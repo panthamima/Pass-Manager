@@ -3,13 +3,17 @@
 #include <ncurses.h>
 #include <string.h>
 
-int main(void)
-{
-    FILE *pm; // pass-manager
+
+FILE *pm; // pass-manager
+
+void format();
+
+int main() {
     int id = 0; 
-    char corp[256];
-    char pass[256];
-    char str[256];
+    // char corp[256];
+    // char pass[256];
+    // char str[256];
+    char enter = '\n';
     // int command[] = {1, // addition
     //                  2, // remove
     //                  3, // re-addition
@@ -21,19 +25,48 @@ int main(void)
         printf("error");
     }
 
-    printf("1[add]\n2[show passwords]\n3[remove]\n4[rename corp or pass]\n5[shred]\n6[add an existing file]\n\nenter command:: ");
+    printf("1[add]\n2[show passwords]\n3[remove]\n4[rename corp or pass]\n5[shred]\n6[add an existing file]\n\nenter command: ");
     int token = getchar();
     if(token == '1') {
+        // id++;
+        // fputs(id, pm);
         printf("enter corp name: ");
-        fgets(corp, 255, stdin);
-        fputs(corp, pm);
+        format();
+        fputs(":", pm);
 
         printf("enter password: ");
-        fgets(pass, 255, stdin);
-        fputs(pass, pm);
+        format();
 
+        fputs("\n", pm);
         fclose(pm);
     }
+
+        // fgets(corp, 255, stdin);
+        // scanf("%s:", corp);
+
+        // fgets(pass, 255, stdin);
+        // scanf("%s", pass);
+        // fputs(corp, pm);
+        // fputs(pass, pm);
+
+
+}
+
+void format() {
+    int id = 0; 
+    char info[256];
+    // char pass[256];
+    char str[256];
+    char colon = ':';
+
+    fgets(info, 255, stdin);
+    scanf("%s", info);
+    fputs(info, pm);
+
+    // fgets(pass, 255, stdin);
+    // scanf("%s", pass);
+    // fputs(pass, pm);   
+}
     // if((pm = fopen(filename, "a")) != NULL) {
     //     // fgets(str, 255, stdin);
     //     fscanf(pm, "%d:%d", &corp,&pass);
@@ -80,5 +113,4 @@ int main(void)
     // fclose(pm);
 
     // return 0;
-}
 

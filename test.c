@@ -6,64 +6,85 @@
 #define N 256 // размер массива
 
 FILE *pm; // pass-manager
+char line[N];
+char filename[] = "p.txt";
 
-void format();
-int addition(char str) {
+void format() { // функция вставляющая форматированную строку в файл
+    char info[256];
 
-		// pm = fopen("p.txt", "r");
-		// while( !feof(pm)){
-		// fscanf(pm,"%s",str);
-		//  = (strlen(str));
-		// printf("%c  %c     ", sym[0], sym[i-1]);
-
-        printf("enter login: ");
-        format();
-        fputs(":", pm);
-
-        printf("enter password: ");
-        format();
-
-        fputs("\n", pm);
-        fclose(pm);
+    fgets(info, 255, stdin);
+    scanf("%s", info);
+    fputs(info, pm);
 }
 
+int addition() { // добавление в файл
+    printf("enter login: ");
+    format();
+    fputs(":", pm);
+
+    printf("enter password: ");
+    format();
+
+    fputs("\n", pm);
+    fclose(pm);
+}
+
+void show() { // 
+    pm = fopen("p.txt", "r");
+	char sym[N], c = 0;
+	while( (c = fgetc(pm)) != EOF) {
+		printf("%c", c);
+	}
+    printf("\n");
+}
+
+void shred() {
+    pm = fopen("p.txt", "w");
+    fclose(pm);
+}
 
 int main() {
     char id[N]; 
     char enter = '\n';
-    char filename[] = "p.txt";
-    // char corp[256];
-    // char pass[256];
-    // char str[256];
-    // int command[] = {1, // addition
-    //                  2, // remove
-    //                  3, // re-addition
-    //                  4, // shred
-    //                  5};// add existing file
 
     if((pm = fopen(filename, "a")) == NULL) {
         printf("error");
     }
-
-    printf("1[add]\n2[show passwords]\n3[remove]\n4[rename corp or pass]\n5[shred]\n6[add an existing file]\n\nenter command: ");
+    system("clear");
+    printf("1[add]\n2[show passwords]\n3[remove]\n4[rename login or pass] \
+            \n5[shred]\n6[add an existing file]\n\n:>> ");
     int command = getchar();
 
     if(command == '1') {
+        addition();
+    }
+    else if(command == '2') {
+        system("clear");
+        printf("your accounts:\n\n");
+        show();
+    }
+    else if(command == '3') {
 
     }
+    else if(command == '4') {
 
-        // fgets(corp, 255, stdin);
-        // scanf("%s:", corp);
+    }
+    else if(command == '5') {
+        printf("do you really wan't to delete your accs? [y/n]\n");
+        char c;
+        while((c = getchar()) == 'y' || 'Y') {
+            shred();
+        } // fix that
+    }
+    else if(command == '6') {
 
-        // fgets(pass, 255, stdin);
-        // scanf("%s", pass);
-        // fputs(corp, pm);
-        // fputs(pass, pm);
-
-
+    }
+    // show();
 }
 
-// int addition(char str) {
+
+
+// int addition() {
 
 // 		// pm = fopen("p.txt", "r");
 // 		// while( !feof(pm)){
@@ -82,22 +103,6 @@ int main() {
 //         fclose(pm);
 // }
 
-
-void format() {
-    int id = 0; 
-    char info[256];
-    // char pass[256];
-    char str[256];
-    char colon = ':';
-
-    fgets(info, 255, stdin);
-    scanf("%s", info);
-    fputs(info, pm);
-
-    // fgets(pass, 255, stdin);
-    // scanf("%s", pass);
-    // fputs(pass, pm);   
-}
     // if((pm = fopen(filename, "a")) != NULL) {
     //     // fgets(str, 255, stdin);
     //     fscanf(pm, "%d:%d", &corp,&pass);

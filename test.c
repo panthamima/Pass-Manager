@@ -30,7 +30,7 @@ int addition() { // добавление в файл
 }
 
 void show() { // 
-    pm = fopen("p.txt", "r");
+    pm = fopen(filename, "r");
 	char sym[N], c = 0;
 	while( (c = fgetc(pm)) != EOF) {
 		printf("%c", c);
@@ -39,7 +39,7 @@ void show() { //
 }
 
 void shred() {
-    pm = fopen("p.txt", "w");
+    pm = fopen(filename, "w");
     fclose(pm);
 }
 
@@ -47,14 +47,14 @@ int main() {
     char id[N]; 
     char enter = '\n';
 
-    if((pm = fopen(filename, "a")) == NULL) {
-        printf("error");
-    }
+    // if((pm = fopen(filename, "a")) == NULL) {
+    //     printf("error");
+    // }
     system("clear");
     printf("1[add]\n2[show passwords]\n3[remove]\n4[rename login or pass] \
             \n5[shred]\n6[add an existing file]\n\n:>> ");
-    int command = getchar();
 
+    int command = getchar();
     if(command == '1') {
         addition();
     }
@@ -70,12 +70,14 @@ int main() {
 
     }
     else if(command == '5') {
+        char i;
         printf("do you really wan't to delete your accs? [y/n]\n");
-        char c;
-        while((c = getchar()) == 'y' || 'Y') {
-            shred();
-        } // fix that
-    }
+        scanf("%d", i);
+        printf("%d", i);
+        // getchar();
+        // getchar();
+        // shred(); // need fix
+    } 
     else if(command == '6') {
 
     }

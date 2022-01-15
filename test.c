@@ -27,7 +27,17 @@ int addition() { // добавление в файл
 
     fputs("\n", pm);
     fclose(pm);
-}
+
+    // for(int id = 0; id < N; id++) {
+    //     pm = fopen("p.txt", "a");
+	//     while( !feof(pm)){
+    //         char sym[N], c = 0;
+	// 	    fscanf(pm,"%s",sym);
+	// 	    id = (strlen(sym));
+	// 	    printf("%c  %c     ", sym[0], sym[id-1]);
+    //     }
+    // }
+} 
 
 void show() { // 
     pm = fopen(filename, "r");
@@ -38,12 +48,32 @@ void show() { //
     printf("\n");
 }
 
-void shred() {
-    pm = fopen(filename, "w");
-    fclose(pm);
+int shred() {
+    pm = fopen("p.txt", "a");
+	char sym[N];
+    int c = 0;
+    int id = 1;
+
+        pm = fopen("p.txt", "r");
+    while((c = fgetc(pm)) != EOF) {
+        if(c == '\n') {
+            id++;
+        }
+    }
+        printf("%d", id);
+    // while( !feof(pm)){
+    //     fscanf(pm,"%s",sym);
+    //     id = (strlen(sym));
+    //     printf("%c %c ", sym[0], sym[id-1]);
+    // }
+    	// 	file = fopen("p.txt", "r");
+	// while( !feof(file)){
+	// 	fscanf(file,"%s",sym);
+	// 	i = (strlen(sym));
+	// 	printf("%c  %c     ", sym[0], sym[i-1]);
 }
 
-int main() {
+int main() { 
     char id[N]; 
     char enter = '\n';
 
@@ -51,37 +81,40 @@ int main() {
     //     printf("error");
     // }
     system("clear");
-    printf("1[add]\n2[show passwords]\n3[remove]\n4[rename login or pass] \
-            \n5[shred]\n6[add an existing file]\n\n:>> ");
+    printf("1[add]\n2[get password]\n3[remove]\n4[rename login or password] \
+            \n6[show password list]\n7[delete file with accounts]\n\n:>> ");
 
     int command = getchar();
-    if(command == '1') {
+
+    if(command == 'a') { // add
         addition();
-    }
-    else if(command == '2') {
+    } 
+    else if(command == '2') { // get password
+        shred();
+    } 
+    else if(command == '3') { // remove
+
+    } 
+    else if(command == '4') { // rename
+
+    } 
+    else if(command == '5') { // 
+
+    } 
+    else if(command == '6') {
         system("clear");
         printf("your accounts:\n\n");
         show();
-    }
-    else if(command == '3') {
-
-    }
-    else if(command == '4') {
-
-    }
-    else if(command == '5') {
-        char i;
+    } 
+    else if(command == '7') {
+        int i;
         printf("do you really wan't to delete your accs? [y/n]\n");
-        scanf("%d", i);
-        printf("%d", i);
+        scanf("%c", i);
+        printf("%c", i);
         // getchar();
         // getchar();
         // shred(); // need fix
-    } 
-    else if(command == '6') {
-
     }
-    // show();
 }
 
 

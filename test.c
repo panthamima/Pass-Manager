@@ -3,6 +3,33 @@
 #include <ncurses.h>
 #include <string.h>
 
+
+// sypher example :
+// 	if(word >= 10 char) {
+// 		word / 4 = 4/4 word
+// 		word от 1 до 4 шифром цезаря с разным ключем 
+// 		example word: 
+// 			1 hel
+// 			2 llo
+// 			3 woo
+// 			4 rld
+// 		 hel  + сдвиг ROT5
+// 		 llo  + сдвиг ROT12
+// 		 woo  + сдвиг ROT18
+// 		 rld  + сдвиг ROT7
+// 				helllowoorld - 5:12:18:7 - mjqxxaoggysk
+				
+// 		}
+	
+
+// transp
+// sition
+
+// noi + сдвиг
+// tis + сдвиг revers(2/2)
+// psn + сдвиг
+// art + сдвиг revers(1/2)
+
 #define N 256 // размер массива
 
 FILE *pm; // pass-manager

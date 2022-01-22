@@ -6,7 +6,7 @@
 #define SIZE 256
 
 FILE *PM; // Password-Manager
-char fn[] = "manager.db";
+char fn[] = "p.txt";
 
 void prepareString() { // создание строки для записи в файл
     char buffer[SIZE];

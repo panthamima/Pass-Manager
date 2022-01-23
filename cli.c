@@ -2,4 +2,7 @@
 #include <string.h>
 
 //start
-	
+int main(){
+
+	return 0;
+}

@@ -16,9 +16,6 @@ int cryptMessage () {
     char *encryptedText;
     char *decryptedText;
 
-<<<<<<< HEAD
-=======
-
 // sypher example :
 // 	if(word >= 10 char) {
 // 		word / 4 = 4/4 word
@@ -46,7 +43,6 @@ int cryptMessage () {
 // art + сдвиг revers(1/2)
 
 #define N 256 // размер массива
->>>>>>> bc2d748e7faf699253a69af4fd5644fddaa1da85
 
     scanf("%s", text);
     encryptedText = caesarCipher(1, text, 'e');
@@ -487,3 +483,4 @@ int main() {
 //       break;
 //     }
 // } /* End of 'main' function */
+

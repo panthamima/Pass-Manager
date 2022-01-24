@@ -6,95 +6,9 @@
 #include <ncurses.h>
 #include <string.h>
 #include <ctype.h>
+#include "../d_cipher.h"
 
 #define SIZE 255
-
-char* caesarCipher(int, char*, char);
-
-int cryptMessage () {
-    char text[SIZE];
-    char *encryptedText;
-    char *decryptedText;
-
-// sypher example :
-// 	if(word >= 10 char) {
-// 		word / 4 = 4/4 word
-// 		word от 1 до 4 шифром цезаря с разным ключем 
-// 		example word: 
-// 			1 hel
-// 			2 llo
-// 			3 woo
-// 			4 rld
-// 		 hel  + сдвиг ROT5
-// 		 llo  + сдвиг ROT12
-// 		 woo  + сдвиг ROT18
-// 		 rld  + сдвиг ROT7
-// 				helllowoorld - 5:12:18:7 - mjqxxaoggysk
-				
-// 		}
-	
-
-// transp
-// sition
-
-// noi + сдвиг
-// tis + сдвиг revers(2/2)
-// psn + сдвиг
-// art + сдвиг revers(1/2)
-
-#define N 256 // размер массива
-
-    scanf("%s", text);
-    encryptedText = caesarCipher(1, text, 'e');
-    decryptedText = caesarCipher(1, encryptedText, 'd');
-
-    printf("Plain text: %s\n", text);
-    printf("Encrypted text with key 1: %s\n", encryptedText);
-    printf("Decrypted text: %s\n", decryptedText);
-
-    free(encryptedText);
-
-    return 0;
-}
-
-char* caesarCipher(int key, char *text, char opt) {
-    char alphabet[26];
-    int offset = 65;
-    int textSize = strlen(text);
-    int i = 0;
-    char *outputText = malloc(textSize+1);
-    char oldCharacter;
-    char newCharacter;
-    char upperChar;
-
-    if (!outputText)
-        exit(1);
-
-    if (opt == 'd')
-        key = -key;
-
-    for (i = 0; i < 26; i++) {
-        alphabet[i] = offset + i;
-    }
-
-    for (i = 0; i < textSize; i++) {
-        if (isalpha(text[i])) {
-            upperChar = toupper(text[i]);
-            oldCharacter = upperChar - offset;
-            newCharacter = (oldCharacter + key) % 26;
-        if (newCharacter < 0){
-            newCharacter += 26;
-        }
-        outputText[i] = alphabet[newCharacter];
-        } 
-        else {
-            outputText[i] = text[i];
-        }
-    }
-    outputText[textSize] = '\0';
-
-    return outputText;
-}
 
 FILE *PM; // Password-Manager
 char fn[] = "p.txt";
@@ -149,7 +63,7 @@ int main() {
         addition();
     }
     else if (command == '2') {
-        cryptMessage();
+        
     }
 
 }

@@ -1,7 +1,10 @@
-#include<stdio.h>
- 
-int encrypt() {
-    char message[100], ch;
+#include <stdio.h>
+#include "d_cipher.h"
+
+#define SIZE 255
+
+int encrypt(char message[SIZE], int key) {
+    char ch;
     int i, key;
 
     printf("Enter a message to encrypt: ");
@@ -30,8 +33,8 @@ int encrypt() {
     return 0;
 }
 
-int decrypt() {
-    char message[100], ch;
+int decrypt(char message[SIZE], int key) {
+    char ch;
     int i, key;
 
     printf("Enter a message to decrypt: ");
@@ -67,17 +70,22 @@ int decrypt() {
     return 0;
 }
 
-int main() {
-    char command;
-    command = getchar();
+// int main() {
+//     char command;
+//     command = getchar();
 
-    if(command == '1') {
-        encrypt();
-    }
-    else if(command == '2') {
-        decrypt();
-    }
-}
+//     if(command == '1') {
+//         encrypt();
+//         // srand(time(NULL));  ===== rand(numbers) function
+//         // for(int i = 0; i < 3; i++) {
+
+//         // printf("%d ",  1+ rand()%25);
+//         // }
+//     }
+//     else if(command == '2') {
+//         decrypt();
+//     }
+// }
 
 // #include <stdio.h>
 // #include <stdlib.h>

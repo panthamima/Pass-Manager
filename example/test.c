@@ -10,6 +10,10 @@
 
 #define SIZE 255
 
+
+int encrypt();
+int decrypt();
+
 FILE *PM; // Password-Manager
 char fn[] = "p.txt";
 
@@ -63,7 +67,7 @@ int main() {
         addition();
     }
     else if (command == '2') {
-        
+        encrypt();
     }
 
 }

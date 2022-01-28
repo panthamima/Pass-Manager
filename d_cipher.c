@@ -7,33 +7,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "d_cipher.h"
 
 #define fPath "p.txt"
 
 const int num = 16;
 const int length = 64;
 const int cdlength = 28;
-const int keylength = 48;
 const int lrlength = 32;
-
-void HexToBinary(int Hex[], int Binary[]);
-void BinaryToHex(int Binary[], int Hex[]);
-int IntPow(int x, int n);
-void GetSubkey(int key[], int Subkey[][keylength]);
-void LeftMove(int x[], int y[], int n);
-void Replace(int C[], int D[], int key[]);
-void Combine(int C[], int D[], int key[]);
-void Encrypt(int Plaintext[], int Subkey[][keylength], int Ciphertext[]);
-void ReplaceIP(int Plaintext[], int L[], int R[]);
-void ArrayCopy(int x[], int y[]);
-void EncryptCore(int output[], int L[], int R[], int K[]);
-void InverseReplaceIP(int output[], int L[], int R[]);
-void ESelect(int output[], int x[]);
-void Sbox(int x[], int y[]);
-void Reorder(int x[], int output[]);
-void Decrypt(int Ciphertext[], int Subkey[][keylength], int DePlaintext[]);
-void Display(int x[], int n);
-void DecToBinary(int x[], int n);
+const int keylength = 48;
 
 int main() {
     int i, Key[num], result[num], j, k, len, pos;
@@ -93,6 +75,58 @@ int main() {
 
     printf("\n");
     return 0;
+}
+
+/* Dec to Binary */
+void DecToBinary(int x[], int n) {
+    int i, num = n;
+    x[0] = 0;
+    for(i = 1; i < 8; i++) {
+        if(num >= IntPow(2, 8 - i - 1)) {
+            x[i] = 1;
+            num -= IntPow(2, 8 - i - 1);
+        }
+        else {
+            x[i] = 0;
+        }
+    }
+}
+
+/* x^n */
+int IntPow(int x, int n) {
+    int result = 1;
+
+    while(n-- > 0) {
+        result *= x;
+    }
+
+    return result;
+}
+
+/* transform hex to binary */
+void HexToBinary(int Hex[], int Binary[]) {
+    int i = 0, j = 0;
+
+    for(i = 0; i < num; i++) {
+        for(j = 0; j < 4; j++) {
+            if(Hex[i] >= IntPow(2, (3 - j))) {
+                Binary[i * 4 + j] = 1;
+                Hex[i] -= IntPow(2, (3 - j));
+            }
+            else {
+                Binary[i * 4 + j] = 0;
+            }
+        }
+    }
+}
+
+/* transform binary to hex */
+void BinaryToHex(int Binary[], int Hex[]) {
+    int i = 0;
+
+    for(i = 0; i < num; i++) {
+        Hex[i] = Binary[i * 4] * 8 + Binary[i * 4 + 1] * 4 + Binary[i * 4 + 2] * 2 + Binary[i * 4 + 3];
+    }
 }
 
 /* Dec to Binary */
@@ -271,7 +305,7 @@ void EncryptCore(int output[], int L[], int R[], int K[]) {
 }
 
 /* Inverse permutation */
-void InverseReplaceIP(int output[], int L[], int R[] {
+void InverseReplaceIP(int output[], int L[], int R[]) {
     int InverseIP[] = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31,
                        38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29,
                        36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27,

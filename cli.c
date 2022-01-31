@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-// #include <ncurses.h>
-// #include <ctype.h>
-// #include <math.h>
 
 #define SIZE 255
-
-// enum { g, c, d };
 
 void prepareString(); 	// создание строки для записи в файл
 void addition();		// добавление строки в файл
 int  counting();        // подсчет строк
 void extradition();     // выдача информации о записи (строке)
 void logging();         // создание мастер аккаунта
-void removing();
-void showTheList();
+void removing();        // удаление записи из файла
+void showTheList();     // показать все пароли из файла
+void shred();           // удалить все пароли
+void iToc(int n, char s[]); // int to char
+void reverse(char s[]); // reverse string
+
 
 FILE *AWE;
 char fn[] = "base.db";
@@ -44,7 +43,6 @@ int main(int argc,char **argv){
         printf("<ERROR> enter command like: awestruck reg|add|rem|get\n");
     }
 
-	return 0;
 }
 
 void logging() {
@@ -61,63 +59,70 @@ void reverse(char s[]) { //reverse string
         s[j] = c;
     }
 }
-void itoa(int n, char s[]) { // int to char
+
+// int to char
+void iToc(int n, char s[]) { 
     int i, sign;
 
-    if ((sign = n) < 0)  /* записываем знак */
+    if ((sign = n) < 0) { /* записываем знак */
         n = -n;          /* делаем n положительным числом */
+    } 
     i = 0;
     do {       /* генерируем цифры в обратном порядке */
         s[i++] = n % 10 + '0';   /* берем следующую цифру */
     } while ((n /= 10) > 0);     /* удаляем */
-    if (sign < 0)
+    if (sign < 0) {
         s[i++] = '-';
+    }
     s[i] = '\0';
     reverse(s);
 }
 
-int counting() { // подсчет строк в файле
+// подсчет строк в файле
+int counting() { 
     int lineID = 0;
-    char lineCh[32];
-    char chCnt; // счетчик чаров
+    char lineChar[32];
+    char charCount; // счетчик чаров
 
     AWE = fopen(fn, "r+");
     
-    fseek(AWE, 0, SEEK_END);
-    unsigned pos = ftell(AWE);    
-    if(pos == 0){
-        fputs("0:", AWE);
-    }
-    for (chCnt = getc(AWE); chCnt != EOF; chCnt = getc(AWE)){
-        if (chCnt == '\n') {
+    do {
+        AWE = fopen(fn, "r+");
+        fputs("1:", AWE);
+        lineID++;
+    } while (lineID == 0);
+    
+    for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
+        if (charCount == '\n') {
             lineID += 1;
-            itoa(lineID, lineCh);
-            fputs(lineCh, AWE);
+            iToc(lineID, lineChar);
+            fputs(lineChar, AWE);
             fputc(':', AWE);
         }
     }
 }
 
+// показать все пароли из файла
 void showTheList() {
-    char chCnt; // счетчик чаров
+    char charCount; // счетчик чаров
     if (AWE = fopen(fn, "r+")) {
         printf("\n");
-        for (chCnt = getc(AWE); chCnt != EOF; chCnt = getc(AWE)){
-            printf("%c", chCnt);
+        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
+            printf("%c", charCount);
         }
         printf("\n");
     }
-
 }
 
-
-void prepareString() { // создание строки для записи в файл
+// создание строки для записи в файл
+void prepareString() { 
     char buffer[SIZE];
     scanf("%255s", buffer);
     fputs(buffer, AWE);
 }
 
-void addition() { // добавление строки в файл
+// добавление строки в файл
+void addition() { 
     AWE = fopen(fn, "a");
     
     counting();
@@ -132,6 +137,12 @@ void addition() { // добавление строки в файл
     
     fclose(AWE);
 }
+
+
+void shred() {
+
+}
+
 
 void removing() {
 

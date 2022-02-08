@@ -1,14 +1,20 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include "cli.h"
+// #include <sqlite3.h>
 
-#define SIZE 255
+#define SIZE 256
 
 FILE *AWE;
 char fn[] = "base.db";
+char mf[] = "mas.txt";
 
 int main(int argc,char **argv){
 
     if(!strcmp(argv[1], "reg")) {
-        ownPassCreate();
+        masterSeed();
     }
     else if(!strcmp(argv[1], "add")) {
         addition();
@@ -25,7 +31,7 @@ int main(int argc,char **argv){
     else if(!strcmp(argv[1], "rem+")) {
         shred();
     }
-    else if(!strcmp(argv[1], "rem+")) {
+    else if(!strcmp(argv[1], "asd")) {
 
     }
     else if(!strcmp(argv[1], "help")) {
@@ -34,11 +40,44 @@ int main(int argc,char **argv){
     else {
         printf("<ERROR> enter command like: awestruck reg|add|rem|get\n");
     }
-
 }
 
-void ownPassCreate() {
-    printf("Hello! Enter a master password: ");
+
+
+
+
+// создание мастер пароля
+void masterSeed() { 
+    char answer;
+    system("clear");
+    AWE = fopen(mf, "a+"); 
+    char masterPass[SIZE];
+    fseek(AWE, 0, SEEK_END);
+    long pos = ftell(AWE);
+    if(pos > 0) {
+        printf("Пароль уже создан. Изменить пароль?[Y/n]\n");
+        answer = getchar();
+        if(answer == 'Y' || answer == 'y') {
+            AWE = fopen(mf, "w");
+        }
+        else {
+            printf("Отмена...\n");
+        }
+        
+    }
+    printf("                                                                     \n\
+   ▄▄▄     █     █░▓█████   ██████ ▄▄██████▓ ██▀███   █    ██  ▄ █▓█    ██ ▄█▀   \n\
+  █▓ ▓█▄  ▓█░ █ ░█░▓█   ▀ ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒ ██  ▓██▒▒██  ▀█   ██▄█▒    \n\
+▒██   ▀█▄ ▒█░ █ ░█ ▒███   ░ ▓██▄   ▒ ▓██░ ▒░▓██ ░▄█ ▒▓██  ▒██░▒▓█      ▓███▄░    \n\
+░██▄▄▄▄██ ░█░ █ ░█ ▒▓█  ▄   ▒   ██▒░ ▓██▓ ░ ▒██▀▀█▄  ▓▓█  ░██░▒▓▓▄ ▄  ▒▓██ █▄    \n\
+ ▓█   ▓██▒░░██▒██▓ ░▒████▒▒██████▒▒  ▒██▒ ░ ░██▓ ▒██▒▒▒█████▓ ▒ ▓▒▒█▀ ░▒██▒ █▄   \n\
+ ▒    ▓▒ ░░ ▓░▒ ▒  ░░ ▒░ ░▒ ▒▓▒ ▒ ░  ▒ ░░   ░ ▒  ░▒▓░ ▒▓▒ ▒ ▒ ░ ░▒ ▒  ░▒ ▒   ▒   \n\
+  ▒   ▒  ░  ▒   ░   ░ ░  ░  ░   ░ ░    ░      ░▒ ░ ▒    ░ ░ ░   ░  ▒   ░ ░  ▒░   \n\
+  ░         ░         ░   ░  ░  ░    ░        ░    ░  ░     ░        ░  ░        \n\n\
+");
+    printf("Hello in Awestruck! Enter a master password: \n\t- ");
+    scanf("%s", masterPass);
+    fputs(masterPass, AWE);
 }
 
 //reverse string
@@ -80,7 +119,7 @@ int counting() {
     char lineChar[32];
     char charCount; // счетчик чаров
 
-        AWE = fopen(fn, "r+");
+    AWE = fopen(fn, "r+");
     do {
         fputs("1:", AWE);
         lineID++;

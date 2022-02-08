@@ -1,2 +1,3 @@
-# qwenta
+# << awestruck >
+
 password manager in C language

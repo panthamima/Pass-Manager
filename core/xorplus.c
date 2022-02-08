@@ -52,13 +52,4 @@ int caeXorDec(char xor_str[SIZE], char *xor_key) {
     }
 }
 
-// int main() {
-//     char message[SIZE];
-//     char key[] = "3478fh"; //aa33dss sdfgkhjgh4khjkjjk
-
-//     scanf("%s", message);
-//     caeXorEnc(message, key);
-
-//     return 0;
-// }
 

@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 #include "cli.h"
-// #include <sqlite3.h>
 
 #define SIZE 256
 
@@ -42,16 +42,12 @@ int main(int argc,char **argv){
     }
 }
 
-
-
-
-
 // создание мастер пароля
 void masterSeed() { 
     char answer;
     system("clear");
     AWE = fopen(mf, "a+"); 
-    char masterPass[SIZE];
+    char masterPass[SIZE], reMasterPass[SIZE];
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
     if(pos > 0) {
@@ -62,22 +58,36 @@ void masterSeed() {
         }
         else {
             printf("Отмена...\n");
+            exit(0);
         }
+
+
+    }
+    //awestruck
+    printf("%s Hello in Awestruck! Enter a master password: \n\t~$ ", logotype);
+    
+    scanf("%s", &masterPass);
+    if(masterPass != NULL) {
+        printf("Re-enter master password: ");
+        scanf("%s", &reMasterPass);
+        if(strcmp(masterPass, reMasterPass) == 0) {
+            printf("the password has been saved.\n");
+            fputs(reMasterPass, AWE);
+        }
+        else {
+            printf("Error: Passwords don't match.\n");
+            exit(1);
+        }
+    }
+}
+
+void confirm() {
+    fseek(AWE, 0, SEEK_END);
+    long pos = ftell(AWE);
+    if(pos > 0) {
+        printf("Enter еру master password to confirm: ");
         
     }
-    printf("                                                                     \n\
-   ▄▄▄     █     █░▓█████   ██████ ▄▄██████▓ ██▀███   █    ██  ▄ █▓█    ██ ▄█▀   \n\
-  █▓ ▓█▄  ▓█░ █ ░█░▓█   ▀ ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒ ██  ▓██▒▒██  ▀█   ██▄█▒    \n\
-▒██   ▀█▄ ▒█░ █ ░█ ▒███   ░ ▓██▄   ▒ ▓██░ ▒░▓██ ░▄█ ▒▓██  ▒██░▒▓█      ▓███▄░    \n\
-░██▄▄▄▄██ ░█░ █ ░█ ▒▓█  ▄   ▒   ██▒░ ▓██▓ ░ ▒██▀▀█▄  ▓▓█  ░██░▒▓▓▄ ▄  ▒▓██ █▄    \n\
- ▓█   ▓██▒░░██▒██▓ ░▒████▒▒██████▒▒  ▒██▒ ░ ░██▓ ▒██▒▒▒█████▓ ▒ ▓▒▒█▀ ░▒██▒ █▄   \n\
- ▒    ▓▒ ░░ ▓░▒ ▒  ░░ ▒░ ░▒ ▒▓▒ ▒ ░  ▒ ░░   ░ ▒  ░▒▓░ ▒▓▒ ▒ ▒ ░ ░▒ ▒  ░▒ ▒   ▒   \n\
-  ▒   ▒  ░  ▒   ░   ░ ░  ░  ░   ░ ░    ░      ░▒ ░ ▒    ░ ░ ░   ░  ▒   ░ ░  ▒░   \n\
-  ░         ░         ░   ░  ░  ░    ░        ░    ░  ░     ░        ░  ░        \n\n\
-");
-    printf("Hello in Awestruck! Enter a master password: \n\t- ");
-    scanf("%s", masterPass);
-    fputs(masterPass, AWE);
 }
 
 //reverse string

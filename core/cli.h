@@ -1,6 +1,10 @@
 #ifndef CLI_H
 #define CLI_H
 
+#define SIZE 256
+#define FALSE 0
+#define TRUE 1
+
 char logotype[] = "                                                              \n\
    ▄▄▄     █     █░▓█████   ██████ ▄▄██████▓ ██▀███   █    ██  ▄ █▓█    ██ ▄█▀   \n\
   █▓ ▓█▄  ▓█░ █ ░█░▓█   ▀ ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒ ██  ▓██▒▒██  ▀█   ██▄█▒    \n\
@@ -23,5 +27,7 @@ void iToc(int n, char s[]); // int to char
 void reverse(char s[]);     // reverse string
 int randomPass();           // создание случайного пароля
 void masterSeed();       // создание мастер пароля
+int confirm();
+
 
 #endif

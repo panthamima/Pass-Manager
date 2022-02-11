@@ -5,15 +5,13 @@
 #include <unistd.h>
 #include "cli.h"
 
-#define SIZE 256
-
 FILE *AWE;
 char fn[] = "base.db";
 char mf[] = "mas.txt";
 
 int main(int argc,char **argv){
 
-    if(!strcmp(argv[1], "reg")) {
+    if(!strcmp(argv[1],      "reg")) {
         masterSeed();
     }
     else if(!strcmp(argv[1], "add")) {
@@ -32,10 +30,10 @@ int main(int argc,char **argv){
         shred();
     }
     else if(!strcmp(argv[1], "asd")) {
-
+        confirm();
     }
     else if(!strcmp(argv[1], "help")) {
-        
+   
     }
     else {
         printf("<ERROR> enter command like: awestruck reg|add|rem|get\n");
@@ -45,28 +43,29 @@ int main(int argc,char **argv){
 // создание мастер пароля
 void masterSeed() { 
     char answer;
+    char masterPass[SIZE], 
+         reMasterPass[SIZE];
     system("clear");
+
     AWE = fopen(mf, "a+"); 
-    char masterPass[SIZE], reMasterPass[SIZE];
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
+
     if(pos > 0) {
-        printf("Пароль уже создан. Изменить пароль?[Y/n]\n");
+        printf("the password already exists. change password?[y/n]\n");
         answer = getchar();
         if(answer == 'Y' || answer == 'y') {
             AWE = fopen(mf, "w");
         }
         else {
-            printf("Отмена...\n");
-            exit(0);
+            printf("Canselling...\n");
+            exit(1);
         }
-
-
     }
     //awestruck
-    printf("%s Hello in Awestruck! Enter a master password: \n\t~$ ", logotype);
-    
+    printf("%sHello in Awestruck! \nEnter a master password: ~$ ", logotype);
     scanf("%s", &masterPass);
+
     if(masterPass != NULL) {
         printf("Re-enter master password: ");
         scanf("%s", &reMasterPass);
@@ -81,13 +80,28 @@ void masterSeed() {
     }
 }
 
-void confirm() {
+int confirm() {
+    char pasConfirm[SIZE], buffer[SIZE];
+    int i;
+
+    AWE = fopen(mf, "r+");
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
+
     if(pos > 0) {
-        printf("Enter еру master password to confirm: ");
-        
-    }
+        AWE = fopen(mf, "r+");
+        printf("Enter master password to confirm: ");
+        scanf("%s", &pasConfirm);
+        fgets(buffer, SIZE, AWE);
+        if(strcmp(pasConfirm, buffer) == 0) {
+            printf("Success.\n");
+            return TRUE;
+        }
+        printf("passwords are not match. Cancelling...\n");
+        return FALSE;
+    } 
+    printf("Enter awestruck reg, and create password\n");
+    return FALSE;
 }
 
 //reverse string
@@ -126,8 +140,8 @@ void iToc(int n, char s[]) {
 // подсчет строк в файле
 int counting() { 
     int lineID = 0;
-    char lineChar[32];
-    char charCount; // счетчик чаров
+    char lineChar[32]; // максиальный размер id строки
+    char charCount; // счетчик символов
 
     AWE = fopen(fn, "r+");
     do {
@@ -135,7 +149,7 @@ int counting() {
         lineID++;
     } while (lineID == 0);
     
-    for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
+    for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
         if (charCount == '\n') {
             lineID += 1;
             iToc(lineID, lineChar);
@@ -147,13 +161,15 @@ int counting() {
 
 // показать все пароли из файла
 void showTheList() {
-    char charCount; // счетчик чаров
-    if (AWE = fopen(fn, "r+")) {
-        printf("\n");
-        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
-            printf("%c", charCount);
+    if(confirm() == TRUE) {
+        char charCount; // счетчик чаров
+        if (AWE = fopen(fn, "r+")) {
+            printf("\n");
+            for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
+                printf("%c", charCount);
+            }
+            printf("\n");
         }
-        printf("\n");
     }
 }
 

@@ -11,32 +11,25 @@ char mf[] = "mas.txt";
 
 int main(int argc,char **argv){
 
-    if(!strcmp(argv[1],      "reg")) {
+    /****/ if (!strcmp(argv[1], "reg")) {
         masterSeed();
-    }
-    else if(!strcmp(argv[1], "add")) {
+    } else if (!strcmp(argv[1], "add")) {
         addition();
-    }
-    else if(!strcmp(argv[1], "rem")) {
+    } else if (!strcmp(argv[1], "rem")) {
         removing();
-    }
-    else if(!strcmp(argv[1], "get")) {
+    } else if (!strcmp(argv[1], "get")) {
         extradition();
-    }
-    else if(!strcmp(argv[1], "shw")) {
+    } else if (!strcmp(argv[1], "list")) {
         showTheList();
-    }
-    else if(!strcmp(argv[1], "rem+")) {
+    } else if (!strcmp(argv[1], "rem+")) {
         shred();
-    }
-    else if(!strcmp(argv[1], "asd")) {
+    } else if (!strcmp(argv[1], "asd")) {
         confirm();
-    }
-    else if(!strcmp(argv[1], "help")) {
-   
-    }
-    else {
-        printf("<ERROR> enter command like: awestruck reg|add|rem|get\n");
+    } else if (!strcmp(argv[1], "help")) {
+        system("clear");
+        printf("%s", help);
+    } else {
+        printf(":ERROR COMMAND: enter awe help\n");
     }
 }
 

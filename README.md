@@ -7,11 +7,6 @@ Awestruck is a simple project that is a password manager. <br>Uses txt files to 
 -  refactoring
 -  have fun
 
-## work structure: 
-
-![Awestruck structure](https://github.com/panthamima/Pass-Manager/raw/master/img/structure.png)
-
-
 ## Awestruck file structure
 ```sh
 ├── awestruck/
@@ -39,3 +34,8 @@ Awestruck is a simple project that is a password manager. <br>Uses txt files to 
 │    
 └── README.md             
 ```
+
+
+## work structure: 
+
+![Awestruck structure](https://github.com/panthamima/Pass-Manager/raw/master/img/structure.png)

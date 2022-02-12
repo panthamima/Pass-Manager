@@ -2,8 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h>
+
 #include "cli.h"
+#include "xorplus.h"
 
 FILE *AWE;
 char fn[] = "base.db";
@@ -24,7 +25,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "asd")) {
-        confirm();
+
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -48,6 +49,9 @@ void masterSeed() {
         printf("the password already exists. change password?[y/n]\n");
         answer = getchar();
         if(answer == 'Y' || answer == 'y') {
+            if(confirm() == FALSE) {
+                exit(1);
+            }
             AWE = fopen(mf, "w");
         }
         else {
@@ -60,7 +64,7 @@ void masterSeed() {
     scanf("%s", &masterPass);
 
     if(masterPass != NULL) {
-        printf("Re-enter master password: ");
+        printf("confirm your master password: ");
         scanf("%s", &reMasterPass);
         if(strcmp(masterPass, reMasterPass) == 0) {
             printf("the password has been saved.\n");
@@ -73,6 +77,7 @@ void masterSeed() {
     }
 }
 
+// подтверждение мастер пароля
 int confirm() {
     char pasConfirm[SIZE], buffer[SIZE];
     int i;
@@ -154,22 +159,20 @@ int counting() {
 
 // показать все пароли из файла
 void showTheList() {
-    if(confirm() == TRUE) {
-        char charCount; // счетчик чаров
-        if (AWE = fopen(fn, "r+")) {
-            printf("\n");
-            for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
-                printf("%c", charCount);
-            }
-            printf("\n");
+    char charCount; // счетчик чаров
+    if (AWE = fopen(fn, "r+")) {
+        printf("\n");
+        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
+            printf("%c", charCount);
         }
+        printf("\n");
     }
 }
 
 // создание строки для записи в файл
 void prepareString() { 
     char buffer[SIZE];
-    scanf("%255s", buffer);
+    scanf("%255s", &buffer);
     fputs(buffer, AWE);
 }
 
@@ -181,7 +184,7 @@ void addition() { // если нажать пробел запись багае�
 
     printf("Enter login\n\t- ");
     prepareString();
-    fputc(':', AWE);
+    fputc(' ', AWE);
 
     printf("Enter password\n\t- ");
     prepareString();
@@ -190,9 +193,19 @@ void addition() { // если нажать пробел запись багае�
     fclose(AWE);
 }
 
-
+// удалить все пароли
 void shred() {
-
+    char answer;
+    printf("do you really want to delete passwords?[y/n] ");
+    answer = getchar();
+    if(answer == 'Y' || answer == 'y') {
+        printf("passwords in %s", fn);
+        showTheList();
+        if(confirm() == TRUE) {
+            AWE = fopen(fn, "w");
+        }
+        exit(1);
+    }
 }
 
 void removing() {
@@ -207,12 +220,10 @@ int randomPass() {
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
     srand(time(NULL));
-
     for(i = 0; i < passLen; i++) {
         randCh = rand()%62;
         randPass[i] = pool[randCh];
     }
-    // printf("%s\n", randPass);
 }
 
 // выдача информации о записи (строке)

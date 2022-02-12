@@ -5,9 +5,17 @@
 #define SIZE 256
 
 FILE *AWE;
-char fn[] = "base.db";
+// должен принимать файл в который идет запись!
 
-int caeXorEnc(char xor_str[SIZE], char *xor_key) {
+// masterssed --- mf
+//     crypt
+//     file
+//     crypt
+// masterseed
+
+
+
+int caeXorEnc(char * filename, char xor_str[SIZE], char *xor_key) {
     int i, // xor_str
         j, // count 
         k; // k % strlen
@@ -15,12 +23,12 @@ int caeXorEnc(char xor_str[SIZE], char *xor_key) {
     i = k = j = 0;
     char buf; 
     char count[SIZE];
-    AWE = fopen(fn, "a");
+    AWE = fopen(filename, "a");
 
     for(i = 0; xor_str[i] != '\0'; ++i){
         buf = xor_str[i];
-        if(buf >= '!' && buf <= '}'){ // от минимально до максимально доступного чара
-            buf += strlen(xor_key); // чар + сдвиг
+        if(buf >= '!' && buf <= '}'){ // от минимально до максимально доступного символа
+            buf += strlen(xor_key); // символ + сдвиг
             if(buf > '}'){
                 buf = buf - '}' + '!' - 1;
             }
@@ -30,14 +38,15 @@ int caeXorEnc(char xor_str[SIZE], char *xor_key) {
         fputc(count[j], AWE);
         k++;
     }
+    fclose(AWE);
 }
 
-int caeXorDec(char xor_str[SIZE], char *xor_key) {
+int caeXorDec(char* filename, char xor_str[SIZE], char *xor_key) {
     char buf;
     int i, k, j;
     i = k = j =0;
     char output[SIZE];
-    AWE = fopen(fn, "a");
+    AWE = fopen(filename, "a");
     for(i = 0; xor_str[i] != '\0'; i++){
         output[j] = xor_str[i] ^ xor_key[k % strlen(xor_key)]; //xor
         k++;
@@ -50,6 +59,6 @@ int caeXorDec(char xor_str[SIZE], char *xor_key) {
         }
         fputc(buf, AWE);
     }
+    fclose(AWE);
 }
-
 

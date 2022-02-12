@@ -24,8 +24,8 @@ int main(int argc,char **argv){
         showTheList();
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
-    } else if (!strcmp(argv[1], "asd")) {
-
+    } else if (!strcmp(argv[1], "test")) {
+        createCat();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -100,6 +100,31 @@ int confirm() {
     } 
     printf("Enter awestruck reg, and create password\n");
     return FALSE;
+}
+
+// создание категории
+void createCat() {
+    char catName[SIZE];
+    char buffer[SIZE];
+    int length = strlen(catName);
+    char *r = (char *)calloc(2 * length, 1);
+    char dotTxt[] = ".txt";
+    int i, j = 0;
+
+    if(confirm() == TRUE) {
+        printf("enter a category name: without a special symbols(#/.&! etc)\n\t- ");
+        scanf("%s", &catName);
+        for(i = 0; i < length; i++) {
+            if(catName[i] >= 'a' && catName[i] <= 'z' || catName[i] >= 'A' && catName[i] <= 'Z' || catName[i] >= '0' && catName[i] <= '9') {
+                r[j++] = catName[i];
+            }
+        }
+        r = realloc(r, j + 1);
+        printf("%c", r); // пофиксить .txt и еще всякого https://www.cyberforum.ru/c-beginners/thread2414970.html
+        // AWE = fopen(strcat(r, dotTxt), "a");
+        fclose(AWE);
+    }
+    exit(1);
 }
 
 //reverse string
@@ -228,5 +253,5 @@ int randomPass() {
 
 // выдача информации о записи (строке)
 void extradition() { 
-    printf("");
+
 }

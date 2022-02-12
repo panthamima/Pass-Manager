@@ -40,5 +40,6 @@ void reverse(char s[]);     // reverse string
 int randomPass();           // создание случайного пароля
 void masterSeed();          // создание мастер пароля
 int confirm();              // подтверждение мастер пароля
+void createCat();           // создание категории
 
 #endif

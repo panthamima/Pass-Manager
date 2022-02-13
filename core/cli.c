@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "cli.h"
 #include "xorplus.h"
@@ -102,28 +103,33 @@ int confirm() {
     return FALSE;
 }
 
+char* removeXChar(char* str) {
+    char* temp = str;
+    char* add, *buffer;
+    for(add = str, buffer = str; *buffer = *add; *add++) {
+        if(isalnum(*add))
+            *buffer++;
+        }
+    return temp;
+}
+
 // создание категории
-void createCat() {
+char* createCat() {
     char catName[SIZE];
     char buffer[SIZE];
-    int length = strlen(catName);
-    char *r = (char *)calloc(2 * length, 1);
+    char xPool[] = "!@#$%^&*()_+-=\":?/\\{}[]'.,<>~`;|";
     char dotTxt[] = ".txt";
-    int i, j = 0;
+    int i, j;
 
     if(confirm() == TRUE) {
-        printf("enter a category name: without a special symbols(#/.&! etc)\n\t- ");
+        printf("enter a category name without a special symbols(#/.&! etc)\n\t- ");
         scanf("%s", &catName);
-        for(i = 0; i < length; i++) {
-            if(catName[i] >= 'a' && catName[i] <= 'z' || catName[i] >= 'A' && catName[i] <= 'Z' || catName[i] >= '0' && catName[i] <= '9') {
-                r[j++] = catName[i];
-            }
-        }
-        r = realloc(r, j + 1);
-        printf("%c", r); // пофиксить .txt и еще всякого https://www.cyberforum.ru/c-beginners/thread2414970.html
-        // AWE = fopen(strcat(r, dotTxt), "a");
+
+        removeXChar(catName);
+        printf("%s - name of category\n", catName);
+        AWE = fopen(strcat(catName, dotTxt), "a");
         fclose(AWE);
-    }
+    } // не записывается пробел, нет проверки на существование файла
     exit(1);
 }
 
@@ -228,6 +234,7 @@ void shred() {
         showTheList();
         if(confirm() == TRUE) {
             AWE = fopen(fn, "w");
+            fclose(AWE);
         }
         exit(1);
     }

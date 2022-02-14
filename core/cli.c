@@ -9,7 +9,7 @@
 
 FILE *AWE;
 char fn[] = "base.db";
-char mf[] = "mas.txt";
+char mf[] = "../awebase/mas.txt";
 
 int main(int argc,char **argv){
 
@@ -26,10 +26,12 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        createCat();
+        initStruct();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
+    } else if(!strcmp(argv[1], "cat")) {
+        createCat();
     } else {
         printf(":ERROR COMMAND: enter awe help\n");
     }
@@ -113,12 +115,13 @@ char* removeXChar(char* str) {
     return temp;
 }
 
+void initStruct() {
+    _mkdir("bebra");
+}
 // создание категории
 char* createCat() {
     char catName[SIZE];
     char buffer[SIZE];
-    char xPool[] = "!@#$%^&*()_+-=\":?/\\{}[]'.,<>~`;|";
-    char dotTxt[] = ".txt";
     int i, j;
 
     if(confirm() == TRUE) {
@@ -126,8 +129,8 @@ char* createCat() {
         scanf("%s", &catName);
 
         removeXChar(catName);
-        printf("%s - name of category\n", catName);
-        AWE = fopen(strcat(catName, dotTxt), "a");
+        printf("%s.txt - name of category\n", catName);
+        AWE = fopen(strcat(catName, ".txt"), "a");
         fclose(AWE);
     } // не записывается пробел, нет проверки на существование файла
     exit(1);
@@ -146,24 +149,22 @@ void reverse(char s[]) {
 }
 
 // int to char
-void iToc(int n, char s[]) { 
+void iToc(int num, char str[]) { 
     int i, sign;
     i = 0;
 
-    if ((sign = n) < 0) { /* записываем знак */
-        n = -n;          /* делаем n положительным числом */
+    if ((sign = num) < 0) { /* записываем знак */
+        num = -num;          /* делаем n положительным числом */
     } 
-    
     do {       /* генерируем цифры в обратном порядке */
-        s[i++] = n % 10 + '0';   /* берем следующую цифру */
-    } while ((n /= 10) > 0);     /* удаляем */
+        str[i++] = num % 10 + '0';   /* берем следующую цифру */
+    } while ((num /= 10) > 0);     /* удаляем */
 
     if (sign < 0) {
-        s[i++] = '-';
+        str[i++] = '-';
     }
-
-    s[i] = '\0';
-    reverse(s);
+    str[i] = '\0';
+    reverse(str);
 }
 
 // подсчет строк в файле

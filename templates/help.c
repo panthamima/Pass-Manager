@@ -369,3 +369,29 @@
 // 	}
 // 	return 0;
 // }
+
+
+#include <stdio.h>
+#include <ctype.h>
+
+char* str_remove(char* s) {
+   char* t = s;
+   char* a, *b;
+   for(a = s, b = s; *b = *a; *a++) {
+      if(! isalnum(*a))
+          *b++;
+   }
+   return t;
+}
+
+int main(void) {
+   char s[128] = "[ops]<123405006>.(opsabweABSDE)";
+   /*
+   printf("enter str: ");
+   scanf("%127[^\n]", s);
+   */
+   puts( str_remove(s) );
+   
+   getchar();
+   return 0;
+}

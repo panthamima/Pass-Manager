@@ -27,8 +27,9 @@ Awestruck is a simple project that is a password manager. <br>Uses txt files to 
 │    │    └── tmp2.txt          
 │    │    └── tmp3.txt
 │    │ 
-│    ├── img
+│    ├── img/
 │    │    └── logo.png
+│    │    └── structure.png
 │    │
 │    └── .gitignore
 │    
@@ -39,3 +40,7 @@ Awestruck is a simple project that is a password manager. <br>Uses txt files to 
 ## work structure: 
 
 ![Awestruck structure](https://github.com/panthamima/Pass-Manager/raw/master/img/structure.png)
+
+## Contributors: 
+- panthamima (https://github.com/panthamima)
+- equitans (https://github.com/equitans)

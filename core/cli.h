@@ -28,9 +28,7 @@ char help[] = " getting started with awestruck\n\t\
 
 void prepareString(); 	      // создание строки для записи в файл
 void addition();		          // добавление строки в файл
-int  counting();              // подсчет строк
 void extradition();           // выдача информации о записи (строке)
-void logging();               // создание мастер аккаунта
 void removing();              // удаление записи из файла
 void showTheList();           // показать все пароли из файла
 void shred();                 // удалить все пароли

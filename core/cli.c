@@ -9,7 +9,7 @@
 
 FILE *AWE;
 char fn[] = "base.db";
-char mf[] = "../awebase/mas.txt";
+char mf[] = "__awebase/mas.txt";
 
 int main(int argc,char **argv){
 
@@ -120,9 +120,9 @@ void initStruct() {
 }
 // создание категории
 char* createCat() {
-    char path[] = "../awebase/categories/";
+    char path[] = "__awebase/categories/";
     char catName[SIZE];
-    char *buffer;
+    char buffer[SIZE];
     int i, j;
 
     if(confirm() == TRUE) {
@@ -131,8 +131,9 @@ char* createCat() {
 
         removeXChar(catName);
         printf("%s.txt - name of category\n", catName);
-        buffer = strcat(path, catName);
-        AWE = fopen(strcat(buffer, ".txt"), "a");
+        buffer[SIZE] = strcat(path, catName);
+        printf("%s", buffer);
+        // AWE = fopen(strcat(buffer, ".txt"), "a");
         printf("%s", AWE);
         fclose(AWE);
     } // не записывается пробел, нет проверки на существование файла

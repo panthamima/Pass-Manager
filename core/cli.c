@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <dirent.h>
 
 #include "cli.h"
 #include "xorplus.h"
@@ -26,7 +27,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        initStruct();
+        extradition();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -105,19 +106,25 @@ int confirm() {
     return FALSE;
 }
 
+// удаление запрещенных символов
 char* removeXChar(char* str) {
     char* temp = str;
     char* add, *buffer;
     for(add = str, buffer = str; *buffer = *add; *add++) {
+        if(*add == ' ') {
+            *buffer++;
+        }
         if(isalnum(*add))
             *buffer++;
         }
     return temp;
 }
 
+// разщвертка структуры приложения
 void initStruct() {
 
 }
+
 // создание категории
 char* createCat() {
     char path[] = "__awebase/categories/";
@@ -128,16 +135,19 @@ char* createCat() {
     if(confirm() == TRUE) {
         printf("enter a category name without a special symbols(#/.&! etc)\n\t- ");
         scanf("%s", &catName);
-
         removeXChar(catName);
-        printf("%s.txt - name of category\n", catName);
-        buffer[SIZE] = strcat(path, catName);
-        printf("%s", buffer);
-        // AWE = fopen(strcat(buffer, ".txt"), "a");
-        printf("%s", AWE);
-        fclose(AWE);
-    } // не записывается пробел, нет проверки на существование файла
-    exit(1);
+
+        strcat(path, catName);
+        AWE = fopen(strcat(path, ".txt"), "rb+");
+        if(!AWE) {
+            AWE = fopen(path, "a");
+            printf("%s.txt - name of category\n", catName);
+        }else {
+            printf("the file already exists\n");
+
+        }
+    } // не записывается пробел
+    fclose(AWE);
 }
 
 //reverse string
@@ -245,28 +255,64 @@ void shred() {
     }
 }
 
+// удалить выбранную запись
 void removing() {
 
 }
 
+// генерирует случайный пароль
 int randomPass() {
-    int i;
     int passLen = 24;
-    char randPass[23];
-    char randCh;
+    char randCh, randPass[23];
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
     srand(time(NULL));
-    for(i = 0; i < passLen; i++) {
+    for(int i = 0; i < passLen; i++) {
         randCh = rand()%62;
         randPass[i] = pool[randCh];
     }
 }
 
+// показать сществующие категории
+void showCat() { // for windows https://learnc.info/c/libuv_directories.html
+    DIR *listDir;
+    struct dirent *dir;
+    listDir = opendir("__awebase/categories");
+
+    if (listDir) {
+        while ((dir = readdir(listDir)) != NULL) {
+            if(strlen(dir->d_name) > 3) { // if dirname > 3 то не будет показаны 
+                printf("%s\n", dir->d_name); // функции выхода  из директории . и ..
+            }
+        }
+    closedir(listDir);
+    }
+}
+
 // выдача информации о записи (строке)
-void extradition() { 
+void extradition() {
+    int line;
+    char charCount;
+    char category[SIZE];
+    char path[] = "__awebase/categories/";
+
     AWE = fopen(fn, "r");
-    char command;
+    void showCat();
     
-    
+    printf("enter category name: ");
+    scanf("%s", &category);
+    strcat(path, category);
+    AWE = fopen(path, "a");
+    printf("enter number of entry: ");
+    scanf("%d", &line);
+
+    for(int i = 1; i < line; i) {
+        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
+            if (charCount == '\n') {
+                i++;
+                printf("%d", i);
+            }
+        }
+    }
+
 }

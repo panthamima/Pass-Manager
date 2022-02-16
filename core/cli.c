@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <ctype.h>
-#include <dirent.h>
 
 #include "cli.h"
 #include "xorplus.h"
-#include "passwd.h"
 
 FILE *AWE;
 char fn[] = "base.db";
@@ -39,7 +38,47 @@ int main(int argc,char **argv){
 }
 
 // создание мастер пароля
+void masterSeed() { 
+    char answer;
+    char masterPass[SIZE], 
+         reMasterPass[SIZE];
+    system("clear");
 
+    AWE = fopen(mf, "a+"); 
+    fseek(AWE, 0, SEEK_END);
+    long pos = ftell(AWE);
+
+    if(pos > 0) {
+        printf("the password already exists. change password?[y/n]\n");
+        answer = getchar();
+        if(answer == 'Y' || answer == 'y') {
+            if(confirm() == FALSE) {
+                exit(1);
+            }
+            AWE = fopen(mf, "w");
+        }
+        else {
+            printf("Canselling...\n");
+            exit(1);
+        }
+    }
+    //awestruck
+    printf("%sHello in Awestruck! \nEnter a master password: ~$ ", logotype);
+    scanf("%s", &masterPass);
+
+    if(masterPass != NULL) {
+        printf("confirm your master password: ");
+        scanf("%s", &reMasterPass);
+        if(strcmp(masterPass, reMasterPass) == 0) {
+            printf("the password has been saved.\n");
+            fputs(reMasterPass, AWE);
+        }
+        else {
+            printf("Error: Passwords don't match.\n");
+            exit(1);
+        }
+    }
+}
 
 // подтверждение мастер пароля
 int confirm() {
@@ -66,13 +105,24 @@ int confirm() {
     return FALSE;
 }
 
+char* removeXChar(char* str) {
+    char* temp = str;
+    char* add, *buffer;
+    for(add = str, buffer = str; *buffer = *add; *add++) {
+        if(isalnum(*add))
+            *buffer++;
+        }
+    return temp;
+}
+
 void initStruct() {
-    
+
 }
 // создание категории
 char* createCat() {
+    char path[] = "../awebase/categories/";
     char catName[SIZE];
-    char buffer[SIZE];
+    char *buffer;
     int i, j;
 
     if(confirm() == TRUE) {
@@ -81,10 +131,43 @@ char* createCat() {
 
         removeXChar(catName);
         printf("%s.txt - name of category\n", catName);
-        AWE = fopen(strcat(catName, ".txt"), "a");
+        buffer = strcat(path, catName);
+        AWE = fopen(strcat(buffer, ".txt"), "a");
+        printf("%s", AWE);
         fclose(AWE);
     } // не записывается пробел, нет проверки на существование файла
     exit(1);
+}
+
+//reverse string
+void reverse(char s[]) { 
+    int i, j;
+    char c;
+    
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
+}
+
+// int to char
+void iToc(int num, char str[]) { 
+    int i, sign;
+    i = 0;
+
+    if ((sign = num) < 0) { /* записываем знак */
+        num = -num;          /* делаем n положительным числом */
+    } 
+    do {       /* генерируем цифры в обратном порядке */
+        str[i++] = num % 10 + '0';   /* берем следующую цифру */
+    } while ((num /= 10) > 0);     /* удаляем */
+
+    if (sign < 0) {
+        str[i++] = '-';
+    }
+    str[i] = '\0';
+    reverse(str);
 }
 
 // подсчет строк в файле
@@ -165,7 +248,24 @@ void removing() {
 
 }
 
+int randomPass() {
+    int i;
+    int passLen = 24;
+    char randPass[23];
+    char randCh;
+    char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+
+    srand(time(NULL));
+    for(i = 0; i < passLen; i++) {
+        randCh = rand()%62;
+        randPass[i] = pool[randCh];
+    }
+}
+
 // выдача информации о записи (строке)
 void extradition() { 
-
+    AWE = fopen(fn, "r");
+    char command;
+    
+    
 }

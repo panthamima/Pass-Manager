@@ -369,29 +369,85 @@
 // 	}
 // 	return 0;
 // }
-
-
 #include <stdio.h>
-#include <ctype.h>
 
-char* str_remove(char* s) {
-   char* t = s;
-   char* a, *b;
-   for(a = s, b = s; *b = *a; *a++) {
-      if(! isalnum(*a))
-          *b++;
-   }
-   return t;
-}
+int n_readline(const char* fname, int n, char* buf, int len){
+    char  c;
+    FILE* fp = fopen(fname, "rt");
+    if(fp == NULL)
+        return 0;
 
-int main(void) {
-   char s[128] = "[ops]<123405006>.(opsabweABSDE)";
-   /*
-   printf("enter str: ");
-   scanf("%127[^\n]", s);
-   */
-   puts( str_remove(s) );
-   
-   getchar();
+    while(! feof(fp) && (n > 0)){
+       fscanf(fp, "%*[^\n\r]%c", &c);
+       --n;
+    }
+
+    if(! feof(fp))
+        fgets(buf, len-1, fp);
+    else
+       *buf = '\0';
+
+    fclose(fp);
+    return (int)(*buf != '\0');
+  }
+
+
+
+ int main(void){
+   char buf[255];
+
+   //считать 2-строку
+   if(n_readline("1.txt", 4, buf, sizeof(buf)))
+         puts(buf);
+
+   //считать 3-строку
+   if(n_readline("levels.txt", 2, buf, sizeof(buf)))
+         puts(buf);
    return 0;
-}
+ }
+
+// #include <stdio.h>
+ 
+// size_t count_lines(const char* filename) {
+//    FILE* fp;
+//    size_t cnt = 0u;
+//    if((fp = fopen(filename, "r")) == NULL)
+//          return 0u;
+//    while(! feof(fp)) {
+//          fscanf(fp, "%*[^\n]%*c");
+//          cnt++;
+//    }
+//    fclose(fp);
+//    return cnt;
+// }
+ 
+// int main(void){
+//     printf("file lines: %u\n", count_lines("../core/__awebase/categories/zxczxc.txt") );
+//     getchar();
+//     return 0;
+// }
+
+// #include <stdio.h>
+// #include <ctype.h>
+
+// char* str_remove(char* s) {
+//    char* t = s;
+//    char* a, *b;
+//    for(a = s, b = s; *b = *a; *a++) {
+//       if(! isalnum(*a))
+//           *b++;
+//    }
+//    return t;
+// }
+
+// int main(void) {
+//    char s[128] = "[ops]<123405006>.(opsabweABSDE)";
+//    /*
+//    printf("enter str: ");
+//    scanf("%127[^\n]", s);
+//    */
+//    puts( str_remove(s) );
+   
+//    getchar();
+//    return 0;
+// }

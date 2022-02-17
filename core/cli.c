@@ -27,7 +27,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        extradition();
+        showCat();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -182,37 +182,50 @@ void iToc(int num, char str[]) {
 }
 
 // подсчет строк в файле
-int counting() { 
-    int lineID = 0;
-    char lineChar[32]; // максиальный размер id строки
-    char charCount; // счетчик символов
+int counting(const char* fname, int n, char* buf, int len){
+    char  c;
+    FILE* fp = fopen(fname, "rt");
+    if(fp == NULL)
+        return 0;
 
-    AWE = fopen(fn, "r+");
-    do {
-        fputs("1:", AWE);
-        lineID++;
-    } while (lineID == 0);
-    
-    for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
-        if (charCount == '\n') {
-            lineID += 1;
-            iToc(lineID, lineChar);
-            fputs(lineChar, AWE);
-            fputc(':', AWE);
-        }
+    while(! feof(fp) && (n > 0)){
+       fscanf(fp, "%*[^\n\r]%c", &c);
+       --n;
     }
+
+    if(! feof(fp))
+        fgets(buf, len-1, fp);
+    else
+       *buf = '\0';
+
+    fclose(fp);
+    return (int)(*buf != '\0');
 }
+
+// int counting() { 
+//     int lineID = 0;
+//     char lineChar[32]; // максиальный размер id строки
+//     char charCount; // счетчик символов
+
+//     AWE = fopen(fn, "r+");
+//     do {
+//         fputs("1:", AWE);
+//         lineID++;
+//     } while (lineID == 0);
+    
+//     for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
+//         if (charCount == '\n') {
+//             lineID += 1;
+//             iToc(lineID, lineChar);
+//             fputs(lineChar, AWE);
+//             fputc(':', AWE);
+//         }
+//     }
+// }
 
 // показать все пароли из файла
 void showTheList() {
-    char charCount; // счетчик чаров
-    if (AWE = fopen(fn, "r+")) {
-        printf("\n");
-        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)){
-            printf("%c", charCount);
-        }
-        printf("\n");
-    }
+
 }
 
 // создание строки для записи в файл
@@ -226,7 +239,7 @@ void prepareString() {
 void addition() { // если нажать пробел запись багается
     AWE = fopen(fn, "a");
     
-    counting();
+    // counting();
 
     printf("Enter login\n\t- ");
     prepareString();
@@ -291,28 +304,33 @@ void showCat() { // for windows https://learnc.info/c/libuv_directories.html
 
 // выдача информации о записи (строке)
 void extradition() {
-    int line;
-    char charCount;
+    unsigned line;
+    char buffer[SIZE];
     char category[SIZE];
     char path[] = "__awebase/categories/";
 
-    AWE = fopen(fn, "r");
-    void showCat();
-    
+    system("clear");
+    showCat();
     printf("enter category name: ");
     scanf("%s", &category);
     strcat(path, category);
-    AWE = fopen(path, "a");
+    if(!(AWE = fopen(path, "r"))) {
+        printf("error. the category doesn't exist\n");
+        exit(1);
+    }
     printf("enter number of entry: ");
     scanf("%d", &line);
 
-    for(int i = 1; i < line; i) {
-        for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
-            if (charCount == '\n') {
-                i++;
-                printf("%d", i);
-            }
-        }
-    }
+    counting(path, line-1, buffer, sizeof(buffer));
+    puts(buffer);
 
+    // while(!feof(AWE)) {
+    //     fscanf(AWE, "%*[^\n]%*c");
+    //     countLine++;
+    //     if(countLine == line) {
+    //         for(;;) {
+
+    //         }
+    //     }
+    // }
 }

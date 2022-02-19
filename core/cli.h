@@ -24,7 +24,8 @@ char help[] = " getting started with awestruck\n\t\
  edit\tedit an entry\n\n\
  global actions\n\t\
  list\tshow the full list of entries\n\t\
- rem+\tdeleting category or all entries\n\n";
+ rem+\tdeleting category or all entries\n\t\
+ cat\tcreating a new category\n\n";
 
 void prepareString(); 	      // создание строки для записи в файл
 void addition();		          // добавление строки в файл
@@ -40,6 +41,6 @@ int confirm();                // подтверждение мастер пар�
 char* createCat();            // создание категории
 char* removeXChar(char* str); // удаление запрещенного символа из массива
 void initStruct();            // развертка структуры программы
-void showCat();               // показывает все существующие категории 
+void showDir();               // показывает все существующие категории 
 
 #endif

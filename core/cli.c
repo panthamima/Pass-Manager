@@ -27,12 +27,12 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        showCat();
+        showDir();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
     } else if(!strcmp(argv[1], "cat")) {
-        createCat();
+        createCat(); // добавить проверку на добвление .txt
     } else {
         printf(":ERROR COMMAND: enter awe help\n");
     }
@@ -225,7 +225,22 @@ int counting(const char* fname, int n, char* buf, int len){
 
 // показать все пароли из файла
 void showTheList() {
+    char c;
+    DIR *listDir;
+    struct dirent *dir;
+    char path[] = "__awebase/categories/";
 
+    listDir = opendir(path);
+    while ((dir = readdir(listDir)) != NULL) {
+        if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
+            printf("\n%s ( \n", dir->d_name);
+            AWE = fopen(strcat(path, dir->d_name), "r"); //segmenrtation fault
+            while( (c = fgetc(AWE)) != EOF){
+		        printf("%c", c);
+            }
+            printf("\n)\n");
+        }
+    } // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 }
 
 // создание строки для записи в файл
@@ -287,7 +302,7 @@ int randomPass() {
 }
 
 // показать сществующие категории
-void showCat() { // for windows https://learnc.info/c/libuv_directories.html
+void showDir() { // for windows https://learnc.info/c/libuv_directories.html
     DIR *listDir;
     struct dirent *dir;
     listDir = opendir("__awebase/categories");
@@ -310,7 +325,7 @@ void extradition() {
     char path[] = "__awebase/categories/";
 
     system("clear");
-    showCat();
+    showDir();
     printf("enter category name: ");
     scanf("%s", &category);
     strcat(path, category);

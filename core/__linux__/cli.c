@@ -7,7 +7,7 @@
 #include <X11/Xlib.h>
 
 #include "cli.h"
-#include "xorplus.h"
+#include "../xorplus.h"
 
 FILE *AWE;
 char fn[] = "base.db";
@@ -57,7 +57,7 @@ void masterSeed() {
             if(confirm() == FALSE) {
                 exit(1);
             }
-            AWE = fopen(mf, "w");
+            AWE = fopen(mf, "w"); // в файле ничего не остается если ничего не написать
         }
         else {
             printf("Canselling...\n");
@@ -112,12 +112,10 @@ char* removeXChar(char* str) {
     char* temp = str;
     char* add, *buffer;
     for(add = str, buffer = str; *buffer = *add; *add++) {
-        if(*add == ' ') {
+        if(isalnum(*add)) {
             *buffer++;
         }
-        if(isalnum(*add))
-            *buffer++;
-        }
+    }
     return temp;
 }
 
@@ -127,7 +125,7 @@ void initStruct() {
 }
 
 // создание категории
-char* createCat() {
+char* createCat() { // seg fault if net master pass
     char path[] = "__awebase/categories/";
     char catName[SIZE];
     char buffer[SIZE];
@@ -144,8 +142,7 @@ char* createCat() {
             AWE = fopen(path, "a");
             printf("%s.txt - name of category\n", catName);
         }else {
-            printf("the file already exists\n");
-
+            printf("ERROR: the file already exists\n");
         }
     } // не записывается пробел
     CLOSE_FILE;
@@ -203,46 +200,34 @@ int counting(const char* fname, int n, char* buf, int len){
     return (int)(*buf != '\0');
 }
 
-// int counting() { 
-//     int lineID = 0;
-//     char lineChar[32]; // максиальный размер id строки
-//     char charCount; // счетчик символов
-
-//     AWE = fopen(fn, "r+");
-//     do {
-//         fputs("1:", AWE);
-//         lineID++;
-//     } while (lineID == 0);
-    
-//     for (charCount = getc(AWE); charCount != EOF; charCount = getc(AWE)) {
-//         if (charCount == '\n') {
-//             lineID += 1;
-//             iToc(lineID, lineChar);
-//             fputs(lineChar, AWE);
-//             fputc(':', AWE);
-//         }
-//     }
-// }
-
 // показать все пароли из файла
 void showTheList() {
     char c;
+    char buffer[SIZE];
     DIR *listDir;
     struct dirent *dir;
     char path[] = "__awebase/categories/";
 
+    if(!confirm()) {
+        exit(1);
+    }
+    
     listDir = opendir(path);
     while ((dir = readdir(listDir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
-            printf("\n%s ( \n", dir->d_name);
-            AWE = fopen(strcat(path, dir->d_name), "r"); //segmenrtation fault
-            while( (c = fgetc(AWE)) != EOF){
+            memcpy(buffer, path, 22); // копирование path в buffer 
+            AWE = fopen(strcat(buffer, dir->d_name), "r"); 
+            printf("\n%s\n", dir->d_name);
+
+            while((c = fgetc(AWE)) != EOF){
 		        printf("%c", c);
             }
-            printf("\n)\n");
+            printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
         }
-    } // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
+    } 
+    closedir(listDir);
 }
+// СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
 void prepareString() { 
@@ -340,13 +325,4 @@ void extradition() {
     counting(path, line-1, buffer, sizeof(buffer));
     puts(buffer);
 
-    // while(!feof(AWE)) {
-    //     fscanf(AWE, "%*[^\n]%*c");
-    //     countLine++;
-    //     if(countLine == line) {
-    //         for(;;) {
-
-    //         }
-    //     }
-    // }
 }

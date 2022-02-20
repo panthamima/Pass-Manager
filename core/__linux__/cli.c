@@ -121,7 +121,7 @@ char* removeXChar(char* str) {
 
 // разщвертка структуры приложения
 void initStruct() {
-
+    
 }
 
 // создание категории

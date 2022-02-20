@@ -28,20 +28,20 @@ char help[] = " getting started with awestruck\n\t\
  rem+\tdeleting category or all entries\n\t\
  cat\tcreating a new category\n\n";
 
-void prepareString(); 	      // создание строки для записи в файл
-void addition();		          // добавление строки в файл
-void extradition();           // выдача информации о записи (строке)
-void removing();              // удаление записи из файла
-void showTheList();           // показать все пароли из файла
-void shred();                 // удалить все пароли
-void iToc(int n, char s[]);   // int to char
-void reverse(char s[]);       // reverse string
-int randomPass();             // создание случайного пароля
-void masterSeed();            // создание мастер пароля
-int confirm();                // подтверждение мастер пароля
-char* createCat();            // создание категории
-char* removeXChar(char* str); // удаление запрещенного символа из массива
-void initStruct();            // развертка структуры программы
-void showDir();               // показывает все существующие категории 
+void   prepareString(); 	       // создание строки для записи в файл
+void   addition();		           // добавление строки в файл
+void   extradition();            // выдача информации о записи (строке)
+void   removing();               // удаление записи из файла
+void   showTheList();            // показать все пароли из файла
+void   shred();                  // удалить все пароли
+void   iToc(int n, char s[]);    // int to char
+void   reverse(char s[]);        // reverse string
+int    randomPass();             // создание случайного пароля
+void   masterSeed();             // создание мастер пароля
+int    confirm();                // подтверждение мастер пароля
+char*  createCat();              // создание категории
+char*  removeXChar(char* str);   // удаление запрещенного символа из массива
+void   initStruct();             // развертка структуры программы
+void   showDir();                // показывает все существующие категории 
 
 #endif

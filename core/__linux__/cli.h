@@ -4,6 +4,7 @@
 #define SIZE 256
 #define FALSE 0
 #define TRUE 1
+#define CLOSE_FILE fclose(AWE)
 
 char logotype[] = "                                                              \n\
    ▄▄▄     █     █░▓█████   ██████ ▄▄██████▓ ██▀███   █    ██  ▄ █▓█    ██ ▄█▀   \n\

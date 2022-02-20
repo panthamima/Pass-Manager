@@ -4,6 +4,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <dirent.h>
+#include <X11/Xlib.h>
 
 #include "cli.h"
 #include "xorplus.h"
@@ -147,7 +148,7 @@ char* createCat() {
 
         }
     } // не записывается пробел
-    fclose(AWE);
+    CLOSE_FILE;
 }
 
 //reverse string
@@ -184,21 +185,21 @@ void iToc(int num, char str[]) {
 // подсчет строк в файле
 int counting(const char* fname, int n, char* buf, int len){
     char  c;
-    FILE* fp = fopen(fname, "rt");
-    if(fp == NULL)
+    FILE* AWE = fopen(fname, "rt");
+    if(AWE == NULL)
         return 0;
 
-    while(! feof(fp) && (n > 0)){
-       fscanf(fp, "%*[^\n\r]%c", &c);
+    while(! feof(AWE) && (n > 0)){
+       fscanf(AWE, "%*[^\n\r]%c", &c);
        --n;
     }
 
-    if(! feof(fp))
-        fgets(buf, len-1, fp);
+    if(! feof(AWE))
+        fgets(buf, len-1, AWE);
     else
        *buf = '\0';
 
-    fclose(fp);
+    CLOSE_FILE;
     return (int)(*buf != '\0');
 }
 
@@ -264,7 +265,7 @@ void addition() { // если нажать пробел запись багае�
     prepareString();
     fputc('\n', AWE);
     
-    fclose(AWE);
+    CLOSE_FILE;
 }
 
 // удалить все пароли
@@ -277,7 +278,7 @@ void shred() {
         showTheList();
         if(confirm() == TRUE) {
             AWE = fopen(fn, "w");
-            fclose(AWE);
+            CLOSE_FILE;
         }
         exit(1);
     }

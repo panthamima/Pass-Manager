@@ -12,10 +12,14 @@
 FILE *AWE;
 char fn[] = "base.db";
 char mf[] = "__awebase/mas.txt";
+char path[] = "__awebase/categories/";
+
 
 int main(int argc,char **argv){
 
-    /****/ if (!strcmp(argv[1], "reg")) {
+    /****/ if (argc < 2) {
+        printf("command not found. Enter: awe help\n");
+    } else if (!strcmp(argv[1], "reg")) {
         masterSeed();
     } else if (!strcmp(argv[1], "add")) {
         addition();
@@ -32,10 +36,10 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
-    } else if(!strcmp(argv[1], "cat")) {
+    } else if (!strcmp(argv[1], "cat")) {
         createCat(); // добавить проверку на добвление .txt
     } else {
-        printf(":ERROR COMMAND: enter awe help\n");
+        printf("command not found. Enter: awe help\n");
     }
 }
 
@@ -121,7 +125,7 @@ char* removeXChar(char* str) {
 
 // разщвертка структуры приложения
 void initStruct() {
-    
+
 }
 
 // создание категории
@@ -167,7 +171,8 @@ void iToc(int num, char str[]) {
 
     if ((sign = num) < 0) { /* записываем знак */
         num = -num;          /* делаем n положительным числом */
-    } 
+    }
+
     do {       /* генерируем цифры в обратном порядке */
         str[i++] = num % 10 + '0';   /* берем следующую цифру */
     } while ((num /= 10) > 0);     /* удаляем */
@@ -202,6 +207,7 @@ int counting(const char* fname, int n, char* buf, int len){
 
 // показать все пароли из файла
 void showTheList() {
+    int i = 0;
     char c;
     char buffer[SIZE];
     DIR *listDir;
@@ -218,8 +224,11 @@ void showTheList() {
             memcpy(buffer, path, 22); // копирование path в buffer 
             AWE = fopen(strcat(buffer, dir->d_name), "r"); 
             printf("\n%s\n", dir->d_name);
-
+            printf("%d: ", i);
             while((c = fgetc(AWE)) != EOF){
+                if(c == '\n') {
+                    printf("\n%d: ", ++i);
+                }
 		        printf("%c", c);
             }
             printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
@@ -230,24 +239,35 @@ void showTheList() {
 // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
-void prepareString() { 
+void prepareString(char filename[SIZE]) { 
+    AWE = fopen(strcat(path, filename), "r");
+    if(AWE == NULL) {
+        printf("file doesnt exist\n");
+        exit(1);
+    }
+    CLOSE_FILE;
+    AWE = fopen(path, "a");
     char buffer[SIZE];
     scanf("%255s", &buffer);
     fputs(buffer, AWE);
+    CLOSE_FILE;
 }
 
 // добавление строки в файл
 void addition() { // если нажать пробел запись багается
-    AWE = fopen(fn, "a");
-    
-    // counting();
+    char path[] = "__awebase/categories/";
+    char filename[SIZE];
+    scanf("%s", &filename);
+    AWE = fopen(strcat(path, filename), "a");
+    printf("%s", path);
 
     printf("Enter login\n\t- ");
-    prepareString();
+    prepareString(filename);
     fputc(' ', AWE);
+    printf("%s", path);
 
     printf("Enter password\n\t- ");
-    prepareString();
+    prepareString(filename);
     fputc('\n', AWE);
     
     CLOSE_FILE;
@@ -291,7 +311,7 @@ int randomPass() {
 void showDir() { // for windows https://learnc.info/c/libuv_directories.html
     DIR *listDir;
     struct dirent *dir;
-    listDir = opendir("__awebase/categories");
+    listDir = opendir("__awebase/categories/");
 
     if (listDir) {
         while ((dir = readdir(listDir)) != NULL) {
@@ -324,5 +344,4 @@ void extradition() {
 
     counting(path, line-1, buffer, sizeof(buffer));
     puts(buffer);
-
 }

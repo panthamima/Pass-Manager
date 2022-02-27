@@ -11,8 +11,16 @@ Awestruck is a simple project that is a password manager. <br>Uses txt files to 
 ```sh
 ├── awestruck/
 │    ├── core/
-│    │    └── cli.c
-│    │    └── cli.h
+│    │    └── linux__
+│    │    │    └── __awebase
+│    │    │    └── cli.c
+│    │    │    └── cli.h
+│    │    │ 
+│    │    └── win64__
+│    │    │    └── __awebase
+│    │    │    └── cli.c
+│    │    │    └── cli.h
+│    │    │ 
 │    │    └── xorplus.c
 │    │    └── xorplus.h
 │    │ 

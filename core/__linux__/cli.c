@@ -6,8 +6,8 @@
 #include <ctype.h>
 #include <dirent.h>
 #include <X11/Xlib.h>
-#include<sys/stat.h>
-#include<sys/types.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "cli.h"
 #include "../xorplus.h"
@@ -34,7 +34,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        initStruct();
+        confirm();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -89,11 +89,13 @@ void masterSeed() {
 }
 
 // подтверждение мастер пароля
-int confirm() {
+int confirm() {  // сделать количество попыток
     char pasConfirm[SIZE], buffer[SIZE];
     int i;
-
-    AWE = fopen(mf, "r+");
+    AWE = fopen(mf, "r");
+    if(!AWE) {
+        AWE = fopen(mf, "w+");
+    }
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
@@ -129,26 +131,27 @@ char* removeXChar(char* str) {
 }
 
 // создание категории
-char* createCat() { // seg fault if net master pass
-    char path[] = "__awebase/categories/";
+char* createCat() { 
     char catName[SIZE];
     char buffer[SIZE];
     int i, j;
 
-    if(confirm() == TRUE) {
-        printf("enter a category name without a special symbols(#/.&! etc)\n\t- ");
-        scanf("%s", &catName);
-        removeXChar(catName);
-
-        strcat(path, catName);
-        AWE = fopen(strcat(path, ".txt"), "rb+");
-        if(!AWE) {
-            AWE = fopen(path, "a");
-            printf("%s.txt - name of category\n", catName);
-        }else {
-            printf("ERROR: the file already exists\n");
-        }
+    if(confirm() == FALSE) {
+        exit(1);
     } // не записывается пробел
+    printf("enter a category name without .txt\n\t- ");
+    scanf("%s", &catName);
+    removeXChar(catName);
+
+    strcat(path, catName);
+    AWE = fopen(strcat(path, ".txt"), "rb+");
+    if(!AWE) {
+        AWE = fopen(path, "a");
+        printf("%s.txt - name of category\n", catName);
+    }
+    else {
+        printf("ERROR: the file already exists\n");
+    }
     CLOSE_FILE;
 }
 
@@ -212,7 +215,6 @@ void showTheList() {
     char buffer[SIZE];
     DIR *listDir;
     struct dirent *dir;
-    char path[] = "__awebase/categories/";
 
     if(!confirm()) {
         exit(1);
@@ -255,7 +257,6 @@ void prepareString(char filename[SIZE]) {
 
 // добавление строки в файл
 void addition() { // если нажать пробел запись багается
-    char path[] = "__awebase/categories/";
     char filename[SIZE];
     scanf("%s", &filename);
     AWE = fopen(strcat(path, filename), "a");
@@ -275,8 +276,6 @@ void addition() { // если нажать пробел запись багае�
 
 // удалить все пароли
 void shred() {
-
-
 
     char answer;
     printf("do you really want to delete passwords?[y/n] ");
@@ -312,18 +311,15 @@ int randomPass() {
 
 // развертка структуры приложения
 void initStruct() {
-    mkdir("/__awebase", S_IRWXU | S_IRWXG | S_IRWXO); // permission denied
     DIR *listDir;
     struct dirent *dir;
     listDir = opendir("__awebase/categories/");
     if(listDir == NULL) {
-        printf("bebra");
-        umask(700);
-        if (mkdir("/__awebase", 777) == -1) {
-            printf("Error: %s\n", strerror(errno));
-        }
+        system("mkdir -p __awebase/categories");
+        exit(0);
     }
-    exit(0);
+    printf("directory already exists\n");
+    exit(1);
 }
 
 // показать сществующие категории
@@ -347,7 +343,6 @@ void extradition() {
     unsigned line;
     char buffer[SIZE];
     char category[SIZE];
-    char path[] = "__awebase/categories/";
 
     system("clear");
     showDir();

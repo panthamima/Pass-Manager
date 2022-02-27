@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <time.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <X11/Xlib.h>
+#include<sys/stat.h>
+#include<sys/types.h>
 
 #include "cli.h"
 #include "../xorplus.h"
@@ -13,7 +16,6 @@ FILE *AWE;
 char fn[] = "base.db";
 char mf[] = "__awebase/mas.txt";
 char path[] = "__awebase/categories/";
-
 
 int main(int argc,char **argv){
 
@@ -32,7 +34,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        showDir();
+        initStruct();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -116,16 +118,14 @@ char* removeXChar(char* str) {
     char* temp = str;
     char* add, *buffer;
     for(add = str, buffer = str; *buffer = *add; *add++) {
+        if(isspace(*add)) {
+            *buffer++ = ' ';
+        } break;
         if(isalnum(*add)) {
             *buffer++;
         }
     }
     return temp;
-}
-
-// разщвертка структуры приложения
-void initStruct() {
-
 }
 
 // создание категории
@@ -275,6 +275,9 @@ void addition() { // если нажать пробел запись багае�
 
 // удалить все пароли
 void shred() {
+
+
+
     char answer;
     printf("do you really want to delete passwords?[y/n] ");
     answer = getchar();
@@ -305,6 +308,22 @@ int randomPass() {
         randCh = rand()%62;
         randPass[i] = pool[randCh];
     }
+}
+
+// развертка структуры приложения
+void initStruct() {
+    mkdir("/__awebase", S_IRWXU | S_IRWXG | S_IRWXO); // permission denied
+    DIR *listDir;
+    struct dirent *dir;
+    listDir = opendir("__awebase/categories/");
+    if(listDir == NULL) {
+        printf("bebra");
+        umask(700);
+        if (mkdir("/__awebase", 777) == -1) {
+            printf("Error: %s\n", strerror(errno));
+        }
+    }
+    exit(0);
 }
 
 // показать сществующие категории

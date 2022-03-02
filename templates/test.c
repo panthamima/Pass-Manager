@@ -1,76 +1,114 @@
     // printf("1[add]\n2[get password]\n3[remove]\n4[rename login or password] \
             // \n6[show password list]\n7[delete file with accounts]\n\n:>> ");
-
-#include <stdlib.h>
+#include <curses.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <time.h>
 #include <ctype.h>
-#include "../d_cipher.h"
+#include <dirent.h>
+WINDOW *mainwin;
+ mainwin = initscr();   /* start the curses mode with default window */
+ clear()    /* clear the default window */
+ raw();     /* stop terminal driver from interpreting key strokes */ 
+ cbreak();  /* input chars without waiting for newline */
+ 
+ nodelay( mainwin, true); /* causes getch() to wait for a key rather than returning ERR */
+ keypad( mainwin, true ); /* program must handle all meta keys including newline */
 
-#define SIZE 255
+ noecho();  /* stop terminal echo while entering password */
+
+ size_t i = 0;
+ while( i < (sizeof( pwd ) -1) && ( ch = getch() ) != ENTER )
+ {
+     pwd[i] = ch;
+     i++;
+
+     printw( "*" );
+     refresh();
+ }
+
+ echo();               /* resume echoing characters on terminal */
+ keypad( mainwin, false );      /* stop passing keypad chars to program */
+ noraw();              /* terminal driver resumes interpreting key strokes */
+
+ pwd[i] = '\0';        /* NUL terminate the string */   
+ endwin();
+
+// #include <stdlib.h>
+// #include <stdio.h>
+// #include <ncurses.h>
+// #include <string.h>
+// #include <ctype.h>
+// #include "../d_cipher.h"
+
+// #define SIZE 255
 
 
-int encrypt();
-int decrypt();
+// int encrypt();
+// int decrypt();
 
-FILE *PM; // Password-Manager
-char fn[] = "p.txt";
+// FILE *PM; // Password-Manager
+// char fn[] = "p.txt";
 
-void prepareString() { // создание строки для записи в файл
-    char buffer[SIZE];
+// void prepareString() { // создание строки для записи в файл
+//     char buffer[SIZE];
 
-    fgets(buffer, 255, stdin);
-    scanf("%s", buffer);
-    fputs(buffer, PM);
-}
+//     fgets(buffer, 255, stdin);
+//     scanf("%s", buffer);
+//     fputs(buffer, PM);
+// }
 
-void addition() { // добавление строки в файл
-    printf("enter login: ");
-    prepareString();
-    fputs(":", PM);
+// void addition() { // добавление строки в файл
+//     printf("enter login: ");
+//     prepareString();
+//     fputs(":", PM);
 
-    printf("enter password: ");
-    prepareString();
+//     printf("enter password: ");
+//     prepareString();
 
-    fputs("\n", PM);
-    fclose(PM);
+//     fputs("\n", PM);
+//     fclose(PM);
 
-}
+// }
 
-void pasRemove() { // удаление строки из файла
+// void pasRemove() { // удаление строки из файла
 
-}
+// }
 
-void formatting() { // форматирование базы данных
-	char sym[SIZE];
-    int c = 0;
-    int id = 1;
+// void formatting() { // форматирование базы данных
+// 	char sym[SIZE];
+//     int c = 0;
+//     int id = 1;
 
-    PM = fopen("p.txt", "r");
-    while((c = fgetc(PM)) != EOF) {
-        if(c == '\n') {
-            id++;
-        }
-    }
-}
+//     PM = fopen("p.txt", "r");
+//     while((c = fgetc(PM)) != EOF) {
+//         if(c == '\n') {
+//             id++;
+//         }
+//     }
+// }
 
-void showList() { // показать весь файл с паролями
+// void showList() { // показать весь файл с паролями
 
-}
+// }
 
-int main() { 
-    int command = getchar();
+// int main() { 
+//     int command = getchar();
 
-    if(command == '1') {
-        PM = fopen(fn, "a");
-        addition();
-    }
-    else if (command == '2') {
-        encrypt();
-    }
+//     if(command == '1') {
+//         PM = fopen(fn, "a");
+//         addition();
+//     }
+//     else if (command == '2') {
+//         encrypt();
+//     }
 
-}
+// }
 // int main() { 
 //     char id[SIZE]; 
 //     char enter = '\n';

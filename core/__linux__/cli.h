@@ -36,6 +36,7 @@ void   showTheList();            // показать все пароли из ф
 void   shred();                  // удалить все пароли
 void   iToc(int n, char s[]);    // int to char
 void   reverse(char s[]);        // reverse string
+void   myScan(char *string);     // scanf
 int    randomPass();             // создание случайного пароля
 void   masterSeed();             // создание мастер пароля
 int    confirm();                // подтверждение мастер пароля

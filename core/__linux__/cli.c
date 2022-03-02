@@ -5,17 +5,16 @@
 #include <time.h>
 #include <ctype.h>
 #include <dirent.h>
-#include <X11/Xlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+// #include <X11/Xlib.h>
+// #include <sys/stat.h>
+// #include <sys/types.h>
 
 #include "cli.h"
 #include "../xorplus.h"
 
 FILE *AWE;
-char fn[] = "base.db";
 char mf[] = "__awebase/mas.txt";
-char path[] = "__awebase/categories/";
+char path[SIZE] = "__awebase/categories/";
 
 int main(int argc,char **argv){
 
@@ -34,7 +33,7 @@ int main(int argc,char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        confirm();
+
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -51,7 +50,7 @@ void masterSeed() {
     char masterPass[SIZE], 
          reMasterPass[SIZE];
     system("clear");
-
+    initStruct();
     AWE = fopen(mf, "a+"); 
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
@@ -93,6 +92,7 @@ int confirm() {  // сделать количество попыток
     char pasConfirm[SIZE], buffer[SIZE];
     int i;
     AWE = fopen(mf, "r");
+    initStruct();
     if(!AWE) {
         AWE = fopen(mf, "w+");
     }
@@ -102,7 +102,7 @@ int confirm() {  // сделать количество попыток
     if(pos > 0) {
         AWE = fopen(mf, "r+");
         printf("Enter master password to confirm: ");
-        scanf("%s", &pasConfirm);
+        myScan(pasConfirm);
         fgets(buffer, SIZE, AWE);
         if(strcmp(pasConfirm, buffer) == 0) {
             printf("Success.\n");
@@ -121,13 +121,22 @@ char* removeXChar(char* str) {
     char* add, *buffer;
     for(add = str, buffer = str; *buffer = *add; *add++) {
         if(isspace(*add)) {
-            *buffer++ = ' ';
-        } break;
-        if(isalnum(*add)) {
+            *buffer++;
+            continue;
+        }
+        else if (isalnum(*add)) {
             *buffer++;
         }
     }
     return temp;
+}
+
+// analog scanf
+void myScan(char *string) {
+    char c;
+    while ((c = getchar()) != '\n') { 
+        *string++ = c;
+    }
 }
 
 // создание категории
@@ -138,10 +147,15 @@ char* createCat() {
 
     if(confirm() == FALSE) {
         exit(1);
-    } // не записывается пробел
-    printf("enter a category name without .txt\n\t- ");
-    scanf("%s", &catName);
+    }
+    printf("enter a category name without '.txt'\n\t- ");
+    myScan(catName);
     removeXChar(catName);
+
+    if(!strcmp(catName, "")) {
+        printf("Error: enter filename\n");
+        exit(1);
+    }
 
     strcat(path, catName);
     AWE = fopen(strcat(path, ".txt"), "rb+");
@@ -233,7 +247,7 @@ void showTheList() {
                 }
 		        printf("%c", c);
             }
-            printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            printf("\n+------------------------------------+\n");
         }
     } 
     closedir(listDir);
@@ -276,17 +290,17 @@ void addition() { // если нажать пробел запись багае�
 
 // удалить все пароли
 void shred() {
-
+    // need fix!!
     char answer;
     printf("do you really want to delete passwords?[y/n] ");
     answer = getchar();
     if(answer == 'Y' || answer == 'y') {
-        printf("passwords in %s", fn);
-        showTheList();
-        if(confirm() == TRUE) {
-            AWE = fopen(fn, "w");
-            CLOSE_FILE;
-        }
+        // printf("passwords in %s", fn);
+        // showTheList();
+        // if(confirm() == TRUE) {
+        //     AWE = fopen(fn, "w");
+        //     CLOSE_FILE;
+        // } 
         exit(1);
     }
 }
@@ -316,10 +330,7 @@ void initStruct() {
     listDir = opendir("__awebase/categories/");
     if(listDir == NULL) {
         system("mkdir -p __awebase/categories");
-        exit(0);
     }
-    printf("directory already exists\n");
-    exit(1);
 }
 
 // показать сществующие категории

@@ -17,6 +17,7 @@ char mf[] = "__awebase/mas.txt";
 char path[SIZE] = "__awebase/categories/";
 
 int main(int argc,char **argv){
+    initStruct();
 
     /****/ if (argc < 2) {
         printf("command not found. Enter: awe help\n");
@@ -50,7 +51,6 @@ void masterSeed() {
     char masterPass[SIZE], 
          reMasterPass[SIZE];
     system("clear");
-    initStruct();
     AWE = fopen(mf, "a+"); 
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
@@ -62,7 +62,7 @@ void masterSeed() {
             if(confirm() == FALSE) {
                 exit(1);
             }
-            AWE = fopen(mf, "w"); // в файле ничего не остается если ничего не написать
+            AWE = fopen(mf, "w"); // 
         }
         else {
             printf("Canselling...\n");
@@ -92,7 +92,6 @@ int confirm() {  // сделать количество попыток
     char pasConfirm[SIZE], buffer[SIZE];
     int i;
     AWE = fopen(mf, "r");
-    initStruct();
     if(!AWE) {
         AWE = fopen(mf, "w+");
     }
@@ -102,7 +101,7 @@ int confirm() {  // сделать количество попыток
     if(pos > 0) {
         AWE = fopen(mf, "r+");
         printf("Enter master password to confirm: ");
-        myScan(pasConfirm);
+        scanf("%s", pasConfirm);
         fgets(buffer, SIZE, AWE);
         if(strcmp(pasConfirm, buffer) == 0) {
             printf("Success.\n");
@@ -225,7 +224,9 @@ int counting(const char* fname, int n, char* buf, int len){
 // показать все пароли из файла
 void showTheList() {
     int i = 0;
+    int j = 1;
     char c;
+    char line[SIZE];
     char buffer[SIZE];
     DIR *listDir;
     struct dirent *dir;
@@ -240,13 +241,11 @@ void showTheList() {
             memcpy(buffer, path, 22); // копирование path в buffer 
             AWE = fopen(strcat(buffer, dir->d_name), "r"); 
             printf("\n%s\n", dir->d_name);
-            printf("%d: ", i);
-            while((c = fgetc(AWE)) != EOF){
-                if(c == '\n') {
-                    printf("\n%d: ", ++i);
-                }
-		        printf("%c", c);
+            
+            while(fscanf(AWE, "%s", line) != EOF) {
+                printf("[%d] %s\n",j++, line);
             }
+            i = 1;
             printf("\n+------------------------------------+\n");
         }
     } 
@@ -255,34 +254,31 @@ void showTheList() {
 // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
-void prepareString(char filename[SIZE]) { 
-    AWE = fopen(strcat(path, filename), "r");
+void prepareString(char pathfile[SIZE]) { 
+    AWE = fopen(path, "a"); //pass -> login FIX!!
     if(AWE == NULL) {
         printf("file doesnt exist\n");
         exit(1);
     }
-    CLOSE_FILE;
-    AWE = fopen(path, "a");
     char buffer[SIZE];
     scanf("%255s", &buffer);
     fputs(buffer, AWE);
-    CLOSE_FILE;
 }
 
 // добавление строки в файл
 void addition() { // если нажать пробел запись багается
     char filename[SIZE];
+    showDir();
+    printf("enter filename\n\t- ");
     scanf("%s", &filename);
     AWE = fopen(strcat(path, filename), "a");
-    printf("%s", path);
 
     printf("Enter login\n\t- ");
-    prepareString(filename);
-    fputc(' ', AWE);
-    printf("%s", path);
+    prepareString(path);
+    fputc(':', AWE);
 
     printf("Enter password\n\t- ");
-    prepareString(filename);
+    prepareString(path);
     fputc('\n', AWE);
     
     CLOSE_FILE;
@@ -306,7 +302,24 @@ void shred() {
 }
 
 // удалить выбранную запись
-void removing() {
+void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
+    char filename[SIZE];
+    char ext[] = ".txt";
+    showDir();
+    printf("enter file where delete\n\t- ");
+    myScan(filename);
+    reverse(filename);
+    if(strncmp(filename, "txt.", 4) != 0) {
+        reverse(filename);
+    } else {
+        reverse(filename);
+    }
+    AWE = fopen(strcat(path, filename), "r");
+    if(!AWE) {
+        printf("Error: file doesn't exist\n");
+        exit(1);
+    }
+    AWE = fopen(path, "a");
 
 }
 
@@ -342,10 +355,10 @@ void showDir() { // for windows https://learnc.info/c/libuv_directories.html
     if (listDir) {
         while ((dir = readdir(listDir)) != NULL) {
             if(strlen(dir->d_name) > 3) { // if dirname > 3 то не будет показаны 
-                printf("%s\n", dir->d_name); // функции выхода  из директории . и ..
+                printf("-- %s\n", dir->d_name); // функции выхода  из директории . и ..
             }
         }
-    closedir(listDir);
+        closedir(listDir);
     }
 }
 
@@ -356,6 +369,11 @@ void extradition() {
     char category[SIZE];
 
     system("clear");
+
+    if(confirm() == FALSE) {
+        exit(1);
+    }
+
     showDir();
     printf("enter category name: ");
     scanf("%s", &category);

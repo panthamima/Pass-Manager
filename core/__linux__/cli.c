@@ -16,7 +16,7 @@ FILE *AWE;
 char mf[] = "__awebase/mas.txt";
 char path[SIZE] = "__awebase/categories/";
 
-int main(int argc,char **argv){
+int main(int argc, char **argv){
     initStruct();
 
     /****/ if (argc < 2) {
@@ -168,6 +168,11 @@ char* createCat() {
     CLOSE_FILE;
 }
 
+// удаление категории 40m
+void deleteCat(char *fileN) {
+
+}
+
 //reverse string
 void reverse(char s[]) { 
     int i, j;
@@ -204,8 +209,9 @@ void iToc(int num, char str[]) {
 int counting(const char* fname, int n, char* buf, int len){
     char  c;
     FILE* AWE = fopen(fname, "rt");
-    if(AWE == NULL)
+    if(AWE == NULL) {
         return 0;
+    }
 
     while(! feof(AWE) && (n > 0)){
        fscanf(AWE, "%*[^\n\r]%c", &c);
@@ -254,15 +260,16 @@ void showTheList() {
 // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
-void prepareString(char pathfile[SIZE]) { 
-    AWE = fopen(path, "a"); //pass -> login FIX!!
+void prepareString(char pathfile[SIZE], char symbol) { 
+    AWE = fopen(pathfile, "r");
     if(AWE == NULL) {
         printf("file doesnt exist\n");
         exit(1);
     }
     char buffer[SIZE];
     scanf("%255s", &buffer);
-    fputs(buffer, AWE);
+    fprintf(AWE, "%s%c", buffer, symbol);
+    CLOSE_FILE;
 }
 
 // добавление строки в файл
@@ -271,17 +278,13 @@ void addition() { // если нажать пробел запись багае�
     showDir();
     printf("enter filename\n\t- ");
     scanf("%s", &filename);
-    AWE = fopen(strcat(path, filename), "a");
+    strcat(path, filename);
 
     printf("Enter login\n\t- ");
-    prepareString(path);
-    fputc(':', AWE);
+    prepareString(path, ':');
 
     printf("Enter password\n\t- ");
-    prepareString(path);
-    fputc('\n', AWE);
-    
-    CLOSE_FILE;
+    prepareString(path, '\n');
 }
 
 // удалить все пароли
@@ -303,6 +306,8 @@ void shred() {
 
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
+    unsigned line = 0;
+    char entry[SIZE];
     char filename[SIZE];
     char ext[] = ".txt";
     showDir();
@@ -321,6 +326,8 @@ void removing() { // брать слово вычитать все символ�
     }
     AWE = fopen(path, "a");
 
+    counting(path, line-1, entry, sizeof(entry));
+    // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа
 }
 
 // генерирует случайный пароль
@@ -365,7 +372,7 @@ void showDir() { // for windows https://learnc.info/c/libuv_directories.html
 // выдача информации о записи (строке)
 void extradition() {
     unsigned line;
-    char buffer[SIZE];
+    char entry[SIZE];
     char category[SIZE];
 
     system("clear");
@@ -385,6 +392,7 @@ void extradition() {
     printf("enter number of entry: ");
     scanf("%d", &line);
 
-    counting(path, line-1, buffer, sizeof(buffer));
-    puts(buffer);
+    counting(path, line-1, entry, sizeof(entry));
+    puts(entry);
+    CLOSE_FILE;
 }

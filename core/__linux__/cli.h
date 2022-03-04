@@ -28,7 +28,7 @@ char help[] = " getting started with awestruck\n\t\
  rem+\tdeleting category or all entries\n\t\
  cat\tcreating a new category\n\n";
 
-void   prepareString(); 	       // создание строки для записи в файл
+void   prepareString(char pathfile[SIZE], char symbol); // создание строки для записи в файл
 void   addition();		           // добавление строки в файл
 void   extradition();            // выдача информации о записи (строке)
 void   removing();               // удаление записи из файла
@@ -40,8 +40,9 @@ void   myScan(char *string);     // scanf
 int    randomPass();             // создание случайного пароля
 void   masterSeed();             // создание мастер пароля
 int    confirm();                // подтверждение мастер пароля
-char*  createCat();              // создание категории
-char*  removeXChar(char* str);   // удаление запрещенного символа из массива
+char   *createCat();             // создание категории
+void   deleteCat(char *fileN);   // удаление категории
+char   *removeXChar(char* str);  // удаление запрещенного символа из массива
 void   initStruct();             // развертка структуры программы
 void   showDir();                // показывает все существующие категории 
 

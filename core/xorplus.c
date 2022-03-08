@@ -4,18 +4,7 @@
 
 #define SIZE 256
 
-FILE *AWE;
-// должен принимать файл в который идет запись!
-
-// masterssed --- mf
-//     crypt
-//     file
-//     crypt
-// masterseed
-
-
-
-int caeXorEnc(char * filename, char xor_str[SIZE], char *xor_key) {
+int caeXorEnc(char xor_str[SIZE], char *xor_key) {
     int i, // xor_str
         j, // count 
         k; // k % strlen
@@ -23,7 +12,6 @@ int caeXorEnc(char * filename, char xor_str[SIZE], char *xor_key) {
     i = k = j = 0;
     char buf; 
     char count[SIZE];
-    AWE = fopen(filename, "a");
 
     for(i = 0; xor_str[i] != '\0'; ++i){
         buf = xor_str[i];
@@ -35,18 +23,16 @@ int caeXorEnc(char * filename, char xor_str[SIZE], char *xor_key) {
         }
         count[j] = buf;
         count[j] = count[j] ^ xor_key[k % strlen(xor_key)]; // xor
-        fputc(count[j], AWE);
         k++;
+        // printf("%c", count[j]);
     }
-    fclose(AWE);
 }
 
-int caeXorDec(char* filename, char xor_str[SIZE], char *xor_key) {
+int caeXorDec(char xor_str[SIZE], char *xor_key) {
     char buf;
     int i, k, j;
     i = k = j =0;
     char output[SIZE];
-    AWE = fopen(filename, "a");
     for(i = 0; xor_str[i] != '\0'; i++){
         output[j] = xor_str[i] ^ xor_key[k % strlen(xor_key)]; //xor
         k++;
@@ -57,8 +43,6 @@ int caeXorDec(char* filename, char xor_str[SIZE], char *xor_key) {
 				buf = buf + '}' - '!' + 1;
 			}
         }
-        fputc(buf, AWE);
+        // printf("%c", buf);
     }
-    fclose(AWE);
 }
-

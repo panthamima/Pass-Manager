@@ -12,17 +12,17 @@
 #include "cli.h"
 #include "../xorplus.h"
 
-FILE *AWE;
+FILE *AWE, *TEMP;
 char mf[] = "__awebase/mas.txt";
 char path[SIZE] = "__awebase/categories/";
 
 int main(int argc, char **argv){
-    initStruct();
+    init_struct();
 
     /****/ if (argc < 2) {
         printf("command not found. Enter: awe help\n");
     } else if (!strcmp(argv[1], "reg")) {
-        masterSeed();
+        master_seed();
     } else if (!strcmp(argv[1], "add")) {
         addition();
     } else if (!strcmp(argv[1], "rem")) {
@@ -30,26 +30,26 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "get")) {
         extradition();
     } else if (!strcmp(argv[1], "list")) {
-        showTheList();
+        show_the_list();
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-
+        // handler_io("asd.txt");
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
     } else if (!strcmp(argv[1], "cat")) {
-        createCat(); // добавить проверку на добвление .txt
+        create_cat(); // добавить проверку на добвление .txt
     } else {
         printf("command not found. Enter: awe help\n");
     }
 }
 
 // создание мастер пароля
-void masterSeed() { 
+void master_seed() { 
     char answer;
-    char masterPass[SIZE], 
-         reMasterPass[SIZE];
+    char master_pass[SIZE], 
+         re_master_pass[SIZE];
     system("clear");
     AWE = fopen(mf, "a+"); 
     fseek(AWE, 0, SEEK_END);
@@ -71,14 +71,14 @@ void masterSeed() {
     }
     //awestruck
     printf("%sHello in Awestruck! \nEnter a master password: ~$ ", logotype);
-    scanf("%s", &masterPass);
+    scanf("%s", &master_pass);
 
-    if(masterPass != NULL) {
+    if(master_pass != NULL) {
         printf("confirm your master password: ");
-        scanf("%s", &reMasterPass);
-        if(strcmp(masterPass, reMasterPass) == 0) {
+        scanf("%s", &re_master_pass);
+        if(strcmp(master_pass, re_master_pass) == 0) {
             printf("the password has been saved.\n");
-            fputs(reMasterPass, AWE);
+            fputs(re_master_pass, AWE);
         }
         else {
             printf("Error: Passwords don't match.\n");
@@ -89,7 +89,7 @@ void masterSeed() {
 
 // подтверждение мастер пароля
 int confirm() {  // сделать количество попыток
-    char pasConfirm[SIZE], buffer[SIZE];
+    char pas_confirm[SIZE], buffer[SIZE];
     int i;
     AWE = fopen(mf, "r");
     if(!AWE) {
@@ -101,9 +101,9 @@ int confirm() {  // сделать количество попыток
     if(pos > 0) {
         AWE = fopen(mf, "r+");
         printf("Enter master password to confirm: ");
-        scanf("%s", pasConfirm);
+        scanf("%s", pas_confirm);
         fgets(buffer, SIZE, AWE);
-        if(strcmp(pasConfirm, buffer) == 0) {
+        if(strcmp(pas_confirm, buffer) == 0) {
             printf("Success.\n");
             return TRUE;
         }
@@ -115,7 +115,7 @@ int confirm() {  // сделать количество попыток
 }
 
 // удаление запрещенных символов
-char* removeXChar(char* str) {
+char* remove_x_char(char* str) {
     char* temp = str;
     char* add, *buffer;
     for(add = str, buffer = str; *buffer = *add; *add++) {
@@ -131,16 +131,42 @@ char* removeXChar(char* str) {
 }
 
 // analog scanf
-void myScan(char *string) {
+void my_scanf(char *string) {
     char c;
     while ((c = getchar()) != '\n') { 
         *string++ = c;
     }
 }
 
+void handler_io(char *filename, char *crypt_action) {
+    int i = 0;
+    unsigned file_size = 524288;
+    char file_buf[file_size];
+
+
+
+    if(strcmp(crypt_action, "encrypt")) {
+        // do smthng encrypt
+    }
+
+    if(strcmp(crypt_action, "decrypt")) {
+        // do smthng decrypt
+    }
+
+    AWE = fopen(strcat(path, filename), "r");
+    while(!feof(AWE)) {
+        file_buf[i++] = getc(AWE);
+    }
+    
+}
+
+void output(char *filename) {
+
+}
+
 // создание категории
-char* createCat() { 
-    char catName[SIZE];
+char* create_cat() { 
+    char cat_name[SIZE];
     char buffer[SIZE];
     int i, j;
 
@@ -148,19 +174,19 @@ char* createCat() {
         exit(1);
     }
     printf("enter a category name without '.txt'\n\t- ");
-    myScan(catName);
-    removeXChar(catName);
+    my_scanf(cat_name);
+    remove_x_char(cat_name);
 
-    if(!strcmp(catName, "")) {
+    if(!strcmp(cat_name, "")) {
         printf("Error: enter filename\n");
         exit(1);
     }
 
-    strcat(path, catName);
+    strcat(path, cat_name);
     AWE = fopen(strcat(path, ".txt"), "rb+");
     if(!AWE) {
         AWE = fopen(path, "a");
-        printf("%s.txt - name of category\n", catName);
+        printf("%s.txt - name of category\n", cat_name);
     }
     else {
         printf("ERROR: the file already exists\n");
@@ -169,7 +195,7 @@ char* createCat() {
 }
 
 // удаление категории 40m
-void deleteCat(char *fileN) {
+void delete_cat(char *fileN) {
 
 }
 
@@ -186,7 +212,7 @@ void reverse(char s[]) {
 }
 
 // int to char
-void iToc(int num, char str[]) { 
+void itoc(int num, char str[]) { 
     int i, sign;
     i = 0;
 
@@ -206,43 +232,45 @@ void iToc(int num, char str[]) {
 }
 
 // подсчет строк в файле
-int counting(const char* fname, int n, char* buf, int len){
+int counting(const char* f_name, int n, char* buf, int len){
     char  c;
-    FILE* AWE = fopen(fname, "rt");
+    FILE* AWE = fopen(f_name, "r");
     if(AWE == NULL) {
         return 0;
     }
 
-    while(! feof(AWE) && (n > 0)){
+    while(! feof(AWE) && (n > 0)) {
        fscanf(AWE, "%*[^\n\r]%c", &c);
        --n;
     }
 
-    if(! feof(AWE))
+    if(! feof(AWE)) {
         fgets(buf, len-1, AWE);
-    else
+    }
+    else {
        *buf = '\0';
-
+    }
     CLOSE_FILE;
+
     return (int)(*buf != '\0');
 }
 
 // показать все пароли из файла
-void showTheList() {
+void show_the_list() {
     int i = 0;
     int j = 1;
     char c;
     char line[SIZE];
     char buffer[SIZE];
-    DIR *listDir;
+    DIR *list_dir;
     struct dirent *dir;
 
     if(!confirm()) {
         exit(1);
     }
     
-    listDir = opendir(path);
-    while ((dir = readdir(listDir)) != NULL) {
+    list_dir = opendir(path);
+    while ((dir = readdir(list_dir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
             memcpy(buffer, path, 22); // копирование path в buffer 
             AWE = fopen(strcat(buffer, dir->d_name), "r"); 
@@ -255,13 +283,13 @@ void showTheList() {
             printf("\n+------------------------------------+\n");
         }
     } 
-    closedir(listDir);
+    closedir(list_dir);
 }
 // СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
-void prepareString(char pathfile[SIZE], char symbol) { 
-    AWE = fopen(pathfile, "r");
+void prepare_string(char path_file[SIZE], char symbol) { 
+    AWE = fopen(path_file, "r");
     if(AWE == NULL) {
         printf("file doesnt exist\n");
         exit(1);
@@ -275,16 +303,16 @@ void prepareString(char pathfile[SIZE], char symbol) {
 // добавление строки в файл
 void addition() { // если нажать пробел запись багается
     char filename[SIZE];
-    showDir();
+    show_dir();
     printf("enter filename\n\t- ");
     scanf("%s", &filename);
     strcat(path, filename);
 
     printf("Enter login\n\t- ");
-    prepareString(path, ':');
+    prepare_string(path, ':');
 
     printf("Enter password\n\t- ");
-    prepareString(path, '\n');
+    prepare_string(path, '\n');
 }
 
 // удалить все пароли
@@ -308,11 +336,13 @@ void shred() {
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
     unsigned line = 0;
     char entry[SIZE];
+    char buf;
     char filename[SIZE];
     char ext[] = ".txt";
-    showDir();
+
+    show_dir();
     printf("enter file where delete\n\t- ");
-    myScan(filename);
+    my_scanf(filename);
     reverse(filename);
     if(strncmp(filename, "txt.", 4) != 0) {
         reverse(filename);
@@ -327,45 +357,47 @@ void removing() { // брать слово вычитать все символ�
     AWE = fopen(path, "a");
 
     counting(path, line-1, entry, sizeof(entry));
+
+
     // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа
 }
 
 // генерирует случайный пароль
-int randomPass() {
-    int passLen = 24;
-    char randCh, randPass[23];
+int random_pass() {
+    int pass_len = 24;
+    char rand_ch, rand_pass[23];
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
     srand(time(NULL));
-    for(int i = 0; i < passLen; i++) {
-        randCh = rand()%62;
-        randPass[i] = pool[randCh];
+    for(int i = 0; i < pass_len; i++) {
+        rand_ch = rand()%62;
+        rand_pass[i] = pool[rand_ch];
     }
 }
 
 // развертка структуры приложения
-void initStruct() {
-    DIR *listDir;
+void init_struct() {
+    DIR *list_dir;
     struct dirent *dir;
-    listDir = opendir("__awebase/categories/");
-    if(listDir == NULL) {
+    list_dir = opendir("__awebase/categories/");
+    if(list_dir == NULL) {
         system("mkdir -p __awebase/categories");
     }
 }
 
 // показать сществующие категории
-void showDir() { // for windows https://learnc.info/c/libuv_directories.html
-    DIR *listDir;
+void show_dir() { // for windows https://learnc.info/c/libuv_directories.html
+    DIR *list_dir;
     struct dirent *dir;
-    listDir = opendir("__awebase/categories/");
+    list_dir = opendir("__awebase/categories/");
 
-    if (listDir) {
-        while ((dir = readdir(listDir)) != NULL) {
+    if (list_dir) {
+        while ((dir = readdir(list_dir)) != NULL) {
             if(strlen(dir->d_name) > 3) { // if dirname > 3 то не будет показаны 
                 printf("-- %s\n", dir->d_name); // функции выхода  из директории . и ..
             }
         }
-        closedir(listDir);
+        closedir(list_dir);
     }
 }
 
@@ -381,7 +413,7 @@ void extradition() {
         exit(1);
     }
 
-    showDir();
+    show_dir();
     printf("enter category name: ");
     scanf("%s", &category);
     strcat(path, category);

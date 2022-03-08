@@ -28,22 +28,23 @@ char help[] = " getting started with awestruck\n\t\
  rem+\tdeleting category or all entries\n\t\
  cat\tcreating a new category\n\n";
 
-void   prepareString(char pathfile[SIZE], char symbol); // создание строки для записи в файл
+void   prepare_string(char pathfile[SIZE], char symbol); // создание строки для записи в файл
 void   addition();		           // добавление строки в файл
 void   extradition();            // выдача информации о записи (строке)
 void   removing();               // удаление записи из файла
-void   showTheList();            // показать все пароли из файла
+void   show_the_list();            // показать все пароли из файла
 void   shred();                  // удалить все пароли
-void   iToc(int n, char s[]);    // int to char
+void   itoc(int n, char s[]);    // int to char
 void   reverse(char s[]);        // reverse string
-void   myScan(char *string);     // scanf
-int    randomPass();             // создание случайного пароля
-void   masterSeed();             // создание мастер пароля
+void   my_scanf(char *string);     // scanf
+int    random_pass();             // создание случайного пароля
+void   master_seed();             // создание мастер пароля
 int    confirm();                // подтверждение мастер пароля
-char   *createCat();             // создание категории
-void   deleteCat(char *fileN);   // удаление категории
-char   *removeXChar(char* str);  // удаление запрещенного символа из массива
-void   initStruct();             // развертка структуры программы
-void   showDir();                // показывает все существующие категории 
+char   *create_cat();             // создание категории
+void   delete_cat(char *fileN);   // удаление категории
+char   *remove_x_char(char* str);  // удаление запрещенного символа из массива
+void   init_struct();             // развертка структуры программы
+void   show_dir();                // показывает все существующие категории 
+void   handler_io(char *filename, char *crypt_action);
 
 #endif

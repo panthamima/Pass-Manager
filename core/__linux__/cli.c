@@ -73,11 +73,14 @@ void master_seed() {
     printf("%sHello in Awestruck! \nEnter a master password: ~$ ", logotype);
     scanf("%s", &master_pass);
 
+
     if(master_pass != NULL) {
         printf("confirm your master password: ");
         scanf("%s", &re_master_pass);
         if(strcmp(master_pass, re_master_pass) == 0) {
             printf("the password has been saved.\n");
+            // caeXorEnc(re_master_pass, "asd");
+            printf("%s", re_master_pass);
             fputs(re_master_pass, AWE);
         }
         else {
@@ -143,21 +146,20 @@ void handler_io(char *filename, char *crypt_action) {
     unsigned file_size = 524288;
     char file_buf[file_size];
 
+    AWE = fopen(strcat(path, filename), "a");
+    while(!feof(AWE)) {
+        file_buf[i++] = getc(AWE);
+    }
 
-
-    if(strcmp(crypt_action, "encrypt")) {
-        // do smthng encrypt
+    if(!strcmp(crypt_action, "encrypt")) {
+        
+        // caeXorEnc(file_buf, "bebra", ); // соеденить с confirmom и взять от туда мастер пас ЙЙЙ
     }
 
     if(strcmp(crypt_action, "decrypt")) {
         // do smthng decrypt
     }
 
-    AWE = fopen(strcat(path, filename), "r");
-    while(!feof(AWE)) {
-        file_buf[i++] = getc(AWE);
-    }
-    
 }
 
 void output(char *filename) {
@@ -355,8 +357,29 @@ void removing() { // брать слово вычитать все символ�
         exit(1);
     }
     AWE = fopen(path, "a");
+    
+    // int main() {
+    //     int inp_buf = 0;
+    //     int lines = 0;
+    //     int i,j,k;
+    //     i = j = k = 0;
+    //     char ch_buf[256];
+    //     int d = 0;
 
-    counting(path, line-1, entry, sizeof(entry));
+    //     scanf("%d", &d);
+    //     txt = fopen("2.txt", "a");
+    //     awe = fopen("1.txt", "r");
+
+    //     while(!feof(awe)) {
+    //         if((fgets(ch_buf, 256, awe) != NULL) && lines != d) {
+    //             printf("%d  %s ", lines, ch_buf);
+    //             fprintf(txt, "%d: %s",lines,  ch_buf);
+    //         }
+    //         lines++;
+    //     }
+    //     fclose(awe);
+    // }
+    // -- ------------------------- REMUVING!!!!
 
 
     // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа

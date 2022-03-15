@@ -4,7 +4,7 @@
 
 #define SIZE 256
 
-int caeXorEnc(char xor_str[SIZE], char *xor_key) {
+char *caeXorEnc(char *xor_str, char *xor_key, char *value) {
     int i, // xor_str
         j, // count 
         k; // k % strlen
@@ -15,7 +15,7 @@ int caeXorEnc(char xor_str[SIZE], char *xor_key) {
 
     for(i = 0; xor_str[i] != '\0'; ++i){
         buf = xor_str[i];
-        if(buf >= '!' && buf <= '}'){ // от минимально до максимально доступного символа
+        if(buf >= '!' && buf <= '}') { // от минимально до максимально доступного символа
             buf += strlen(xor_key); // символ + сдвиг
             if(buf > '}'){
                 buf = buf - '}' + '!' - 1;
@@ -24,12 +24,13 @@ int caeXorEnc(char xor_str[SIZE], char *xor_key) {
         count[j] = buf;
         count[j] = count[j] ^ xor_key[k % strlen(xor_key)]; // xor
         k++;
-        // printf("%c", count[j]);
+        *value++ = count[j];
     }
 }
 
-int caeXorDec(char xor_str[SIZE], char *xor_key) {
+char *caeXorDec(char *xor_str, char *xor_key, char *value) {
     char buf;
+    char *cipher;
     int i, k, j;
     i = k = j =0;
     char output[SIZE];
@@ -43,6 +44,7 @@ int caeXorDec(char xor_str[SIZE], char *xor_key) {
 				buf = buf + '}' - '!' + 1;
 			}
         }
-        // printf("%c", buf);
+        *value++ = buf;
     }
+
 }

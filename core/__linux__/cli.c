@@ -15,6 +15,7 @@
 FILE *AWE, *TEMP;
 char mf[] = "__awebase/mas.txt";
 char path[SIZE] = "__awebase/categories/";
+char temp_buffer[] = "__awebase/categories/_tmp.txt";
 
 int main(int argc, char **argv){
     init_struct();
@@ -34,7 +35,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        // handler_io("asd.txt");
+        tmp_stor(TEMP, AWE, temp_buffer, "a");
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -334,54 +335,64 @@ void shred() {
     }
 }
 
+void tmp_stor(FILE *name, FILE *output, char *file_way, char* mode) {
+    name = fopen(file_way, mode);
+
+    while(!feof(name)) {
+        if((fgets(ch_buf, 256, AWE) != NULL) && lines != d) {
+            fprintf(TEMP, "%s", ch_buf);
+        }
+        lines++;
+    }
+
+    fclose(name);
+}
+
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
-    unsigned line = 0;
-    char entry[SIZE];
-    char buf;
     char filename[SIZE];
-    char ext[] = ".txt";
+    char ext[] = ".txt";    
+    char ch_buf[256];
+
+    unsigned lines = 1;
+    int i,j,k;
+    int d = 0;
+    i = j = k = 0;
 
     show_dir();
     printf("enter file where delete\n\t- ");
-    my_scanf(filename);
-    reverse(filename);
-    if(strncmp(filename, "txt.", 4) != 0) {
-        reverse(filename);
-    } else {
-        reverse(filename);
-    }
+    scanf("%s", filename);
+
     AWE = fopen(strcat(path, filename), "r");
     if(!AWE) {
         printf("Error: file doesn't exist\n");
         exit(1);
     }
-    AWE = fopen(path, "a");
-    
-    // int main() {
-    //     int inp_buf = 0;
-    //     int lines = 0;
-    //     int i,j,k;
-    //     i = j = k = 0;
-    //     char ch_buf[256];
-    //     int d = 0;
 
-    //     scanf("%d", &d);
-    //     txt = fopen("2.txt", "a");
-    //     awe = fopen("1.txt", "r");
+    printf("Enter number of line\n\t- ");
+    scanf("%d", &d);
+  
+    TEMP = fopen(temp_buffer, "a");
+    while(!feof(AWE)) {
+        if((fgets(ch_buf, 256, AWE) != NULL) && lines != d) {
+            fprintf(TEMP, "%s", ch_buf);
+        }
+        lines++;
+    }
 
-    //     while(!feof(awe)) {
-    //         if((fgets(ch_buf, 256, awe) != NULL) && lines != d) {
-    //             printf("%d  %s ", lines, ch_buf);
-    //             fprintf(txt, "%d: %s",lines,  ch_buf);
-    //         }
-    //         lines++;
-    //     }
-    //     fclose(awe);
+    // AWE = freopen(path, "w", stdout);
+
+    // while(!feof(TEMP)) {
+        // if(fgets(ch_buf, 256, TEMP) != NULL) {
+            // fprintf(AWE, "%s", ch_buf);
+        // }
+        // lines++;
     // }
-    // -- ------------------------- REMUVING!!!!
+    printf("eee");
 
-
+    TEMP = freopen(temp_buffer, "w", stdout);
+    fclose(TEMP);
+    CLOSE_FILE;    
     // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа
 }
 

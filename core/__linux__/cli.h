@@ -44,7 +44,6 @@ char   *create_cat();             // создание категории
 void   delete_cat(char *fileN);   // удаление категории
 char   *remove_x_char(char* str);  // удаление запрещенного символа из массива
 void   init_struct();             // развертка структуры программы
-void   tmp_stor(FILE *name, FILE *output, char *file_way, char* mode);
 void   show_dir();                // показывает все существующие категории 
 void   handler_io(char *filename, char *crypt_action);
 

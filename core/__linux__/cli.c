@@ -35,7 +35,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        tmp_stor(TEMP, AWE, temp_buffer, "a");
+        // handler_io("asd.txt");
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -297,6 +297,7 @@ void prepare_string(char path_file[SIZE], char symbol) {
         printf("file doesnt exist\n");
         exit(1);
     }
+    AWE = fopen(path_file, "a");
     char buffer[SIZE];
     scanf("%255s", &buffer);
     fprintf(AWE, "%s%c", buffer, symbol);
@@ -335,19 +336,6 @@ void shred() {
     }
 }
 
-void tmp_stor(FILE *name, FILE *output, char *file_way, char* mode) {
-    name = fopen(file_way, mode);
-
-    while(!feof(name)) {
-        if((fgets(ch_buf, 256, AWE) != NULL) && lines != d) {
-            fprintf(TEMP, "%s", ch_buf);
-        }
-        lines++;
-    }
-
-    fclose(name);
-}
-
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
     char filename[SIZE];
@@ -355,6 +343,7 @@ void removing() { // брать слово вычитать все символ�
     char ch_buf[256];
 
     unsigned lines = 1;
+    int inp_buf = 0;
     int i,j,k;
     int d = 0;
     i = j = k = 0;
@@ -380,17 +369,19 @@ void removing() { // брать слово вычитать все символ�
         lines++;
     }
 
-    // AWE = freopen(path, "w", stdout);
+    fclose(AWE);
+    fclose(TEMP);
+    AWE = fopen(path, "w");
+    TEMP = fopen(temp_buffer, "r");
+    
+    while(!feof(TEMP)) {
+        if(fgets(ch_buf, 256, TEMP) != NULL) {
+            fprintf(AWE, "%s", ch_buf);
+        }
+        lines++;
+    }
+    TEMP = freopen(temp_buffer, "w", stdin);
 
-    // while(!feof(TEMP)) {
-        // if(fgets(ch_buf, 256, TEMP) != NULL) {
-            // fprintf(AWE, "%s", ch_buf);
-        // }
-        // lines++;
-    // }
-    printf("eee");
-
-    TEMP = freopen(temp_buffer, "w", stdout);
     fclose(TEMP);
     CLOSE_FILE;    
     // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа

@@ -7,7 +7,7 @@
 #include <dirent.h>
 // #include <X11/Xlib.h>
 // #include <sys/stat.h>
-// #include <sys/types.h>
+// #include <sys/typesnuiium .h>
 
 #include "cli.h"
 #include "../xorplus.h"
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        // handler_io("asd.txt");
+
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -260,7 +260,6 @@ int counting(const char* f_name, int n, char* buf, int len){
 
 // показать все пароли из файла
 void show_the_list() {
-    int i = 0;
     int j = 1;
     char c;
     char line[SIZE];
@@ -282,7 +281,7 @@ void show_the_list() {
             while(fscanf(AWE, "%s", line) != EOF) {
                 printf("[%d] %s\n",j++, line);
             }
-            i = 1;
+            j = 1;
             printf("\n+------------------------------------+\n");
         }
     } 
@@ -388,7 +387,7 @@ void removing() { // брать слово вычитать все символ�
 }
 
 // генерирует случайный пароль
-int random_pass() {
+const char *random_pass() {
     int pass_len = 24;
     char rand_ch, rand_pass[23];
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
@@ -398,6 +397,7 @@ int random_pass() {
         rand_ch = rand()%62;
         rand_pass[i] = pool[rand_ch];
     }
+    // return rand_pass;
 }
 
 // развертка структуры приложения
@@ -429,7 +429,9 @@ void show_dir() { // for windows https://learnc.info/c/libuv_directories.html
 // выдача информации о записи (строке)
 void extradition() {
     unsigned line;
+    int i = 1;
     char entry[SIZE];
+    char buffer[SIZE];
     char category[SIZE];
 
     system("clear");
@@ -445,6 +447,9 @@ void extradition() {
     if(!(AWE = fopen(path, "r"))) {
         printf("error. the category doesn't exist\n");
         exit(1);
+    }
+    while(fscanf(AWE, "%s", buffer) != EOF) {
+        printf("[%d] > %s\n", i++, buffer);
     }
     printf("enter number of entry: ");
     scanf("%d", &line);

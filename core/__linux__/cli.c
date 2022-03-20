@@ -15,7 +15,7 @@
 FILE *AWE, *TEMP;
 char mf[] = "__awebase/mas.txt";
 char path[SIZE] = "__awebase/categories/";
-char temp_buffer[] = "__awebase/categories/_tmp.txt";
+char temp_buffer[] = "__awebase/_tmp.txt";
 
 int main(int argc, char **argv){
     init_struct();
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-
+        delete_cat();
     } else if (!strcmp(argv[1], "help")) {
         system("clear");
         printf("%s", help);
@@ -197,9 +197,28 @@ char* create_cat() {
     CLOSE_FILE;
 }
 
-// удаление категории 40m
-void delete_cat(char *fileN) {
+int identify_txt(char *filename) {
+    reverse(filename);
+    printf("%s", filename);
+    if(!strncmp(filename, "txt.", 5)) {
+        reverse(filename);
+        printf("%s", filename);
+    } else {
+        strcmp(filename, ".txt");
+    }
+}
 
+// удаление категории 
+void delete_cat() {
+    char filename[SIZE];  
+    if(confirm() == FALSE) {
+        exit(1);
+    }
+    show_dir();
+    printf("enter file what you want to delete: ");
+    scanf("%s", filename);
+    strcat(path,filename);
+    remove(path);
 }
 
 //reverse string
@@ -207,7 +226,7 @@ void reverse(char s[]) {
     int i, j;
     char c;
     
-    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+    for (i = 0, j = strlen(s)-1; i < j; i++, j--) {
         c = s[i];
         s[i] = s[j];
         s[j] = c;
@@ -274,7 +293,7 @@ void show_the_list() {
     list_dir = opendir(path);
     while ((dir = readdir(list_dir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
-            memcpy(buffer, path, 22); // копирование path в buffer 
+            memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 
             AWE = fopen(strcat(buffer, dir->d_name), "r"); 
             printf("\n%s\n", dir->d_name);
             
@@ -287,7 +306,6 @@ void show_the_list() {
     } 
     closedir(list_dir);
 }
-// СДЕЛАТЬ СОХРАНИНЕ ЗАПИСИ В ВИДЕ PANTHAMA:PASSWORED а выводить добавляя цифру = 1)poanthamima:bebra
 
 // создание строки для записи в файл
 void prepare_string(char path_file[SIZE], char symbol) { 
@@ -304,7 +322,7 @@ void prepare_string(char path_file[SIZE], char symbol) {
 }
 
 // добавление строки в файл
-void addition() { // если нажать пробел запись багается
+void addition() { // если нажать пробел запись багается, если дать по башке после логина -> только он остается в файле
     char filename[SIZE];
     show_dir();
     printf("enter filename\n\t- ");
@@ -320,18 +338,14 @@ void addition() { // если нажать пробел запись багае�
 
 // удалить все пароли
 void shred() {
+    char *buffer;
     // need fix!!
     char answer;
     printf("do you really want to delete passwords?[y/n] ");
     answer = getchar();
     if(answer == 'Y' || answer == 'y') {
-        // printf("passwords in %s", fn);
-        // showTheList();
-        // if(confirm() == TRUE) {
-        //     AWE = fopen(fn, "w");
-        //     CLOSE_FILE;
-        // } 
-        exit(1);
+        memcpy(buffer, path, (strlen(path)+1));
+        
     }
 }
 
@@ -387,17 +401,16 @@ void removing() { // брать слово вычитать все символ�
 }
 
 // генерирует случайный пароль
-const char *random_pass() {
+char *random_pass(char *password) {
     int pass_len = 24;
-    char rand_ch, rand_pass[23];
+    char rand_ch;
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
     srand(time(NULL));
     for(int i = 0; i < pass_len; i++) {
         rand_ch = rand()%62;
-        rand_pass[i] = pool[rand_ch];
+        *password++ = pool[rand_ch]; 
     }
-    // return rand_pass;
 }
 
 // развертка структуры приложения
@@ -411,7 +424,7 @@ void init_struct() {
 }
 
 // показать сществующие категории
-void show_dir() { // for windows https://learnc.info/c/libuv_directories.html
+void show_dir() { 
     DIR *list_dir;
     struct dirent *dir;
     list_dir = opendir("__awebase/categories/");
@@ -449,7 +462,7 @@ void extradition() {
         exit(1);
     }
     while(fscanf(AWE, "%s", buffer) != EOF) {
-        printf("[%d] > %s\n", i++, buffer);
+        printf("[%d]> %s\n", i++, buffer);
     }
     printf("enter number of entry: ");
     scanf("%d", &line);

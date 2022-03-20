@@ -37,11 +37,11 @@ void   shred();                  // удалить все пароли
 void   itoc(int n, char s[]);    // int to char
 void   reverse(char s[]);        // reverse string
 void   my_scanf(char *string);     // scanf
-int    random_pass();             // создание случайного пароля
+char   *random_pass();             // создание случайного пароля
 void   master_seed();             // создание мастер пароля
 int    confirm();                // подтверждение мастер пароля
 char   *create_cat();             // создание категории
-void   delete_cat(char *fileN);   // удаление категории
+void   delete_cat();   // удаление категории
 char   *remove_x_char(char* str);  // удаление запрещенного символа из массива
 void   init_struct();             // развертка структуры программы
 void   show_dir();                // показывает все существующие категории 

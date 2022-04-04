@@ -1,10 +1,8 @@
 #ifndef CLI_H
-#define CLI_H
+#define CLI_H 
 
-#define SIZE 256
-#define FALSE 0
-#define TRUE 1
-#define CLOSE_FILE fclose(AWE)
+#include "defs.h"
+
 
 char logotype[] = "                                                              \n\
    ▄▄▄     █     █░▓█████   ██████ ▄▄██████▓ ██▀███   █    ██  ▄ █▓█    ██ ▄█▀   \n\

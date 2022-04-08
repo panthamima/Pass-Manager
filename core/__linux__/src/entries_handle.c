@@ -1,5 +1,10 @@
 #include <dirent.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "../include/defs.h"
+#include "../include/dir_handle.h"
+#include "../include/pass_handle.h"
 
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
@@ -65,21 +70,6 @@ void shred() {
     }
 }
 
-// добавление строки в файл
-void addition() { // если нажать пробел запись багается, если дать по башке после логина -> только он остается в файле
-    char filename[SIZE];
-    show_dir();
-    printf("enter filename\n\t- ");
-    scanf("%s", &filename);
-    strcat(path, filename);
-
-    printf("Enter login\n\t- ");
-    prepare_string(path, ':');
-
-    printf("Enter password\n\t- ");
-    prepare_string(path, '\n');
-}
-
 // создание строки для записи в файл
 void prepare_string(char path_file[SIZE], char symbol) { 
     AWE = fopen(path_file, "r");
@@ -92,6 +82,21 @@ void prepare_string(char path_file[SIZE], char symbol) {
     scanf("%255s", &buffer);
     fprintf(AWE, "%s%c", buffer, symbol);
     fclose(AWE);    
+}
+
+// добавление строки в файл, если нет файла некуда добавлять, надо вызывать функцию создания файла
+void addition() { // если нажать пробел запись багается, если дать по башке после логина -> только он остается в файле
+    char filename[SIZE];
+    show_dir();
+    printf("enter filename\n\t- ");
+    scanf("%s", &filename);
+    strcat(path, filename);
+    printf("%s", path);
+    printf("Enter login\n\t- ");
+    prepare_string(path, ':');
+
+    printf("Enter password\n\t- ");
+    prepare_string(path, '\n');
 }
 
 // показать все пароли из файла
@@ -125,7 +130,7 @@ void show_the_list() {
 }
 
 // подсчет строк в файле
-int counting(const char* f_name, int n, char* buf, int len){
+int counting(const char* f_name, int n, char* buf, int len) {
     char  c;
     FILE* AWE = fopen(f_name, "r");
     if(AWE == NULL) {

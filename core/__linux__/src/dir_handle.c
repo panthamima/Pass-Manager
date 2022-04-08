@@ -1,6 +1,13 @@
 #include <dirent.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../include/pass_handle.h"
+#include "../include/tools.h"
 #include "../include/defs.h"
 #include "../include/dir_handle.h"
+
+
 
 char* create_cat() { 
     char cat_name[SIZE];
@@ -11,7 +18,7 @@ char* create_cat() {
         exit(1);
     }
     printf("enter a category name without '.txt'\n\t- ");
-    my_scanf(cat_name);
+    scanf("%s", cat_name); // if segfult == my_scanf(cat_name)
     remove_x_char(cat_name);
 
     if(!strcmp(cat_name, "")) {
@@ -48,7 +55,7 @@ void delete_cat() {
 void show_dir() { 
     DIR *list_dir;
     struct dirent *dir;
-    list_dir = opendir("__awebase/categories/");
+    list_dir = opendir(path);
 
     if (list_dir) {
         while ((dir = readdir(list_dir)) != NULL) {

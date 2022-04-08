@@ -1,5 +1,8 @@
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include "../include/global.h"
 #include "../include/defs.h"
 #include "../include/pass_handle.h"
 
@@ -43,7 +46,7 @@ void master_seed() {
         }
     }
     //awestruck
-    printf("%sHello in Awestruck! \nEnter a master password: ~$ ", logotype);
+    print_logo();
     scanf("%s", &master_pass);
 
 

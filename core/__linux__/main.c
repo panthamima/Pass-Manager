@@ -28,8 +28,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "test")) {
         delete_cat();
     } else if (!strcmp(argv[1], "help")) {
-        system("clear");
-        
+        help();        
     } else if (!strcmp(argv[1], "cat")) {
         create_cat(); // добавить проверку на добвление .txt
     } else {

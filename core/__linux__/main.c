@@ -26,7 +26,7 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        delete_cat();
+        get_home_directory();
     } else if (!strcmp(argv[1], "help")) {
         help();        
     } else if (!strcmp(argv[1], "cat")) {

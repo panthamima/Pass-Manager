@@ -3,6 +3,14 @@
 #include <dirent.h>
 #include <stdlib.h>
 
+#ifdef unix
+void get_home_directory() {
+    extern char *environ;
+    printf("%s\n", getenv("HOME"));
+}
+#elif _WIN64
+#endif
+
 // развертка структуры приложения
 void init_struct() {
     DIR *list_dir;

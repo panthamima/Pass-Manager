@@ -4,7 +4,6 @@
 #include <errno.h>
 #include <time.h>
 #include <ctype.h>
-#include <dirent.h>
 
 const char* const allowed_flags[] = {"--help", "-version"};
 const int const allowed_flags_lenth = sizeof allowed_flags / sizeof allowed_flags[0];

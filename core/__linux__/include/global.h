@@ -1,7 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-void get_home_directory();
+char* get_home_directory(char* directory);
+char* get_path(char* path);
 
 static char logotype[] = "                                   __                            __       \n\
   ____ _ _      __  ___    _____  / /_   _____  __  __  _____   / /__       \n\

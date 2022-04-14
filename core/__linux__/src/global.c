@@ -4,20 +4,40 @@
 #include <stdlib.h>
 
 #ifdef unix
-void get_home_directory() {
-    extern char *environ;
-    printf("%s\n", getenv("HOME"));
-}
+    char* get_home_directory(char* directory) {
+        extern char *environ;
+        directory = getenv("HOME");
+        printf("%s", directory)
+    }
+
+    char* get_path(char* path) {
+        path = "/awebase/categories";
+    }
 #elif _WIN64
+    char* get_home_directory(char* directory) {
+        directory = "C:\\Users\\path\\Desktop";
+    }
+
+    char* get_path(char* path) {
+        char *directory;
+        get_home_directory(directory);
+        path = "\\__awebase\\categories";
+        char* buffer = calloc(strlen(directory) + strlen(path) + 1, 1);
+        strcat(buffer, directory);
+        strcat(buffer, path);
+        printf("%s\n", buffer);
+        free(buffer);
+    }
 #endif
 
 // развертка структуры приложения
 void init_struct() {
+    char* path;
     DIR *list_dir;
     struct dirent *dir;
-    list_dir = opendir("/home/panthamima/__awebase/categories/");
+    list_dir = opendir(get_path(path));
     if(list_dir == NULL) {
-        system("mkdir -p /home/panthamima/__awebase/categories");
+        // system("mkdir -p /home/panthamima/__awebase/categories");
     }
 }
 

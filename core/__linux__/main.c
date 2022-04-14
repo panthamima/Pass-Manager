@@ -8,8 +8,7 @@
 #include "include/pass_handle.h"
 #include "include/tools.h"
 
-int main(int argc, char **argv){
-    init_struct();
+int main(int argc, char **argv) {
 
     /****/ if (argc < 2) {
         printf("command not found. Enter: awe help\n");
@@ -26,7 +25,10 @@ int main(int argc, char **argv){
     } else if (!strcmp(argv[1], "rem+")) {
         shred();
     } else if (!strcmp(argv[1], "test")) {
-        get_home_directory();
+        char* directory;
+        char* path;
+        get_home_directory(directory);
+        get_path(path);
     } else if (!strcmp(argv[1], "help")) {
         help();        
     } else if (!strcmp(argv[1], "cat")) {

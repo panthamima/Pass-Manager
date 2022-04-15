@@ -1,5 +1,6 @@
 #include "../include/defs.h"
 #include "../include/global.h"
+#include "../include/validation.h"
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,20 +39,32 @@ void init_struct() {
     }
 }
 
-void print_logo() {
+void awe_version() {
+    printf("Awestruck version: %s\n", VERSION);
+}
+
+void awe_print_logo() {
+    static char logotype[] = "                                   __                            __       \n\
+  ____ _ _      __  ___    _____  / /_   _____  __  __  _____   / /__       \n\
+ / __ `/| | /| / / / _ \\  / ___/ / __/  / ___/ / / / / / ___/  / //_/      \n\
+/ /_/ / | |/ |/ / /  __/ (__  ) / /_   / /    / /_/ / / /__   / ,<          \n\
+\\__,_/  |__/|__/  \\___/ /____/  \\__/  /_/     \\__,_/  \\___/  /_/|_|    \n\n";
+
     printf("%s", logotype);
 }
 
-void help() {
-    char info[] = " getting started with awestruck\n\t\
-    reg\tcreate a master password\n\n\
-    work with entries\n\t\
-    add\tadding an entry\n\t\
-    rem\tdeleting an entry\n\t\
-    get\tgetting information about an entry\n\t\
-    edit\tedit an entry\n\n\
-    global actions\n\t\
-    list\tshow the full list of entries\n\t\
-    rem+\tdeleting category or all entries\n\t\
-    cat\tcreating a new category\n\n";
+void awe_help() {
+    char info[] = "\n\n\
+ getting started with awestruck\n\
+    \tinit  -  create a master password\n\
+ work with entries\n\
+    \tadd   -  adding an entry\n\
+    \trem   -  deleting an entry\n\
+    \tget   -  getting information about an entry\n\
+    \tedit  -  edit an entry\n\
+ global actions\n\
+    \tlist  -  show the full list of entries\n\
+    \tclear -  deleting category or all entries\n\
+    \tcat   -  create a new category\n\n";
+    printf("%s", info);
 }

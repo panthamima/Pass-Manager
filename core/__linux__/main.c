@@ -7,33 +7,15 @@
 #include "include/global.h"
 #include "include/pass_handle.h"
 #include "include/tools.h"
+#include "include/validation.h"
 
-int main(int argc, char **argv) {
-
-    /****/ if (argc < 2) {
-        printf("command not found. Enter: awe help\n");
-    } else if (!strcmp(argv[1], "reg")) {
-        master_seed();
-    } else if (!strcmp(argv[1], "add")) {
-        addition();
-    } else if (!strcmp(argv[1], "rem")) {
-        removing();
-    } else if (!strcmp(argv[1], "get")) {
-        extradition();
-    } else if (!strcmp(argv[1], "list")) {
-        show_the_list();
-    } else if (!strcmp(argv[1], "rem+")) {
-        shred();
-    } else if (!strcmp(argv[1], "test")) {
-        char* directory;
-        char* path;
-        get_home_directory(directory);
-        get_path(path);
-    } else if (!strcmp(argv[1], "help")) {
-        help();        
-    } else if (!strcmp(argv[1], "cat")) {
-        create_cat(); // добавить проверку на добвление .txt
+int main(const int const argc, const char* const argv[]) {
+    if(argc > 1) {
+        validate_flags(argv, argc);
     } else {
-        printf("command not found. Enter: awe help\n");
+        printf(TCOLOR_R "[×]%s Missing argument. Usage: awe --help\n", TCOLOR_RESET);
     }
+
+    invoke_commands(argv, argc);
+    return 0;
 }

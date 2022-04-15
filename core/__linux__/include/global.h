@@ -4,14 +4,12 @@
 char* get_home_directory(char* directory);
 char* get_path(char* path);
 
-static char logotype[] = "                                   __                            __       \n\
-  ____ _ _      __  ___    _____  / /_   _____  __  __  _____   / /__       \n\
- / __ `/| | /| / / / _ \\  / ___/ / __/  / ___/ / / / / / ___/  / //_/      \n\
-/ /_/ / | |/ |/ / /  __/ (__  ) / /_   / /    / /_/ / / /__   / ,<          \n\
-\\__,_/  |__/|__/  \\___/ /____/  \\__/  /_/     \\__,_/  \\___/  /_/|_|    \n\n";
+#define VERSION "0.1.0"
+
 
 void init_struct();
-void help();
-void print_logo();
+void awe_help();
+void awe_print_logo();
+void awe_version();
 
 #endif

@@ -46,7 +46,7 @@ void master_seed() {
         }
     }
     //awestruck
-    print_logo();
+    awe_print_logo();
     printf("Enter the master password:~# ");
     scanf("%s", &master_pass);
 

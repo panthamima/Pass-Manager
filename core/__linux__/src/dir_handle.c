@@ -7,7 +7,7 @@
 #include "../include/defs.h"
 #include "../include/dir_handle.h"
 
-char* create_cat() { 
+void create_cat() { 
     char cat_name[SIZE];
     char buffer[SIZE];
     int i, j;

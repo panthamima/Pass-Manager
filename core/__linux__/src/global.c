@@ -2,16 +2,20 @@
 #include "../include/global.h"
 #include <dirent.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef unix
     char* get_home_directory(char* directory) {
-        extern char *environ;
-        directory = getenv("HOME");
-        printf("%s", directory)
+        directory = getenv("HOME"); // get home linux directory
     }
-
+    
     char* get_path(char* path) {
-        path = "/awebase/categories";
+        path = "/awestruck/awebase/categories/";
+        char* buffer;
+        
+        get_home_directory(buffer);
+        strcat(buffer, path);
+        path = buffer;
     }
 #elif _WIN64
     char* get_home_directory(char* directory) {
@@ -19,14 +23,7 @@
     }
 
     char* get_path(char* path) {
-        char *directory;
-        get_home_directory(directory);
         path = "\\__awebase\\categories";
-        char* buffer = calloc(strlen(directory) + strlen(path) + 1, 1);
-        strcat(buffer, directory);
-        strcat(buffer, path);
-        printf("%s\n", buffer);
-        free(buffer);
     }
 #endif
 

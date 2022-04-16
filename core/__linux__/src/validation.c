@@ -10,13 +10,13 @@
 #include "../include/validation.h"
 #include "../include/global.h"
 
-const char* const allowed_flags[] = {"init", "add", "rem", 
-                                     "get", "list", "clear", 
-                                     "cat", "--help", "--version",
-                                     "test"};
+const char* const allowed_flags[] = {"init", "add",  "rem", 
+                                     "get",  "list", "clear", 
+                                     "cat+", "cat-", "--help", 
+                                     "--version", "test"};
 void (*commands_store[])(void)    = {master_seed, addition, removing, 
                                       extradition, show_the_list, shred, 
-                                      create_cat, awe_help, awe_version,
+                                      create_cat, delete_cat, awe_help, awe_version,
                                       test};
 const int const allowed_flags_length = sizeof allowed_flags / sizeof allowed_flags[0]; // prim: array[elements] / element
 

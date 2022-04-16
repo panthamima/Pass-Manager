@@ -8,8 +8,8 @@
 #define FALSE 0
 
 static FILE *AWE, *TEMP;
-static char path[SIZE] = "/home/panthamima/__awebase/categories/";
-static char mf[] = "/home/panthamima/__awebase/mas.txt";
-static char temp_buffer[] = "/home/panthamima/__awebase/_tmp.txt";
+static char path[SIZE] = "/home/panthamima/awestruck/awebase/";
+static char mf[] = "/home/panthamima/awestruck/mas.txt";
+static char temp_buffer[] = "/home/panthamima/awestruck/_tmp.txt";
 
 #endif

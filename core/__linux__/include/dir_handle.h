@@ -4,5 +4,6 @@
 void create_cat();
 void delete_cat();
 void show_dir();
+void directory();
 
 #endif

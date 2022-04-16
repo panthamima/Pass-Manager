@@ -7,6 +7,9 @@
 #include "../include/defs.h"
 #include "../include/dir_handle.h"
 
+DIR *list_dir;
+struct dirent *dir;
+
 void create_cat() { 
     char cat_name[SIZE];
     char buffer[SIZE];
@@ -49,18 +52,20 @@ void delete_cat() {
     remove(path);
 }
 
+void directory() {
+    
+
+}
+
 // показать сществующие категории
 void show_dir() { 
-    DIR *list_dir;
-    struct dirent *dir;
     list_dir = opendir(path);
+    int i = 0;
 
-    if (list_dir) {
-        while ((dir = readdir(list_dir)) != NULL) {
-            if(strlen(dir->d_name) > 3) { // if dirname > 3 то не будет показаны 
-                printf("-- %s\n", dir->d_name); // функции выхода  из директории . и ..
-            }
+    while ((dir = readdir(list_dir)) != NULL) {
+        if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будет показаны 
+            printf("[%d] %s\n", ++i, dir->d_name); // функции выхода  из директории . и ..
         }
-        closedir(list_dir);
     }
+    closedir(list_dir);
 }

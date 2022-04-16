@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+void test() {
+    
+}
+
+
 #ifdef unix
     char* get_home_directory(char* directory) {
         directory = getenv("HOME"); // get home linux directory

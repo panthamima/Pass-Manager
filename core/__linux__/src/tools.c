@@ -18,14 +18,6 @@ char* remove_x_char(char* str) {
     return temp;
 }
 
-// analog scanf
-void my_scanf(char *string) {
-    char c;
-    while ((c = getchar()) != '\n') { 
-        *string++ = c;
-    }
-}
-
 //reverse string
 void reverse(char s[]) { 
     int i, j;
@@ -59,7 +51,7 @@ void itoc(int num, char str[]) {
 }
 
 // создание категории
-int identify_txt(char *filename) {
+void validate_txt(char *filename) {
     reverse(filename);
     if(!strncmp(filename, "txt.", 4)) {
         reverse(filename);

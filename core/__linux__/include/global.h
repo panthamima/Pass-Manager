@@ -11,5 +11,6 @@ void init_struct();
 void awe_help();
 void awe_print_logo();
 void awe_version();
+void test();
 
 #endif

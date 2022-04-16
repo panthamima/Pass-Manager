@@ -6,9 +6,7 @@
 #define TCOLOR_RESET "\x1b[0m"
 #define INCORRECT_FLAG 1
 
-void validate_flags(const char * const flags[], const int const lenth);
-void invoke_commands(const char* const commands[], const unsigned int count);
-// void validate_txt();
-// void validate_scan();
+void validate_flags (const int const lenth, const char * const flags[]);
+void invoke_commands(const unsigned int count, const char* const commands[]);
 
 #endif

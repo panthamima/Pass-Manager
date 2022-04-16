@@ -11,11 +11,11 @@
 
 int main(const int const argc, const char* const argv[]) {
     if(argc > 1) {
-        validate_flags(argv, argc);
+        validate_flags(argc, argv);
     } else {
         printf(TCOLOR_R "[×]%s Missing argument. Usage: awe --help\n", TCOLOR_RESET);
     }
+    invoke_commands(argc, argv);
 
-    invoke_commands(argv, argc);
     return 0;
 }

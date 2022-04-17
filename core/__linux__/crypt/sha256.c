@@ -19,6 +19,7 @@
 //
 
 #include "sha256.h"
+#include "../include/tools.h"
 
 #ifndef _cbmc_
 #define __CPROVER_assume(...) do {} while(0)
@@ -264,42 +265,25 @@ void sha256_done(sha256_context *ctx, uint8_t *hash)
 
 
 // -----------------------------------------------------------------------------
-void sha256(const void *data, size_t len, uint8_t *hash)
-{
+void sha256_use(const void *data, size_t len, uint8_t *hash) {
     sha256_context ctx;
 
     sha256_init(&ctx);
     sha256_hash(&ctx, data, len);
     sha256_done(&ctx, hash);
-} // sha256
+}
 
 #include <stdio.h>
 #include <string.h>
 
-int main(void)
-{
-    char *buf[] = {
-        "qweqwe",
-        "e3b0c442 98fc1c14 9afbf4c8 996fb924 27ae41e4 649b934c a495991b 7852b855",
-    };
-    const size_t tests_total = sizeof(buf) / sizeof(buf[0]);
+char* sha256(char* in, char* out) {
+    const size_t tests_total = sizeof(in) / sizeof(in);
     uint8_t hash[SHA256_SIZE_BYTES];
-
-    if (0 != (tests_total % 2)) {
-        return printf("invalid tests\n");
+    sha256_use(in, strlen(in), hash);
+    for (size_t j = 0; j < SHA256_SIZE_BYTES; j++) {
+        out[j] = hash[j];
     }
-
-    for (size_t i = 0; i < tests_total; i += 2) {
-        sha256(buf[i], strlen(buf[i]), hash);
-        printf("input = '%s'\ndigest: %s\nresult: ", buf[i], buf[i + 1]);
-        for (size_t j = 0; j < SHA256_SIZE_BYTES; j++) {
-            printf("%02x%s", hash[j], ((j % 4) == 3) ? " " : "");
-        }
-        printf("\n\n");
-    }
-
-    return 0;
-} // main
+}
 
 
 #ifdef __cplusplus

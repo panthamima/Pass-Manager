@@ -42,8 +42,9 @@ typedef struct {
 void sha256_init(sha256_context *ctx);
 void sha256_hash(sha256_context *ctx, const void *data, size_t len);
 void sha256_done(sha256_context *ctx, uint8_t *hash);
+char* sha256(char* in, char* out);
 
-void sha256(const void *data, size_t len, uint8_t *hash);
+void sha256_use(const void *data, size_t len, uint8_t *hash);
 
 #ifdef __cplusplus
 }

@@ -1,12 +1,15 @@
 #include "../include/defs.h"
 #include "../include/global.h"
 #include "../include/validation.h"
+#include "../include/pass_handle.h"
+#include "../include/clipboard.h"
+
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
 
 void test() {
-    
+    paste();
 }
 
 

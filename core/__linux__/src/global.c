@@ -9,7 +9,7 @@
 #include <string.h>
 
 void test() {
-    paste();
+
 }
 
 

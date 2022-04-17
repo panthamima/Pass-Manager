@@ -1,6 +1,7 @@
 #define FULL_UNROLL
 
 #include "rijndael.h"
+#include <stdio.h>
 
 typedef unsigned long u32;
 typedef unsigned char u8;
@@ -1204,3 +1205,68 @@ void rijndaelDecrypt(const u32 *rk, int nrounds, const u8 ciphertext[16],
     rk[3];
   PUTU32(plaintext + 12, s3);
 }
+
+#define AES_USAGE
+#ifdef AES_USAGE
+
+#define KEYBITS 256
+
+int encrypt() {
+  unsigned long rk[RKLENGTH(KEYBITS)];
+  unsigned char key[KEYLENGTH(KEYBITS)];
+  int i;
+  int nrounds;
+  char *password;
+  FILE *output;
+
+  password = "password";
+  for (i = 0; i < sizeof(key); i++)
+    key[i] = *password != 0 ? *password++ : 0;
+  output = fopen("text.txt", "ab");
+
+  nrounds = rijndaelSetupEncrypt(rk, key, 256);
+    unsigned char plaintext[16];
+    scanf("%s", plaintext);
+    unsigned char ciphertext[16];
+    int j;
+    rijndaelEncrypt(rk, nrounds, plaintext, ciphertext);
+    if (fwrite(ciphertext, sizeof(ciphertext), 1, output) != 1)
+    {
+      fclose(output);
+      fputs("File write error", stderr);
+      return 1;
+  }
+}
+
+int decrypt() {
+  unsigned long rk[RKLENGTH(KEYBITS)];
+  unsigned char key[KEYLENGTH(KEYBITS)];
+  int i;
+  int nrounds;
+  char *password;
+  FILE *input;
+
+  password = "password";
+  for (i = 0; i < sizeof(key); i++)
+    key[i] = *password != 0 ? *password++ : 0;
+  input = fopen("text.txt", "rb");
+  if (input == NULL)
+  {
+    fputs("File read error", stderr);
+    return 1;
+  }
+  nrounds = rijndaelSetupDecrypt(rk, key, 256);
+  while (1)
+  {
+    unsigned char plaintext[16];
+    unsigned char ciphertext[16];
+    int j;
+    if (fread(ciphertext, sizeof(ciphertext), 1, input) != 1)
+      break;
+    rijndaelDecrypt(rk, nrounds, ciphertext, plaintext);
+    fwrite(plaintext, sizeof(plaintext), 1, stdout);
+  }
+  fclose(input);
+}
+
+#endif // AES_USAGE

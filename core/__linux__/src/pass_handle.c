@@ -7,6 +7,7 @@
 #include "../include/global.h"
 #include "../include/defs.h"
 #include "../include/pass_handle.h"
+#include "../crypt/sha256.h"
 
 // генерирует случайный пароль
 char* random_pass(char *password) {
@@ -19,6 +20,7 @@ char* random_pass(char *password) {
         rand_ch = rand()%62;
         *password++ = pool[rand_ch]; 
     }
+    sha256(password);
 }
 
 // создание мастер пароля
@@ -28,13 +30,14 @@ void master_seed() {
     char answer;
     char master_pass[SIZE], 
          re_master_pass[SIZE];
+
     system("clear");
     AWE = fopen(mf, "a+"); 
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
     if(pos > 0) {
-        printf("the password already exists. change password?[y/n]\n");
+        printf(TCOLOR_Y"[!]%s The password already exists. change password?[y/n]\n", TCOLOR_RESET);
         answer = getchar();
         if(answer == 'Y' || answer == 'y') {
             if(confirm() == FALSE) {
@@ -43,26 +46,26 @@ void master_seed() {
             AWE = fopen(mf, "w"); // 
         }
         else {
-            printf("Canselling...\n");
+            printf(TCOLOR_R"[×]%s Canselling...\n", TCOLOR_RESET);
             exit(1);
         }
     }
     //awestruck
     awe_print_logo();
     printf("Enter the master password:~# ");
-    scanf("%s", &master_pass);
-
+    hide_pass(master_pass);
+    sha256(master_pass);
 
     if(master_pass != NULL) {
-        printf("confirm your master password: ");
-        scanf("%s", &re_master_pass);
-        if(strcmp(master_pass, re_master_pass) == 0) {
-            printf("the password has been saved.\n");
-            // caeXorEnc(re_master_pass, "asd");
+        printf("Confirm your master password: ");
+        hide_pass(re_master_pass);
+        sha256(re_master_pass);
+        if(!memcmp(master_pass, re_master_pass, strlen(master_pass))) {
+            printf(TCOLOR_G"[✔]%s The password has been saved.\n", TCOLOR_RESET);
             fputs(re_master_pass, AWE);
         }
         else {
-            printf("Error: Passwords don't match.\n");
+            printf(TCOLOR_R "[×]%s Error: Passwords don't match.\n", TCOLOR_RESET);
             exit(1);
         }
     }
@@ -71,7 +74,8 @@ void master_seed() {
 // подтверждение мастер пароля
 int confirm() {  // сделать количество попыток
     char pas_confirm[SIZE], buffer[SIZE];
-    int i;
+    char* out;
+
     AWE = fopen(mf, "r");
     if(!AWE) {
         AWE = fopen(mf, "w+");
@@ -82,21 +86,26 @@ int confirm() {  // сделать количество попыток
     if(pos > 0) {
         AWE = fopen(mf, "r+");
         printf("Enter master password to confirm: ");
-        scanf("%s", pas_confirm);
+        hide_pass(pas_confirm);
+        sha256(pas_confirm);
         fgets(buffer, SIZE, AWE);
-        if(strcmp(pas_confirm, buffer) == 0) {
+        if(!memcmp(pas_confirm, buffer, strlen(buffer))) {
             printf("Success.\n");
             return TRUE;
         }
-        printf("passwords are not match. Cancelling...\n");
+        printf(TCOLOR_R "[×]%s Passwords are not match. Cancelling...\n", TCOLOR_RESET);
         return FALSE;
     } 
-    printf("Enter awestruck reg, and create password\n");
+    printf(TCOLOR_R "[×]%s Enter awe init, and create password\n", TCOLOR_RESET);
     return FALSE;
 }
 
-void hide_pass() {
-    run();
+void hide_pass(char* buffer) {
+    char sz_pass[256];
+    get_password(&sz_pass[0], sizeof(sz_pass));
+    for(int i = 0; i < strlen(sz_pass); i++) {
+        buffer[i] = sz_pass[i];
+    }
 }
 
 int getchar_supressed(void) {
@@ -208,11 +217,4 @@ int get_password(char* const pszBuffer, const int nBufferLength) {
   pszTemp = NULL;
   
   return return_value;
-}
- 
-void run(void) {
-  char sz_pass[256];
-  printf("Enter password:\n");
-  get_password(&sz_pass[0], sizeof(sz_pass));
-  printf("pass:\n%s\n", sz_pass);
 }

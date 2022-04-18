@@ -9,7 +9,10 @@
 #include <string.h>
 
 void test() {
+    char buffer[SIZE];
+    hide_pass(buffer);
 
+    printf("%s\n", buffer);
 }
 
 

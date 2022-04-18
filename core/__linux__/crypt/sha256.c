@@ -276,13 +276,14 @@ void sha256_use(const void *data, size_t len, uint8_t *hash) {
 #include <stdio.h>
 #include <string.h>
 
-char* sha256(char* in, char* out) {
-    const size_t tests_total = sizeof(in) / sizeof(in);
+char* sha256(char* result) {
     uint8_t hash[SHA256_SIZE_BYTES];
-    sha256_use(in, strlen(in), hash);
-    for (size_t j = 0; j < SHA256_SIZE_BYTES; j++) {
-        out[j] = hash[j];
+    size_t j;
+    sha256_use(result, strlen(result), hash);
+    for (j = 0; j < SHA256_SIZE_BYTES; j++) {
+        result[j] = hash[j];
     }
+    result[j++] = '\0';
 }
 
 

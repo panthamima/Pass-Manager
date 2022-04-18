@@ -2,8 +2,8 @@
 #define GLOBAL_H
 
 #define TCOLOR_R     "\x1b[31;1m"
-#define TCOLOR_Y     "\x1b[33m"
-#define TCOLOR_G     "\x1b[32m"
+#define TCOLOR_Y     "\x1b[33;1m"
+#define TCOLOR_G     "\x1b[32;1m"
 #define TCOLOR_RESET "\x1b[0m"
 
 char* get_home_directory(char* directory);

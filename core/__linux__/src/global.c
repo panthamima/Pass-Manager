@@ -1,20 +1,26 @@
 #include "../include/defs.h"
+#include "../include/clipboard.h"
 #include "../include/global.h"
 #include "../include/validation.h"
+#include "../crypt/rijndael.h"
 #include "../include/pass_handle.h"
-#include "../include/clipboard.h"
+#include "../crypt/sha256.h"
 
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
 
 void test() {
-    char buffer[256];
-    get_path(buffer);
+    char* data = "data sopdaipois";
+    char* pass = "sa";
+    char* filaname = "CC.txt";
+    aes_256_enc(filaname, data, pass);
+    printf("enc: %s\n", data);
+    aes_256_dec(filaname, data, pass);
+    printf("dec: %s\n", data);
 }
 
 #ifdef unix
-    
     char* get_path(char* path) {
         const char main_folder[SIZE] = "/awestruck/storage/";
         path = getenv("HOME"); // get home linux directory

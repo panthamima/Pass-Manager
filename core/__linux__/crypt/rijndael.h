@@ -10,6 +10,9 @@ void rijndaelEncrypt(const unsigned long *rk, int nrounds,
 void rijndaelDecrypt(const unsigned long *rk, int nrounds,
   const unsigned char ciphertext[16], unsigned char plaintext[16]);
 
+int aes_256_enc(char* filename, char* input, char* password);
+int aes_256_dec(char* filename, char* input, char* password);
+
 #define KEYLENGTH(keybits) ((keybits)/8)
 #define RKLENGTH(keybits)  ((keybits)/8+28)
 #define NROUNDS(keybits)   ((keybits)/32+6)

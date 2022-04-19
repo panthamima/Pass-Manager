@@ -45,7 +45,7 @@ void removing() { // брать слово вычитать все символ�
     TEMP = fopen(temp_buffer, "r");
     
     while(!feof(TEMP)) {
-        if(fgets(ch_buf, 256, TEMP) != NULL) {
+        if(fgets(ch_buf, SIZE, TEMP) != NULL) {
             fprintf(AWE, "%s", ch_buf);
         }
         lines++;

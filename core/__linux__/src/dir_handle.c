@@ -3,9 +3,9 @@
 #include <string.h>
 
 #include "../include/pass_handle.h"
+#include "../include/dir_handle.h"
 #include "../include/tools.h"
 #include "../include/defs.h"
-#include "../include/dir_handle.h"
 
 DIR *list_dir;
 struct dirent *dir;
@@ -18,7 +18,7 @@ void create_cat() {
     if(confirm() == FALSE) {
         exit(1);
     }
-    printf("enter a category name without '.txt'\n\t- ");
+    printf("enter a category name without\n\t- ");
     scanf("%s", cat_name); // if segfult == my_scanf(cat_name)
     remove_x_char(cat_name);
 

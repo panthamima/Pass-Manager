@@ -1,7 +1,10 @@
 #define FULL_UNROLL
 
 #include "rijndael.h"
+#include "../include/defs.h"
+#include "../include/global.h"
 #include <stdio.h>
+#include <string.h>
 
 typedef unsigned long u32;
 typedef unsigned char u8;
@@ -1211,21 +1214,22 @@ void rijndaelDecrypt(const u32 *rk, int nrounds, const u8 ciphertext[16],
 
 #define KEYBITS 256
 
-int encrypt(char* filename,char* input) {
+int aes_256_enc(char* filename, char* enc_data, char* password) {
   unsigned long rk[RKLENGTH(KEYBITS)];
   unsigned char key[KEYLENGTH(KEYBITS)];
   int i;
+  char* path;
   int nrounds;
   FILE *output;
-  char* password;
-  password = "password";
-  for (i = 0; i < sizeof(key); i++)
+  password = "sadasasddas";
+  for (i = 0; i < sizeof(key); i++) {
     key[i] = *password != 0 ? *password++ : 0;
-  output = fopen("text.txt", "ab");
-
+  }
+  strcat(get_path(path), filename);
+  output = fopen(path, "ab");
+s
   nrounds = rijndaelSetupEncrypt(rk, key, 256);
     unsigned char plaintext[16];
-    scanf("%s", plaintext);
     unsigned char ciphertext[16];
     int j;
     rijndaelEncrypt(rk, nrounds, plaintext, ciphertext);
@@ -1237,14 +1241,14 @@ int encrypt(char* filename,char* input) {
   }
 }
 
-int decrypt() {
+int aes_256_dec(char* filename, char* dec_data, char* password) {
   unsigned long rk[RKLENGTH(KEYBITS)];
   unsigned char key[KEYLENGTH(KEYBITS)];
   int i;
   int nrounds;
-  char *password;
+  password = "asdasfrhuih34iuhfiuh34ifu33ui4h3f";
   FILE *input;
-
+  
   password = "password";
   for (i = 0; i < sizeof(key); i++)
     key[i] = *password != 0 ? *password++ : 0;

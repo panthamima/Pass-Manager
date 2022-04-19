@@ -23,6 +23,10 @@ char* random_pass(char *password) {
     sha256(password);
 }
 
+void get_pass(char* password) {
+    
+}
+
 // создание мастер пароля
 // запрашивать имя пользвоателя if linux /home/..../init_struct
 // else C:/programfiles/initstruct
@@ -37,8 +41,8 @@ void master_seed() {
     long pos = ftell(AWE);
 
     if(pos > 0) {
-        printf(TCOLOR_Y"[!]%s The password already exists. change password?[y/n]\n", TCOLOR_RESET);
-        answer = getchar();
+        printf("[!] The password already exists. change password?[y/n]\n");
+        answer = 'y';
         if(answer == 'Y' || answer == 'y') {
             if(confirm() == FALSE) {
                 exit(1);

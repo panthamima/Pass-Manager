@@ -1211,14 +1211,13 @@ void rijndaelDecrypt(const u32 *rk, int nrounds, const u8 ciphertext[16],
 
 #define KEYBITS 256
 
-int encrypt() {
+int encrypt(char* filename,char* input) {
   unsigned long rk[RKLENGTH(KEYBITS)];
   unsigned char key[KEYLENGTH(KEYBITS)];
   int i;
   int nrounds;
-  char *password;
   FILE *output;
-
+  char* password;
   password = "password";
   for (i = 0; i < sizeof(key); i++)
     key[i] = *password != 0 ? *password++ : 0;

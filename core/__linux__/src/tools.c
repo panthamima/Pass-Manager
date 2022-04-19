@@ -59,3 +59,9 @@ void validate_txt(char *filename) {
         strcmp(filename, ".txt");
     }
 }
+
+void str_replace(char* give, char* get) {
+    for(int i = 0; i < strlen(give)+1; i++) {
+        get[i] = give[i];
+    }
+}

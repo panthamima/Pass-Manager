@@ -9,25 +9,18 @@
 #include <string.h>
 
 void test() {
-    char buffer[SIZE];
-    hide_pass(buffer);
-
-    printf("%s\n", buffer);
+    char buffer[256];
+    get_path(buffer);
 }
 
-
 #ifdef unix
-    char* get_home_directory(char* directory) {
-        directory = getenv("HOME"); // get home linux directory
-    }
     
     char* get_path(char* path) {
-        path = "/awestruck/awebase/categories/";
-        char* buffer;
+        const char main_folder[SIZE] = "/awestruck/storage/";
+        path = getenv("HOME"); // get home linux directory
         
-        get_home_directory(buffer);
-        strcat(buffer, path);
-        path = buffer;
+        strcat(path, main_folder);
+        printf("%s", path);
     }
 #elif _WIN64
     char* get_home_directory(char* directory) {
@@ -35,7 +28,7 @@ void test() {
     }
 
     char* get_path(char* path) {
-        path = "\\__awebase\\categories";
+        path = "\\awestruck\\storage";
     }
 #endif
 
@@ -44,7 +37,9 @@ void init_struct() {
     char* path;
     DIR *list_dir;
     struct dirent *dir;
+
     list_dir = opendir(get_path(path));
+    
     if(list_dir == NULL) {
         // system("mkdir -p /home/panthamima/__awebase/categories");
     }

@@ -11,13 +11,14 @@
 #include <string.h>
 
 void test() {
-    char* data = "data sopdaipois";
-    char* pass = "sa";
-    char* filaname = "CC.txt";
-    aes_256_enc(filaname, data, pass);
-    printf("enc: %s\n", data);
-    aes_256_dec(filaname, data, pass);
-    printf("dec: %s\n", data);
+    // char* data = "data sopdaipois";
+    // char* pass = "sa";
+    // char* filaname = "CC.txt";
+    // aes_256_enc(filaname, data, pass);
+    // printf("enc: %s\n", data);
+    // aes_256_dec(filaname, data, pass);
+    // printf("dec: %s\n", data);
+    
 }
 
 #ifdef unix

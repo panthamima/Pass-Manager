@@ -11,12 +11,11 @@
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
     char filename[SIZE];
     char ext[] = ".txt";    
-    char ch_buf[256];
+    char buffer[SIZE];
     unsigned lines = 1;
-    int inp_buf = 0;
-    int i,j,k;
+    int j,k;
     int d = 0;
-    i = j = k = 0;
+    j = k = 0;
 
     show_dir();
     printf("enter file where delete\n\t- ");
@@ -33,8 +32,8 @@ void removing() { // брать слово вычитать все символ�
   
     TEMP = fopen(temp_buffer, "a");
     while(!feof(AWE)) {
-        if((fgets(ch_buf, 256, AWE) != NULL) && lines != d) {
-            fprintf(TEMP, "%s", ch_buf);
+        if((fgets(buffer, SIZE, AWE) != NULL) && lines != d) {
+            fprintf(TEMP, "%s", buffer);
         }
         lines++;
     }
@@ -45,16 +44,15 @@ void removing() { // брать слово вычитать все символ�
     TEMP = fopen(temp_buffer, "r");
     
     while(!feof(TEMP)) {
-        if(fgets(ch_buf, SIZE, TEMP) != NULL) {
-            fprintf(AWE, "%s", ch_buf);
+        if(fgets(buffer, SIZE, TEMP) != NULL) {
+            fprintf(AWE, "%s", buffer);
         }
         lines++;
     }
     TEMP = freopen(temp_buffer, "w", stdin);
 
     fclose(TEMP);
-    fclose(AWE);    
-    // закидывать все во временный файл читать по строкам -> нужную удалять остальное возвращать tmpfile create !! не знабыть что хтел ептааа
+    fclose(AWE);
 }
 
 // удалить все пароли

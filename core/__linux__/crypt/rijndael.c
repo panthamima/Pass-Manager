@@ -1227,7 +1227,7 @@ int aes_256_enc(char* filename, char* enc_data, char* password) {
   }
   strcat(get_path(path), filename);
   output = fopen(path, "ab");
-s
+  
   nrounds = rijndaelSetupEncrypt(rk, key, 256);
     unsigned char plaintext[16];
     unsigned char ciphertext[16];

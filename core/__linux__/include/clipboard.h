@@ -5,6 +5,8 @@
 #include <string.h> // strndup, strlen
 #include <X11/Xlib.h>
 
+static Atom UTF8;
+
 static void XCopy(Atom selection, unsigned char * text, int size);
 void copy();
 char * XPasteType(Atom atom);

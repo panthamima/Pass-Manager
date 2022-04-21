@@ -12,20 +12,29 @@
 #include <string.h>
 
 void test() {
-    char buffer[100], 
-    in[] = "ebrbaebabehdbahjebjhbseee";
-    strlcpy(buffer, in, sizeof(buffer));
-    printf("1%s", buffer);
+    init_struct();
 }
 
 #ifdef unix
     char* get_path(char* path) {
         const char main_folder[SIZE] = "/awestruck/storage/";
-        path = getenv("HOME"); // get home linux directory
-        
-        strcat(path, main_folder);
-        printf("%s %ld %ld", path, sizeof(main_folder), sizeof(path));
+        strlcpy(path, getenv("HOME"), SIZE);
+        strlcat(path, main_folder, SIZE);
+    }
 
+    void init_struct() {
+        char path[SIZE];
+        DIR *list_dir;
+        struct dirent *dir;
+
+        get_path(path);
+        printf("%s", path);
+
+        list_dir = opendir(path);
+        
+        if(list_dir == NULL) {
+            
+        }
     }
 #elif _WIN64
     char* get_home_directory(char* directory) {
@@ -36,19 +45,6 @@ void test() {
         path = "\\awestruck\\storage";
     }
 #endif
-
-// развертка структуры приложения
-void init_struct() {
-    char* path;
-    DIR *list_dir;
-    struct dirent *dir;
-
-    list_dir = opendir(get_path(path));
-    
-    if(list_dir == NULL) {
-        // system("mkdir -p /home/panthamima/__awebase/categories");
-    }
-}
 
 void awe_version() {
     printf("Awestruck version: %s\n", VERSION);

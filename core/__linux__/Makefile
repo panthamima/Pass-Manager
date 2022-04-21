@@ -1,4 +1,4 @@
-LIBS    = -lX11
+LIBS    = -lX11 -lsodium
 BUILD_FLAGS   = -Os -Wformat=2 -ggdb#-std=c99
 DEBUG_FLAGS   = -Wall -O # -Werror
 

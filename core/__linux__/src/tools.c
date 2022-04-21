@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
+#include <sodium.h>
 
 // удаление запрещенных символов
 char* remove_x_char(char* str) {
@@ -60,9 +62,10 @@ void validate_txt(char *filename) {
     }
 }
 
-#include <sys/types.h>
-#include <string.h>
 
+#define strlen_limited(S_, M_) (strnlen ((S_), (M_)))
+
+// safe strcpy
 size_t strlcpy (char * dst, const char * src, size_t dstsize) {
     size_t src_len ;
     size_t len ;
@@ -92,10 +95,8 @@ size_t strlcpy (char * dst, const char * src, size_t dstsize) {
     return src_len ;
 }
 
-#include <sys/types.h>
-#include <string.h>
-
-size_t  export_strlcat (char * dst, const char * src, size_t dstsize) {
+// safe strcat
+size_t strlcat (char * dst, const char * src, size_t dstsize) {
     size_t src_len ;
     size_t dst_len ;
     size_t dstlimit ;
@@ -124,5 +125,34 @@ size_t  export_strlcat (char * dst, const char * src, size_t dstsize) {
         memcpy (dst + dst_len, src, len) ;
         dst [dst_len + len] = 0 ;
         return dst_len + src_len ;
+    }
+}
+
+enum read_status {
+    OK,
+    NO_INPUT,
+    TOO_LONG
+};
+
+int get_line(const char *prompt, char *buf, size_t sz) {
+    char fmt[40];
+    int i;
+    int nscanned;
+
+    printf("%s", prompt);
+    fflush(stdout);
+
+    sprintf(fmt, "%%%zu[^\n]%%*[^\n]%%n", sz-1);
+    /* read at most sz-1 characters on, discarding the rest */
+    i = scanf(fmt, buf, &nscanned);
+    if (i > 0) {
+        getchar();
+        if (nscanned >= sz) {
+            return TOO_LONG;
+        } else {
+            return OK;
+        }
+    } else {
+        return NO_INPUT;
     }
 }

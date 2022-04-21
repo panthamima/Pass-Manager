@@ -18,7 +18,7 @@ void test() {
 #ifdef unix
     char* get_path(char* path) {
         const char main_folder[SIZE] = "/awestruck/storage/";
-        strlcpy(path, getenv("HOME"), SIZE);
+        strlcpy(path, getenv("USER"), SIZE);
         strlcat(path, main_folder, SIZE);
     }
 

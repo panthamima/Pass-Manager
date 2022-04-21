@@ -6,6 +6,7 @@
 
 #include "../include/global.h"
 #include "../include/defs.h"
+#include "../include/tools.h"
 #include "../include/pass_handle.h"
 #include "../crypt/sha256.h"
 
@@ -31,10 +32,10 @@ void get_pass(char* password) {
 // запрашивать имя пользвоателя if linux /home/..../init_struct
 // else C:/programfiles/initstruct
 void master_seed() { 
-    char answer;
+    char answer[2];
     char master_pass[SIZE], 
          re_master_pass[SIZE];
-
+         
     system("clear");
     AWE = fopen(mf, "a+"); 
     fseek(AWE, 0, SEEK_END);
@@ -42,8 +43,8 @@ void master_seed() {
 
     if(pos > 0) {
         printf("[!] The password already exists. change password?[y/n]\n");
-        answer = 'y';
-        if(answer == 'Y' || answer == 'y') {
+        get_line("", answer, 2);
+        if(answer[0] == 'Y' || answer[0] == 'y') {
             if(confirm() == FALSE) {
                 exit(1);
             }

@@ -1,7 +1,6 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
-// #include <X11/Xlib.h>
 
 #include "../include/defs.h"
 #include "../include/dir_handle.h"

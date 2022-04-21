@@ -77,7 +77,7 @@ void prepare_string(char path_file[SIZE], char symbol) {
     }
     AWE = fopen(path_file, "a");
     char buffer[SIZE];
-    scanf("%255s", &buffer);
+    scanf("%s", buffer);
     fprintf(AWE, "%s%c", buffer, symbol);
     fclose(AWE);    
 }
@@ -91,7 +91,7 @@ void addition() {
     char filename[SIZE];
     show_dir();
     printf("enter filename\n\t- ");
-    scanf("%s", &filename);
+    scanf("%s", filename);
     strcat(path, filename);
     printf("%s", path);
     printf("Enter login\n\t- ");
@@ -171,7 +171,7 @@ void extradition() {
 
     show_dir();
     printf("enter category name: ");
-    scanf("%s", &category);
+    scanf("%s", category);
     strcat(path, category);
     if(!(AWE = fopen(path, "r"))) {
         printf("error. the category doesn't exist\n");

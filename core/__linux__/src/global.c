@@ -5,20 +5,17 @@
 #include "../crypt/rijndael.h"
 #include "../include/pass_handle.h"
 #include "../crypt/sha256.h"
+#include "../include/tools.h"
 
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
 
 void test() {
-    // char* data = "data sopdaipois";
-    // char* pass = "sa";
-    // char* filaname = "CC.txt";
-    // aes_256_enc(filaname, data, pass);
-    // printf("enc: %s\n", data);
-    // aes_256_dec(filaname, data, pass);
-    // printf("dec: %s\n", data);
-    
+    char buffer[100], 
+    in[] = "ebrbaebabehdbahjebjhbseee";
+    strlcpy(buffer, in, sizeof(buffer));
+    printf("1%s", buffer);
 }
 
 #ifdef unix
@@ -27,7 +24,8 @@ void test() {
         path = getenv("HOME"); // get home linux directory
         
         strcat(path, main_folder);
-        printf("%s", path);
+        printf("%s %ld %ld", path, sizeof(main_folder), sizeof(path));
+
     }
 #elif _WIN64
     char* get_home_directory(char* directory) {

@@ -60,8 +60,69 @@ void validate_txt(char *filename) {
     }
 }
 
-void str_replace(char* give, char* get) {
-    for(int i = 0; i < strlen(give)+1; i++) {
-        get[i] = give[i];
+#include <sys/types.h>
+#include <string.h>
+
+size_t strlcpy (char * dst, const char * src, size_t dstsize) {
+    size_t src_len ;
+    size_t len ;
+    size_t dstlimit ;
+
+    if (src == 0) {
+        if (dst != 0 && 0 < dstsize) {
+            dst [0] = 0 ;
+        }
+        return 0 ;
+    }
+
+    src_len = strlen (src) ;
+    len = src_len ;
+
+    if (dst == 0 || dstsize == 0) {
+        return src_len ;
+    }
+    dstlimit = dstsize - 1 ;
+
+    if (dstlimit < len) {
+        len = dstlimit ;
+    }
+    memcpy (dst, src, len) ;
+    dst [len] = 0 ;
+
+    return src_len ;
+}
+
+#include <sys/types.h>
+#include <string.h>
+
+size_t  export_strlcat (char * dst, const char * src, size_t dstsize) {
+    size_t src_len ;
+    size_t dst_len ;
+    size_t dstlimit ;
+
+    if (dst == 0) {
+        if (src == 0) {
+            return 0 ;
+        }
+        return strlen (src) ;
+    }
+    /* At this poinit, DST != nullptr && SRC != nullptr */
+    src_len = strlen (src) ;
+    dst_len = strlen_limited (dst, dstsize) ;
+    dstlimit = dstsize - 1 ;
+
+    if (dstlimit < dst_len) {
+        /* Already overflowed */
+        return dst_len + src_len ;
+    }
+    else {
+        size_t len = src_len ;
+        /* dstlen <= dstlimit */
+        if (dstlimit < (dst_len + src_len)) {
+            len = dstlimit - dst_len ;
+        }
+        memcpy (dst + dst_len, src, len) ;
+        dst [dst_len + len] = 0 ;
+        return dst_len + src_len ;
     }
 }

@@ -10,6 +10,10 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
+#include <uv.h>
+
+#define MAIN     "/awestruck/categories/"
+#define STORAGE  "categories/"
 
 void test() {
     init_struct();
@@ -17,24 +21,22 @@ void test() {
 
 #ifdef unix
     char* get_path(char* path) {
-        const char main_folder[SIZE] = "/awestruck/storage/";
-        strlcpy(path, getenv("USER"), SIZE);
-        strlcat(path, main_folder, SIZE);
+        strlcpy(path, getenv("HOME"), SIZE);
     }
 
     void init_struct() {
-        char path[SIZE];
+        char  path[SIZE];
         DIR *list_dir;
         struct dirent *dir;
-
         get_path(path);
         printf("%s", path);
 
-        list_dir = opendir(path);
-        
-        if(list_dir == NULL) {
-            
+        strlcat(path, MAIN, SIZE);
+        if((list_dir = opendir(path)) != NULL) {
+            mkdir(path, 0777);
+            printf("created\n");
         }
+
     }
 #elif _WIN64
     char* get_home_directory(char* directory) {

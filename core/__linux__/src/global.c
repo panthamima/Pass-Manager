@@ -13,27 +13,46 @@
 #include <uv.h>
 
 #define MAIN     "/awestruck"
-#define STORAGE  "/categories"
+#define STORAGE  "/categories" 
+
+enum types {
+    main,   // path to user home
+    master, // path to masterpass file
+    temp    // path to temp file
+};
 
 void test() {
-
+    init_struct();
 }
 
 #ifdef unix
-char* get_path(char* path) {
+char* get_path(char* path, int path_type) {
     strlcpy(path, getenv("HOME"), SIZE);
+
+    switch (path_type) {
+    case main:
+        return path;
+        break;
+    case master:
+        strlcat(path, master_file, SIZE); 
+        break;
+    case temp:
+        strlcat(path, temp, SIZE);
+        break;
+    default:
+        EXIT_FAILURE;
+    }
 }
 
 void init_struct() {
     char  path[SIZE];
     DIR *list_dir;
     struct dirent *dir;
-    get_path(path);
+    get_path(path, main);
 
-    printf("");
     strlcat(path, MAIN, SIZE);
     if((list_dir = opendir(path)) == NULL) {
-
+        printf("The password storage folder was not found. Creating.\n");
         mkdir(path, 0777);
     }
     closedir(list_dir);

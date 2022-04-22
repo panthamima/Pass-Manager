@@ -12,32 +12,38 @@
 #include <string.h>
 #include <uv.h>
 
-#define MAIN     "/awestruck/categories/"
-#define STORAGE  "categories/"
+#define MAIN     "/awestruck"
+#define STORAGE  "/categories"
 
 void test() {
-    init_struct();
+
 }
 
 #ifdef unix
-    char* get_path(char* path) {
-        strlcpy(path, getenv("HOME"), SIZE);
+char* get_path(char* path) {
+    strlcpy(path, getenv("HOME"), SIZE);
+}
+
+void init_struct() {
+    char  path[SIZE];
+    DIR *list_dir;
+    struct dirent *dir;
+    get_path(path);
+
+    printf("");
+    strlcat(path, MAIN, SIZE);
+    if((list_dir = opendir(path)) == NULL) {
+
+        mkdir(path, 0777);
     }
+    closedir(list_dir);
 
-    void init_struct() {
-        char  path[SIZE];
-        DIR *list_dir;
-        struct dirent *dir;
-        get_path(path);
-        printf("%s", path);
-
-        strlcat(path, MAIN, SIZE);
-        if((list_dir = opendir(path)) != NULL) {
-            mkdir(path, 0777);
-            printf("created\n");
-        }
-
+    strlcat(path, STORAGE, SIZE);
+    if((list_dir = opendir(path)) == NULL) {
+        mkdir(path, 0777);
     }
+    closedir(list_dir);
+}
 #elif _WIN64
     char* get_home_directory(char* directory) {
         directory = "C:\\Users\\path\\Desktop";

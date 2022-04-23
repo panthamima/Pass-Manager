@@ -15,12 +15,6 @@
 #define MAIN     "/awestruck"
 #define STORAGE  "/categories" 
 
-enum types {
-    main,   // path to user home
-    master, // path to masterpass file
-    temp    // path to temp file
-};
-
 void test() {
     init_struct();
 }
@@ -28,17 +22,17 @@ void test() {
 #ifdef unix
 char* get_path(char* path, int path_type) {
     strlcpy(path, getenv("HOME"), SIZE);
+    strlcat(path, MAIN, SIZE);
 
     switch (path_type) {
-    case main:
-        return path;
-        break;
+    case init:
+        return 0;
+    case storage:
+        strlcat(path, STORAGE,     SIZE); break;
     case master:
-        strlcat(path, master_file, SIZE); 
-        break;
+        strlcat(path, master_file, SIZE); break;
     case temp:
-        strlcat(path, temp, SIZE);
-        break;
+        strlcat(path, tmp_file,    SIZE); break;
     default:
         EXIT_FAILURE;
     }
@@ -48,16 +42,15 @@ void init_struct() {
     char  path[SIZE];
     DIR *list_dir;
     struct dirent *dir;
-    get_path(path, main);
 
-    strlcat(path, MAIN, SIZE);
+    get_path(path, init);
     if((list_dir = opendir(path)) == NULL) {
         printf("The password storage folder was not found. Creating.\n");
         mkdir(path, 0777);
     }
     closedir(list_dir);
 
-    strlcat(path, STORAGE, SIZE);
+    get_path(path, storage);
     if((list_dir = opendir(path)) == NULL) {
         mkdir(path, 0777);
     }

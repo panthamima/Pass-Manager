@@ -144,7 +144,7 @@ int get_line(const char *prompt, char *buf, size_t sz) {
 
     sprintf(fmt, "%%%zu[^\n]%%*[^\n]%%n", sz-1);
     /* read at most sz-1 characters on, discarding the rest */
-    i = scanf(fmt, buf, &nscanned);
+    i = scanf((char*)fmt, buf, &nscanned);
     if (i > 0) {
         getchar();
         if (nscanned >= sz) {

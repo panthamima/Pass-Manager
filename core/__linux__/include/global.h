@@ -7,7 +7,7 @@
 #define TCOLOR_RESET "\x1b[0m"
 
 char* get_home_directory(char* directory);
-char* get_path(char* path);
+char* get_path(char* path, int path_type);
 
 #define VERSION "0.1.1"
 

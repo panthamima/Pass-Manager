@@ -3,6 +3,7 @@
 #include "rijndael.h"
 #include "../include/defs.h"
 #include "../include/global.h"
+#include "../include/tools.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -1225,7 +1226,7 @@ int aes_256_enc(char* filename, char* enc_data, char* password) {
   for (i = 0; i < sizeof(key); i++) {
     key[i] = *password != 0 ? *password++ : 0;
   }
-  strcat(get_path(path), filename);
+  strlcat(get_path(path, storage), filename, SIZE);
   output = fopen(path, "ab");
   
   nrounds = rijndaelSetupEncrypt(rk, key, 256);

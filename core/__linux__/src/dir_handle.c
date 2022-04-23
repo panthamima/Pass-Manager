@@ -4,6 +4,7 @@
 
 #include "../include/pass_handle.h"
 #include "../include/dir_handle.h"
+#include "../include/global.h"
 #include "../include/tools.h"
 #include "../include/defs.h"
 
@@ -12,7 +13,7 @@ struct dirent *dir;
 
 void create_cat() { 
     char cat_name[SIZE];
-    char buffer[SIZE];
+    char   buffer[SIZE];
     int i, j;
 
     if(confirm() == FALSE) {
@@ -26,11 +27,10 @@ void create_cat() {
         printf("Error: enter filename\n");
         exit(1);
     }
-
-    strcat(path, cat_name);
-    AWE = fopen(strcat(path, ".txt"), "rb+");
+    strlcat(get_path(buffer, storage), cat_name, SIZE);
+    AWE = fopen(buffer, "r");
     if(!AWE) {
-        AWE = fopen(path, "a");
+        AWE = fopen(buffer, "a");
         printf("%s.txt - name of category\n", cat_name);
     }
     else {
@@ -41,7 +41,9 @@ void create_cat() {
 
 // удаление категории 
 void delete_cat() {
-    char filename[SIZE];  
+    char filename[SIZE];
+    char path[SIZE];
+    
     if(confirm() == FALSE) {
         exit(1);
     }
@@ -59,7 +61,8 @@ void directory() {
 
 // показать сществующие категории
 void show_dir() { 
-    list_dir = opendir(path);
+    char path[SIZE];
+    list_dir = opendir(get_path(path, storage));
     int i = 0;
 
     while ((dir = readdir(list_dir)) != NULL) {

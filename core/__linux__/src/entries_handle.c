@@ -5,11 +5,14 @@
 #include "../include/defs.h"
 #include "../include/dir_handle.h"
 #include "../include/pass_handle.h"
+#include "../include/global.h"
+#include "../include/tools.h"
 
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
     char filename[SIZE];
-    char ext[] = ".txt";    
+    char ext[] = ".txt";
+    char path[SIZE];    
     char buffer[SIZE];
     unsigned lines = 1;
     int j,k;
@@ -19,8 +22,9 @@ void removing() { // брать слово вычитать все символ�
     show_dir();
     printf("enter file where delete\n\t- ");
     scanf("%s", filename);
-
-    AWE = fopen(strcat(path, filename), "r");
+    
+    strlcat(get_path(path, storage), filename, SIZE);
+    AWE = fopen(path, "r");
     if(!AWE) {
         printf("Error: file doesn't exist\n");
         exit(1);
@@ -29,7 +33,7 @@ void removing() { // брать слово вычитать все символ�
     printf("Enter number of line\n\t- ");
     scanf("%d", &d);
   
-    TEMP = fopen(temp_buffer, "a");
+    TEMP = fopen(tmp_file, "a");
     while(!feof(AWE)) {
         if((fgets(buffer, SIZE, AWE) != NULL) && lines != d) {
             fprintf(TEMP, "%s", buffer);
@@ -40,7 +44,7 @@ void removing() { // брать слово вычитать все символ�
     fclose(AWE);
     fclose(TEMP);
     AWE = fopen(path, "w");
-    TEMP = fopen(temp_buffer, "r");
+    TEMP = fopen(tmp_file, "r");
     
     while(!feof(TEMP)) {
         if(fgets(buffer, SIZE, TEMP) != NULL) {
@@ -48,7 +52,7 @@ void removing() { // брать слово вычитать все символ�
         }
         lines++;
     }
-    TEMP = freopen(temp_buffer, "w", stdin);
+    TEMP = freopen(tmp_file, "w", stdin);
 
     fclose(TEMP);
     fclose(AWE);
@@ -56,15 +60,7 @@ void removing() { // брать слово вычитать все символ�
 
 // удалить все пароли
 void shred() {
-    char *buffer;
-    // need fix!!
-    char answer;
-    printf("do you really want to delete passwords?[y/n] ");
-    answer = getchar();
-    if(answer == 'Y' || answer == 'y') {
-        memcpy(buffer, path, (strlen(path)+1));
-        
-    }
+
 }
 
 // создание строки для записи в файл
@@ -86,12 +82,13 @@ void prepare_string(char path_file[SIZE], char symbol) {
 // 2.если нажать пробел запись багается, если дать 
 // по башке после логина -> только он остается в файле
 
-void addition() { 
+void addition() {
+    char path[SIZE]; 
     char filename[SIZE];
     show_dir();
     printf("enter filename\n\t- ");
     scanf("%s", filename);
-    strcat(path, filename);
+    strlcat(get_path(path, storage), filename, SIZE);
     printf("%s", path);
     printf("Enter login\n\t- ");
     prepare_string(path, ':');
@@ -104,6 +101,7 @@ void addition() {
 void show_the_list() {
     int j = 1;
     char c;
+    char path[SIZE];
     char line[SIZE];
     char buffer[SIZE];
     DIR *list_dir;
@@ -113,7 +111,7 @@ void show_the_list() {
         exit(1);
     }
     
-    list_dir = opendir(path);
+    list_dir = opendir(get_path(path, storage));
     while ((dir = readdir(list_dir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
             memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 
@@ -161,6 +159,7 @@ void extradition() {
     char entry[SIZE];
     char buffer[SIZE];
     char category[SIZE];
+    char path[SIZE];
 
     system("clear");
 
@@ -171,7 +170,7 @@ void extradition() {
     show_dir();
     printf("enter category name: ");
     scanf("%s", category);
-    strcat(path, category);
+    strlcat(get_path(path, storage), category, SIZE);
     if(!(AWE = fopen(path, "r"))) {
         printf("error. the category doesn't exist\n");
         exit(1);

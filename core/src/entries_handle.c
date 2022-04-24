@@ -7,6 +7,7 @@
 #include "../include/pass_handle.h"
 #include "../include/global.h"
 #include "../include/tools.h"
+#include "../include/clipboard.h"
 
 // удалить выбранную запись
 void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
@@ -86,9 +87,10 @@ void addition() {
     char path[SIZE]; 
     char filename[SIZE];
     show_dir();
-    printf("enter filename\n\t- ");
-    scanf("%s", filename);
-    strlcat(get_path(path, storage), filename, SIZE);
+    get_path(path, storage);
+
+    get_line("enter filename\n\t- ", filename, SIZE);
+    strlcat(path, filename, SIZE);
     printf("%s", path);
     printf("Enter login\n\t- ");
     prepare_string(path, ':');
@@ -170,7 +172,8 @@ void extradition() {
     show_dir();
     printf("enter category name: ");
     scanf("%s", category);
-    strlcat(get_path(path, storage), category, SIZE);
+    get_path(path, storage);
+    strlcat(path, category, SIZE);
     if(!(AWE = fopen(path, "r"))) {
         printf("error. the category doesn't exist\n");
         exit(1);
@@ -182,6 +185,6 @@ void extradition() {
     scanf("%d", &line);
 
     counting(path, line-1, entry, sizeof(entry));
-    puts(entry);
+    copy(entry);
     fclose(AWE);    
 }

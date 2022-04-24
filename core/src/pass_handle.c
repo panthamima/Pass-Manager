@@ -36,9 +36,11 @@ void master_seed() {
     char path[SIZE];
     char master_pass[SIZE], 
          re_master_pass[SIZE];
-         
+    get_path(path, master);
+    init_struct();
+    
     system("clear");
-    AWE = fopen(get_path(path, master), "a+"); 
+    AWE = fopen(path, "a+"); 
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
@@ -49,7 +51,7 @@ void master_seed() {
             if(confirm() == FALSE) {
                 exit(1);
             }
-            AWE = fopen(get_path(path, master), "w");
+            AWE = fopen(path, "w");
         }
         else {
             printf(TCOLOR_R"[×]%s Canselling...\n", TCOLOR_RESET);
@@ -81,17 +83,18 @@ void master_seed() {
 int confirm() {  // сделать количество попыток
     char pas_confirm[SIZE], buffer[SIZE], path[SIZE];
     char* out;
+    get_path(path, master);
 
 
-    AWE = fopen(get_path(path, master), "r");
+    AWE = fopen(path, "r");
     if(!AWE) {
-        AWE = fopen(get_path(path, master), "w+");
+        AWE = fopen(path, "w+");
     }
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
     if(pos > 0) {
-        AWE = fopen(get_path(path, master), "r+");
+        AWE = fopen(path, "r+");
         printf("Enter master password to confirm: ");
         hide_pass(pas_confirm);
         sha256(pas_confirm);

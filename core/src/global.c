@@ -13,10 +13,12 @@
 #include <uv.h>
 
 #define MAIN     "/awestruck"
-#define STORAGE  "/categories" 
+#define STORAGE  "/categories/" 
 
 void test() {
-    init_struct();
+    char buffer[SIZE] = "asdads";
+    copy(buffer);
+
 }
 
 #ifdef unix

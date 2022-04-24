@@ -15,11 +15,12 @@ void create_cat() {
     char cat_name[SIZE];
     char   buffer[SIZE];
     int i, j;
+    get_path(buffer, storage);
 
     if(confirm() == FALSE) {
         exit(1);
     }
-    printf("enter a category name without\n\t- ");
+    printf("enter a category name without '.txt'\n\t- ");
     scanf("%s", cat_name); // if segfult == my_scanf(cat_name)
     remove_x_char(cat_name);
 
@@ -27,7 +28,7 @@ void create_cat() {
         printf("Error: enter filename\n");
         exit(1);
     }
-    strlcat(get_path(buffer, storage), cat_name, SIZE);
+    strlcat(buffer, cat_name, SIZE);
     AWE = fopen(buffer, "r");
     if(!AWE) {
         AWE = fopen(buffer, "a");
@@ -62,7 +63,8 @@ void directory() {
 // показать сществующие категории
 void show_dir() { 
     char path[SIZE];
-    list_dir = opendir(get_path(path, storage));
+    get_path(path, storage);
+    list_dir = opendir(path);
     int i = 0;
 
     while ((dir = readdir(list_dir)) != NULL) {

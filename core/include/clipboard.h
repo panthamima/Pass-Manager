@@ -1,15 +1,12 @@
 #ifndef CLIPBOARD_H
 #define CLIPBOARD_H
 
-#include <stdio.h> // printf
-#include <string.h> // strndup, strlen
-#include <X11/Xlib.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_clipboard.h>
 
-static Atom UTF8;
-
-static void XCopy(Atom selection, unsigned char * text, int size);
-void copy();
-char * XPasteType(Atom atom);
-void paste();
+void copy(char *text);
+void paste(char* text);
+void set_keypress(void);
+void reset_keypress(void);
 
 #endif

@@ -12,12 +12,13 @@
 #include <string.h>
 #include <uv.h>
 
-#define MAIN     "/awestruck"
-#define STORAGE  "/categories/" 
+#define MAIN     "/awestruck/"
+#define STORAGE  "categories/" 
 
 void test() {
-    char buffer[SIZE] = "asdads";
-    copy(buffer);
+    char file[] = "git";
+    char beffer[256] = "asdasdasd";
+    aes_256_enc(file, beffer, "aboba");
 
 }
 

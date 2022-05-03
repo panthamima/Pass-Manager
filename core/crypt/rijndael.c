@@ -1219,14 +1219,16 @@ int aes_256_enc(char* filename, char* enc_data, char* password) {
   unsigned long rk[RKLENGTH(KEYBITS)];
   unsigned char key[KEYLENGTH(KEYBITS)];
   int i;
-  char* path;
+  char path[SIZE];
   int nrounds;
   FILE *output;
   password = "sadasasddas";
   for (i = 0; i < sizeof(key); i++) {
     key[i] = *password != 0 ? *password++ : 0;
   }
-  strlcat(get_path(path, storage), filename, SIZE);
+  get_path(path, storage);
+  strlcat(path, filename, SIZE);
+  printf("%s", path);
   output = fopen(path, "ab");
   
   nrounds = rijndaelSetupEncrypt(rk, key, 256);
@@ -1234,8 +1236,7 @@ int aes_256_enc(char* filename, char* enc_data, char* password) {
     unsigned char ciphertext[16];
     int j;
     rijndaelEncrypt(rk, nrounds, plaintext, ciphertext);
-    if (fwrite(ciphertext, sizeof(ciphertext), 1, output) != 1)
-    {
+    if (fwrite(ciphertext, sizeof(ciphertext), 1, output) != 1) {
       fclose(output);
       fputs("File write error", stderr);
       return 1;

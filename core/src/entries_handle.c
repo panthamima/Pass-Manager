@@ -78,16 +78,12 @@ void prepare_string(char path_file[SIZE], char symbol) {
     }
     AWE = fopen(path_file, "a");
     char buffer[SIZE];
-    scanf("%s", buffer);
+    get_line("", buffer, SIZE);
     fprintf(AWE, "%s%c", buffer, symbol);
     fclose(AWE);    
 }
 
 // добавление строки в файл
-// 1.если нет файла некуда добавлять, надо вызывать функцию создания файла
-// 2.если нажать пробел запись багается, если дать 
-// по башке после логина -> только он остается в файле
-
 void addition() {
     char path[SIZE]; 
     char filename[SIZE];

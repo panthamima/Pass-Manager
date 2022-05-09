@@ -21,7 +21,7 @@ void create_cat() {
         exit(1);
     }
     printf("enter a category name without '.txt'\n\t- ");
-    scanf("%s", cat_name); // if segfult == my_scanf(cat_name)
+    scanf("%s", cat_name); 
     remove_x_char(cat_name);
 
     if(!strcmp(cat_name, "")) {
@@ -73,7 +73,7 @@ int show_dir() {
     int hidden_dir = 0;
     while ((dir = readdir(list_dir)) != NULL) {
         hidden_dir++;
-        if(strlen(dir->d_name) > 2) { // if dirname > 2  то не будет показаны 
+        if(strlen(dir->d_name) > 2) {                       // if dirname > 2  то не будет показаны 
             printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
         }
     }

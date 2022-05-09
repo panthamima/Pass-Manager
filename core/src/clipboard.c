@@ -114,20 +114,3 @@ void paste()
 }
 
 #endif
-
-void sdl() {
-    char text[] = "text";
-    SDL_Event event;
-    if(SDL_Init(SDL_INIT_VIDEO) == 0) {
-        if(SDL_SetClipboardText(text) == 0) {
-            while(1) {
-                SDL_WaitEvent(&event);
-                set_keypress();
-                char c = getchar();
-                reset_keypress();
-            }
-        }
-    }
-    SDL_Quit();
-}
-

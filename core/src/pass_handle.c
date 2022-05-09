@@ -22,13 +22,7 @@ char* random_pass(char *password) {
     sha256(password);
 }
 
-// void get_pass(char* password) {
-    
-// }
-
 // создание мастер пароля
-// запрашивать имя пользвоателя if linux /home/..../init_struct
-// else C:/programfiles/initstruct
 void master_seed() { 
     char answer[2];
     char path[SIZE];
@@ -79,11 +73,11 @@ void master_seed() {
 // подтверждение мастер пароля
 int confirm() {  // сделать количество попыток
     char pas_confirm[SIZE], buffer[SIZE], path[SIZE];
-    char* out;
     get_path(path, master);
-    static unsigned int requests = 0;
+    static unsigned int RTS = 0; // Rights To Skip
+    static unsigned int ATL = 2; // Attempts To Login
 
-    if(requests > 0) {
+    if(RTS != 0) {
         return TRUE;
     }
 
@@ -94,19 +88,28 @@ int confirm() {  // сделать количество попыток
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
+    retry:
     if(pos > 0) {
         AWE = fopen(path, "r+");
         printf("Enter master password to confirm: ");
+        
         hide_pass(pas_confirm);
         sha256(pas_confirm);
         fgets(buffer, SIZE, AWE);
+        printf("%s", pas_confirm);
         if(!memcmp(pas_confirm, buffer, strlen(buffer))) {
             printf("Success.\n");
-            requests += 1;
+            RTS += 1;
             return TRUE;
         }
-        printf(TCOLOR_R "[×]%s Passwords are not match. Cancelling...\n", TCOLOR_RESET);
-        return FALSE;
+        if(ATL > 0) {
+            
+            printf(TCOLOR_R "[×]%s Passwords are not match. Attempts: %d\n", TCOLOR_RESET, ATL--);
+            goto retry;
+        }
+        else {
+            return FALSE;
+        } 
     } 
     printf(TCOLOR_R "[×]%s Enter awe init, and create password\n", TCOLOR_RESET);
     return FALSE;

@@ -5,6 +5,6 @@ char *random_pass(char *password);
 void master_seed();
 int confirm();
 void hide_pass(char* buffer);
-
+int access_count();
 
 #endif

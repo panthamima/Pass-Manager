@@ -12,7 +12,7 @@
 #include <string.h>
 #include <uv.h>
 
-#define MAIN     "/awestruck/"
+#define MAIN     "/.awestruck/"
 #define STORAGE  "categories/" 
 
 void test() {

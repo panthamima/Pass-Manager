@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
 #include <stdlib.h>
-
 // удаление запрещенных символов
 char* remove_x_char(char* str) {
     char* temp = str;
@@ -292,4 +292,5 @@ int hide_password(char* const pszBuffer, const int nBufferLength) {
 	pszTemp = NULL;
   
 	return return_value;
+
 }

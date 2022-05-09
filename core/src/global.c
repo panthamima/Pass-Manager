@@ -16,7 +16,6 @@
 #define STORAGE  "categories/" 
 
 void test() {
-    copy("asdasd");
 }
 
 #ifdef unix

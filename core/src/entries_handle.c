@@ -10,50 +10,55 @@
 #include "../include/clipboard.h"
 
 // удалить выбранную запись
-void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
+void removing() {
     char filename[SIZE];
-    char ext[] = ".txt";
-    char path[SIZE];    
+    char file_ext[] = ".txt";
+    char temp_path[SIZE];    
+    char  awe_path[SIZE];
     char buffer[SIZE];
-    unsigned lines = 1;
-    int j,k;
-    int d = 0;
-    j = k = 0;
+    unsigned file_line = 1;
+    int j, k, num_line;
+    j = k = num_line = 0;
 
     show_dir();
-    printf("enter file where delete\n\t- ");
-    scanf("%s", filename);
     
-    strlcat(get_path(path, storage), filename, SIZE);
-    AWE = fopen(path, "r");
+    get_path(temp_path, temp);
+    get_path(awe_path, storage);
+
+    printf("Enter the file where you want to delete the entry\n\t- ");
+    scanf("%s", filename);
+    strlcat(awe_path, filename, SIZE);
+    AWE = fopen(awe_path, "r");
+    
     if(!AWE) {
         printf("Error: file doesn't exist\n");
         exit(1);
     }
 
     printf("Enter number of line\n\t- ");
-    scanf("%d", &d);
+    scanf("%d", &num_line);
   
-    TEMP = fopen(tmp_file, "a");
+    TEMP = fopen(temp_path, "a");
     while(!feof(AWE)) {
-        if((fgets(buffer, SIZE, AWE) != NULL) && lines != d) {
+        if((fgets(buffer, SIZE, AWE) != NULL) && file_line != num_line) {
             fprintf(TEMP, "%s", buffer);
         }
-        lines++;
+        file_line++;
     }
 
     fclose(AWE);
     fclose(TEMP);
-    AWE = fopen(path, "w");
-    TEMP = fopen(tmp_file, "r");
+
+    AWE  = fopen(awe_path, "w");
+    TEMP = fopen(temp_path, "r");
     
     while(!feof(TEMP)) {
         if(fgets(buffer, SIZE, TEMP) != NULL) {
             fprintf(AWE, "%s", buffer);
         }
-        lines++;
+        file_line++;
     }
-    TEMP = freopen(tmp_file, "w", stdin);
+    TEMP = freopen(temp_path, "w", stdin);
 
     fclose(TEMP);
     fclose(AWE);

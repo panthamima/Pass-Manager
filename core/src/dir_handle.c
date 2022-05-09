@@ -15,19 +15,20 @@ void create_cat() {
     char cat_name[SIZE];
     char   buffer[SIZE];
     int i, j;
+    get_path(buffer, storage);
 
     if(confirm() == FALSE) {
         exit(1);
     }
-    printf("enter a category name without\n\t- ");
-    scanf("%s", cat_name); // if segfult == my_scanf(cat_name)
+    printf("enter a category name without '.txt'\n\t- ");
+    scanf("%s", cat_name); 
     remove_x_char(cat_name);
 
     if(!strcmp(cat_name, "")) {
         printf("Error: enter filename\n");
         exit(1);
     }
-    strlcat(get_path(buffer, storage), cat_name, SIZE);
+    strlcat(buffer, cat_name, SIZE);
     AWE = fopen(buffer, "r");
     if(!AWE) {
         AWE = fopen(buffer, "a");
@@ -59,16 +60,26 @@ void directory() {
 
 }
 
-// показать сществующие категории
-void show_dir() { 
-    char path[SIZE];
-    list_dir = opendir(get_path(path, storage));
-    int i = 0;
+void remove_file() {
+    
+}
 
+// показать сществующие категории
+int show_dir() { 
+    char path[SIZE];
+    get_path(path, storage);
+    list_dir = opendir(path);
+    int showed_dir = 0;
+    int hidden_dir = 0;
     while ((dir = readdir(list_dir)) != NULL) {
-        if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будет показаны 
-            printf("[%d] %s\n", ++i, dir->d_name); // функции выхода  из директории . и ..
+        hidden_dir++;
+        if(strlen(dir->d_name) > 2) {                       // if dirname > 2  то не будет показаны 
+            printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
         }
+    }
+    printf("%d", hidden_dir);
+    if(hidden_dir <= 2) {
+        create_cat();
     }
     closedir(list_dir);
 }

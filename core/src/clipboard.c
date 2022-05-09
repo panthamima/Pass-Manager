@@ -1,8 +1,12 @@
 #include "../include/clipboard.h"
+#include "../include/tools.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <X11/Xlib.h>
 
-// #define COPY
+#define COPY
 #ifdef  COPY
-
 Display * display;
 Window window;
 Atom targets_atom, text_atom, UTF8, XA_ATOM = 4, XA_STRING = 31;
@@ -15,6 +19,7 @@ static void XCopy(Atom selection, unsigned char * text, int size) {
 	while (1) {
 		XNextEvent (display, &event);
 		switch (event.type) {
+
 			case SelectionRequest:
 			if (event.xselectionrequest.selection != selection) break;
 			XSelectionRequestEvent * xsr = &event.xselectionrequest;
@@ -37,23 +42,24 @@ static void XCopy(Atom selection, unsigned char * text, int size) {
 	}
 }
 
-void copy() {
-    char input[1000];
-    scanf("%s", input);
+void copy(char* input) {
 	display = XOpenDisplay(0);
 	int N = DefaultScreen(display);
 	window = XCreateSimpleWindow(display, RootWindow(display, N), 0, 0, 1, 1, 0,
-		BlackPixel(display, N), WhitePixel(display, N));	
+								BlackPixel(display, N), WhitePixel(display, N));	
 	targets_atom = XInternAtom(display, "TARGETS", 0);
 	text_atom = XInternAtom(display, "TEXT", 0);
 	UTF8 = XInternAtom(display, "UTF8_STRING", 1);
-	if (UTF8 == None) UTF8 = XA_STRING;
+	
+	if (UTF8 == None) {
+		UTF8 = XA_STRING;
+	}
 	Atom selection = XInternAtom(display, "CLIPBOARD", 0);
 	XCopy(selection, (unsigned char*) input, strlen(input));
 }
 #endif // COPY
 
-#define PASTE
+// #define PASTE
 #ifdef PASTE
 int XA_STRING = 31;
 
@@ -107,4 +113,4 @@ void paste()
     printf("%s\n", x_paste());
 }
 
-#endif // PASTE
+#endif

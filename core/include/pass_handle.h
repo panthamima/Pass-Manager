@@ -5,9 +5,6 @@ char *random_pass(char *password);
 void master_seed();
 int confirm();
 void hide_pass(char* buffer);
-
-int getchar_supressed();
-int get_password(char* const pszBuffer, const int nBufferLength);
-void run();
+int access_count();
 
 #endif

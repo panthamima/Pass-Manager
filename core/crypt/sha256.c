@@ -20,6 +20,8 @@
 
 #include "sha256.h"
 #include "../include/tools.h"
+#include <stdio.h>
+#include <string.h>
 
 #ifndef _cbmc_
 #define __CPROVER_assume(...) do {} while(0)
@@ -273,8 +275,7 @@ void sha256_use(const void *data, size_t len, uint8_t *hash) {
     sha256_done(&ctx, hash);
 }
 
-#include <stdio.h>
-#include <string.h>
+
 
 char* sha256(char* result) {
     uint8_t hash[SHA256_SIZE_BYTES];

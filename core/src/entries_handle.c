@@ -7,52 +7,58 @@
 #include "../include/pass_handle.h"
 #include "../include/global.h"
 #include "../include/tools.h"
+#include "../include/clipboard.h"
 
 // удалить выбранную запись
-void removing() { // брать слово вычитать все символы до последних четырех , если она равно .txt то SUCCESS
+void removing() {
     char filename[SIZE];
-    char ext[] = ".txt";
-    char path[SIZE];    
+    char file_ext[] = ".txt";
+    char temp_path[SIZE];    
+    char  awe_path[SIZE];
     char buffer[SIZE];
-    unsigned lines = 1;
-    int j,k;
-    int d = 0;
-    j = k = 0;
+    unsigned file_line = 1;
+    int j, k, num_line;
+    j = k = num_line = 0;
 
     show_dir();
-    printf("enter file where delete\n\t- ");
-    scanf("%s", filename);
     
-    strlcat(get_path(path, storage), filename, SIZE);
-    AWE = fopen(path, "r");
+    get_path(temp_path, temp);
+    get_path(awe_path, storage);
+
+    printf("Enter the file where you want to delete the entry\n\t- ");
+    scanf("%s", filename);
+    strlcat(awe_path, filename, SIZE);
+    AWE = fopen(awe_path, "r");
+    
     if(!AWE) {
         printf("Error: file doesn't exist\n");
         exit(1);
     }
 
     printf("Enter number of line\n\t- ");
-    scanf("%d", &d);
+    scanf("%d", &num_line);
   
-    TEMP = fopen(tmp_file, "a");
+    TEMP = fopen(temp_path, "a");
     while(!feof(AWE)) {
-        if((fgets(buffer, SIZE, AWE) != NULL) && lines != d) {
+        if((fgets(buffer, SIZE, AWE) != NULL) && file_line != num_line) {
             fprintf(TEMP, "%s", buffer);
         }
-        lines++;
+        file_line++;
     }
 
     fclose(AWE);
     fclose(TEMP);
-    AWE = fopen(path, "w");
-    TEMP = fopen(tmp_file, "r");
+
+    AWE  = fopen(awe_path, "w");
+    TEMP = fopen(temp_path, "r");
     
     while(!feof(TEMP)) {
         if(fgets(buffer, SIZE, TEMP) != NULL) {
             fprintf(AWE, "%s", buffer);
         }
-        lines++;
+        file_line++;
     }
-    TEMP = freopen(tmp_file, "w", stdin);
+    TEMP = freopen(temp_path, "w", stdin);
 
     fclose(TEMP);
     fclose(AWE);
@@ -72,23 +78,21 @@ void prepare_string(char path_file[SIZE], char symbol) {
     }
     AWE = fopen(path_file, "a");
     char buffer[SIZE];
-    scanf("%s", buffer);
+    get_line("", buffer, SIZE);
     fprintf(AWE, "%s%c", buffer, symbol);
     fclose(AWE);    
 }
 
 // добавление строки в файл
-// 1.если нет файла некуда добавлять, надо вызывать функцию создания файла
-// 2.если нажать пробел запись багается, если дать 
-// по башке после логина -> только он остается в файле
-
 void addition() {
     char path[SIZE]; 
     char filename[SIZE];
-    show_dir();
-    printf("enter filename\n\t- ");
-    scanf("%s", filename);
-    strlcat(get_path(path, storage), filename, SIZE);
+    if(show_dir());
+
+    get_path(path, storage);
+
+    get_line("enter filename\n\t- ", filename, SIZE);
+    strlcat(path, filename, SIZE);
     printf("%s", path);
     printf("Enter login\n\t- ");
     prepare_string(path, ':');
@@ -110,8 +114,8 @@ void show_the_list() {
     if(!confirm()) {
         exit(1);
     }
-    
-    list_dir = opendir(get_path(path, storage));
+    get_path(path, storage);
+    list_dir = opendir(path);
     while ((dir = readdir(list_dir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
             memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 
@@ -170,7 +174,8 @@ void extradition() {
     show_dir();
     printf("enter category name: ");
     scanf("%s", category);
-    strlcat(get_path(path, storage), category, SIZE);
+    get_path(path, storage);
+    strlcat(path, category, SIZE);
     if(!(AWE = fopen(path, "r"))) {
         printf("error. the category doesn't exist\n");
         exit(1);
@@ -182,6 +187,6 @@ void extradition() {
     scanf("%d", &line);
 
     counting(path, line-1, entry, sizeof(entry));
-    puts(entry);
+    copy(entry);
     fclose(AWE);    
 }

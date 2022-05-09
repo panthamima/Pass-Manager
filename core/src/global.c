@@ -12,11 +12,10 @@
 #include <string.h>
 #include <uv.h>
 
-#define MAIN     "/awestruck"
-#define STORAGE  "/categories" 
+#define MAIN     "/.awestruck/"
+#define STORAGE  "categories/" 
 
 void test() {
-    init_struct();
 }
 
 #ifdef unix
@@ -82,16 +81,19 @@ void awe_print_logo() {
 
 void awe_help() {
     char info[] = "\n\n\
- getting started with awestruck\n\
-    \tinit  -  create a master password\n\
- work with entries\n\
-    \tadd   -  adding an entry\n\
-    \trem   -  deleting an entry\n\
-    \tget   -  getting information about an entry\n\
-    \tedit  -  edit an entry\n\
- global actions\n\
-    \tlist  -  show the full list of entries\n\
-    \tclear -  deleting category or all entries\n\
-    \tcat   -  create a new category\n\n";
+Getting started with awestruck\n\
+    \tinit    -  create a master password\n\
+Work with entries\n\
+    \tadd     -  adding an entry\n\
+    \trem     -  deleting an entry\n\
+    \tget     -  getting information about an entry\n\
+    \tedit    -  edit an entry\n\
+Global actions\n\
+    \tlist    -  show the full list of entries\n\
+    \tclear   -  deleting category or all entries\n\
+    \tcat     -  create a new category\n\
+App information\n\
+    \thelp    -  awestruck usage help\n\
+    \tversion -  show awestruk version\n\n";
     printf("%s", info);
 }

@@ -2,7 +2,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
-#include <sodium.h>
+#include <termios.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 // удаление запрещенных символов
 char* remove_x_char(char* str) {
@@ -23,12 +25,12 @@ char* remove_x_char(char* str) {
 //reverse string
 void reverse(char s[]) { 
     int i, j;
-    char c;
+    char temp;
     
     for (i = 0, j = strlen(s)-1; i < j; i++, j--) {
-        c = s[i];
+        temp = s[i];
         s[i] = s[j];
-        s[j] = c;
+        s[j] = temp;
     }
 }
 
@@ -135,7 +137,7 @@ enum read_status {
 };
 
 int get_line(const char *prompt, char *buf, size_t sz) {
-    char fmt[40];
+    char  fmt[40];
     int i;
     int nscanned;
 
@@ -155,4 +157,139 @@ int get_line(const char *prompt, char *buf, size_t sz) {
     } else {
         return NO_INPUT;
     }
+}
+
+static struct termios stored_settings;
+
+void set_keypress(void)
+{
+	struct termios new_settings;
+
+	tcgetattr(0,&stored_settings);
+
+	new_settings = stored_settings;
+
+	/* Disable canonical mode, and set buffer size to 1 byte */
+	new_settings.c_lflag &= (~ICANON);
+	new_settings.c_cc[VTIME] = 0;
+	new_settings.c_cc[VMIN] = 1;
+
+	tcsetattr(0,TCSANOW,&new_settings);
+	return;
+}
+
+void reset_keypress(void)
+{
+	tcsetattr(0,TCSANOW,&stored_settings);
+	return;
+}
+
+int getchar_supressed(void) {
+	int return_value = 0;
+	int error_code = 0;
+	int ch = 0;
+
+	struct termios x_old;
+	struct termios x_new;
+  
+	do {
+		memset(&x_old, 0, sizeof(x_old));
+		memset(&x_new, 0, sizeof(x_new));
+
+		/* getting current terminal settings */
+		return_value = tcgetattr(STDIN_FILENO, &x_old);
+		if (error_code != 0) {
+			return_value = -1;
+			break;
+		}
+
+		memcpy(&x_new, &x_old, sizeof(x_new));
+		
+		/* suppressing echoing of input to output, likely dropping canonical as
+		well */
+		x_new.c_lflag &= ~ECHO;
+		x_new.c_lflag &= (~ICANON);
+
+		/* applying new settings with suppression */
+		error_code = tcsetattr(STDIN_FILENO, TCSANOW, &x_new);
+		if (error_code != 0) {
+			return_value = -1;
+			break;
+		}
+
+		/* reading symbol */
+		ch = getchar();
+
+		/* restoring old settings */
+		error_code = tcsetattr(STDIN_FILENO, TCSANOW, &x_old);
+		if (error_code != 0) {
+			return_value = -1;
+			break;
+		}
+
+		return_value = ch;
+	}
+	while (0);
+
+	return return_value;
+}
+
+int hide_password(char* const pszBuffer, const int nBufferLength) {
+	int return_value = 0;
+	int error_code = 0;
+	int N = 0;
+
+	char* pszTemp = NULL;
+
+	const char chBackspace = 127;
+	const char chReturn = 10;
+
+	unsigned char ch = 0;
+  
+	/* allocating temp buffer to store password */
+	pszTemp = malloc(nBufferLength * sizeof(*pszTemp));
+	if (pszTemp == NULL) {
+		error_code = -1;
+	} 
+  
+	while ((error_code != -1) && (ch != chReturn)) {
+	/* trying to read character from stdin with suppression */
+		error_code = getchar_supressed();
+		if (error_code != -1) {
+			/* we actually read something valid */
+			ch = error_code;
+		
+			if (ch == chBackspace) {
+				if (N != 0) {
+					printf("\b \b");
+					N--;
+				}
+			}
+			else if (ch == chReturn) {
+				/* string input is complete */
+				pszTemp[N] = '\0';
+				N++;
+				printf("\n");
+			}
+			else {
+				pszTemp[N] = ch;
+				printf("*");
+				N++;
+			}
+		}
+	} 
+   
+	if (error_code != -1) {
+		/* no error occured -- we can export read string */
+		strncpy(pszBuffer, pszTemp, nBufferLength);
+		pszBuffer[nBufferLength - 1] = '\0';
+	}
+	else {
+		return_value = 1;
+	}
+  
+	free(pszTemp);
+	pszTemp = NULL;
+  
+	return return_value;
 }

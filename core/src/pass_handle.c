@@ -24,9 +24,9 @@ char* random_pass(char *password) {
     sha256(password);
 }
 
-void get_pass(char* password) {
+// void get_pass(char* password) {
     
-}
+// }
 
 // создание мастер пароля
 // запрашивать имя пользвоателя if linux /home/..../init_struct
@@ -39,22 +39,21 @@ void master_seed() {
     get_path(path, master);
     init_struct();
     
-    system("clear");
     AWE = fopen(path, "a+"); 
     fseek(AWE, 0, SEEK_END);
     long pos = ftell(AWE);
 
     if(pos > 0) {
-        printf("[!] The password already exists. change password?[y/n]\n");
-        get_line("", answer, 2);
+        get_line("[!] The password already exists. Change password?[y/n] ", answer, 2);
         if(answer[0] == 'Y' || answer[0] == 'y') {
             if(confirm() == FALSE) {
+                fclose(AWE);
                 exit(1);
             }
             AWE = fopen(path, "w");
         }
         else {
-            printf(TCOLOR_R"[×]%s Canselling...\n", TCOLOR_RESET);
+            printf(TCOLOR_R"[×]%s Aborted...\n", TCOLOR_RESET);
             exit(1);
         }
     }
@@ -84,7 +83,11 @@ int confirm() {  // сделать количество попыток
     char pas_confirm[SIZE], buffer[SIZE], path[SIZE];
     char* out;
     get_path(path, master);
+    static unsigned int requests = 0;
 
+    if(requests > 0) {
+        return TRUE;
+    }
 
     AWE = fopen(path, "r");
     if(!AWE) {
@@ -101,6 +104,7 @@ int confirm() {  // сделать количество попыток
         fgets(buffer, SIZE, AWE);
         if(!memcmp(pas_confirm, buffer, strlen(buffer))) {
             printf("Success.\n");
+            requests += 1;
             return TRUE;
         }
         printf(TCOLOR_R "[×]%s Passwords are not match. Cancelling...\n", TCOLOR_RESET);
@@ -112,119 +116,8 @@ int confirm() {  // сделать количество попыток
 
 void hide_pass(char* buffer) {
     char sz_pass[256];
-    get_password(&sz_pass[0], sizeof(sz_pass));
+    hide_password(&sz_pass[0], sizeof(sz_pass));
     for(int i = 0; i < strlen(sz_pass); i++) {
         buffer[i] = sz_pass[i];
     }
-}
-
-int getchar_supressed(void) {
-  int return_value = 0;
-  int error_code = 0;
-  int ch = 0;
-  
-  struct termios x_old;
-  struct termios x_new;
-  
-  do {
-    memset(&x_old, 0, sizeof(x_old));
-    memset(&x_new, 0, sizeof(x_new));
-    
-    /* getting current terminal settings */
-    return_value = tcgetattr(STDIN_FILENO, &x_old);
-    if (error_code != 0) {
-      return_value = -1;
-      break;
-    }
-    
-    memcpy(&x_new, &x_old, sizeof(x_new));
-    
-    /* suppressing echoing of input to output, likely dropping canonical as
-    well */
-    x_new.c_lflag &= ~ECHO;
-    x_new.c_lflag &= (~ICANON);
-    
-    /* applying new settings with suppression */
-    error_code = tcsetattr(STDIN_FILENO, TCSANOW, &x_new);
-    if (error_code != 0) {
-      return_value = -1;
-      break;
-    }
-    
-    /* reading symbol */
-    ch = getchar();
-    
-    /* restoring old settings */
-    error_code = tcsetattr(STDIN_FILENO, TCSANOW, &x_old);
-    if (error_code != 0) {
-      return_value = -1;
-      break;
-    }
-    
-    return_value = ch;
-  }
-  while (0);
-  
-  return return_value;
-}
- 
- 
-int get_password(char* const pszBuffer, const int nBufferLength) {
-  int return_value = 0;
-  int error_code = 0;
-  int N = 0;
-  
-  char* pszTemp = NULL;
-  
-  const char chBackspace = 127;
-  const char chReturn = 10;
-  
-  unsigned char ch = 0;
-  
-  /* allocating temp buffer to store password */
-  pszTemp = malloc(nBufferLength * sizeof(*pszTemp));
-  if (pszTemp == NULL) {
-    error_code = -1;
-  } 
-  
-  while ((error_code != -1) && (ch != chReturn)) {
-    /* trying to read character from stdin with suppression */
-    error_code = getchar_supressed();
-    if (error_code != -1) {
-      /* we actually read something valid */
-      ch = error_code;
-      
-      if (ch == chBackspace) {
-        if (N != 0) {
-          printf("\b \b");
-          N--;
-        }
-      }
-      else if (ch == chReturn) {
-        /* string input is complete */
-        pszTemp[N] = '\0';
-        N++;
-        printf("\n");
-      }
-      else {
-        pszTemp[N] = ch;
-        printf("*");
-        N++;
-      }
-    }
-  } 
-   
-  if (error_code != -1) {
-    /* no error occured -- we can export read string */
-    strncpy(pszBuffer, pszTemp, nBufferLength);
-    pszBuffer[nBufferLength - 1] = '\0';
-  }
-  else {
-    return_value = 1;
-  }
-  
-  free(pszTemp);
-  pszTemp = NULL;
-  
-  return return_value;
 }

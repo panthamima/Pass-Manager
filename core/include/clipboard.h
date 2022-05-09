@@ -4,9 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_clipboard.h>
 
-void copy(char *text);
-void paste(char* text);
-void set_keypress(void);
-void reset_keypress(void);
+void copy(char* input);
+void paste();
+void sdl();
 
 #endif

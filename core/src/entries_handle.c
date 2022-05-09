@@ -86,7 +86,8 @@ void prepare_string(char path_file[SIZE], char symbol) {
 void addition() {
     char path[SIZE]; 
     char filename[SIZE];
-    show_dir();
+    if(show_dir());
+
     get_path(path, storage);
 
     get_line("enter filename\n\t- ", filename, SIZE);
@@ -112,8 +113,8 @@ void show_the_list() {
     if(!confirm()) {
         exit(1);
     }
-    
-    list_dir = opendir(get_path(path, storage));
+    get_path(path, storage);
+    list_dir = opendir(path);
     while ((dir = readdir(list_dir)) != NULL) {
         if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
             memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 

@@ -60,17 +60,26 @@ void directory() {
 
 }
 
+void remove_file() {
+    
+}
+
 // показать сществующие категории
-void show_dir() { 
+int show_dir() { 
     char path[SIZE];
     get_path(path, storage);
     list_dir = opendir(path);
-    int i = 0;
-
+    int showed_dir = 0;
+    int hidden_dir = 0;
     while ((dir = readdir(list_dir)) != NULL) {
-        if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будет показаны 
-            printf("[%d] %s\n", ++i, dir->d_name); // функции выхода  из директории . и ..
+        hidden_dir++;
+        if(strlen(dir->d_name) > 2) { // if dirname > 2  то не будет показаны 
+            printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
         }
+    }
+    printf("%d", hidden_dir);
+    if(hidden_dir <= 2) {
+        create_cat();
     }
     closedir(list_dir);
 }

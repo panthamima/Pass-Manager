@@ -78,13 +78,20 @@ void prepare_string(char path_file[SIZE], char symbol) {
     }
     AWE = fopen(path_file, "a");
     char buffer[SIZE];
-    get_line("", buffer, SIZE);
+    fgets(buffer, SIZE, stdin);
+    // printf("%s %ld %ld", buffer, sizeof(buffer), strlen(buffer));
+    if(symbol == '\n' && buffer[0] == '\n') {
+        random_pass(buffer);
+        printf("your random password: %s\n", buffer);
+    }
+    buffer[strlen(buffer)-1] = '\0';
     fprintf(AWE, "%s%c", buffer, symbol);
     fclose(AWE);    
 }
 
 // добавление строки в файл
 void addition() {
+    if(confirm()) {}
     char path[SIZE]; 
     char filename[SIZE];
     if(show_dir());
@@ -93,7 +100,6 @@ void addition() {
 
     get_line("enter filename\n\t- ", filename, SIZE);
     strlcat(path, filename, SIZE);
-    printf("%s", path);
     printf("Enter login\n\t- ");
     prepare_string(path, ':');
 
@@ -103,6 +109,10 @@ void addition() {
 
 // показать все пароли из файла
 void show_the_list() {
+    if(!confirm()) {
+        exit(1);
+    }
+
     int j = 1;
     char c;
     char path[SIZE];
@@ -111,9 +121,6 @@ void show_the_list() {
     DIR *list_dir;
     struct dirent *dir;
 
-    if(!confirm()) {
-        exit(1);
-    }
     get_path(path, storage);
     list_dir = opendir(path);
     while ((dir = readdir(list_dir)) != NULL) {
@@ -165,8 +172,6 @@ void extradition() {
     char category[SIZE];
     char path[SIZE];
 
-    system("clear");
-
     if(confirm() == FALSE) {
         exit(1);
     }
@@ -181,8 +186,9 @@ void extradition() {
         exit(1);
     }
     while(fscanf(AWE, "%s", buffer) != EOF) {
-        printf("[%d]> %s\n", i++, buffer);
+        printf("[%02d]> %s\n", i++, buffer);
     }
+    // printf("\n[!] Pass will be saved in your clipboard, after input type ctrl^C\n");
     printf("enter number of entry: ");
     scanf("%d", &line);
 

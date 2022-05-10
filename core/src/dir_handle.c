@@ -20,8 +20,7 @@ void create_cat() {
     if(confirm() == FALSE) {
         exit(1);
     }
-    printf("enter a category name without '.txt'\n\t- ");
-    scanf("%s", cat_name); 
+    get_line("enter a category name without '.txt'\n\t- ", cat_name, SIZE); 
     remove_x_char(cat_name);
 
     if(!strcmp(cat_name, "")) {
@@ -32,7 +31,7 @@ void create_cat() {
     AWE = fopen(buffer, "r");
     if(!AWE) {
         AWE = fopen(buffer, "a");
-        printf("%s.txt - name of category\n", cat_name);
+        printf("%s - name of category\n", cat_name);
     }
     else {
         printf("ERROR: the file already exists\n");
@@ -77,8 +76,9 @@ int show_dir() {
             printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
         }
     }
-    printf("%d", hidden_dir);
+    // printf("%d", hidden_dir);
     if(hidden_dir <= 2) {
+        printf("\n[!] You haven't any categories for your entry. Creating...\n");
         create_cat();
     }
     closedir(list_dir);

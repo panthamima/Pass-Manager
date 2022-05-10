@@ -14,11 +14,13 @@ struct dirent *dir;
 void create_cat() { 
     char cat_name[SIZE];
     char   buffer[SIZE];
-    int i, j;
-    get_path(buffer, storage);
+    int i, j, k = 0;
 
-    if(confirm() == FALSE) {
-        exit(1);
+    if(confirm());
+    show_dir();
+    get_path(buffer, storage);
+    if(k++ == 1) {
+        show_dir();
     }
     get_line("enter a category name without '.txt'\n\t- ", cat_name, SIZE); 
     remove_x_char(cat_name);
@@ -43,24 +45,16 @@ void create_cat() {
 void delete_cat() {
     char filename[SIZE];
     char path[SIZE];
-    
+
     if(confirm() == FALSE) {
         exit(1);
     }
+
+    get_path(path, storage);
     show_dir();
-    printf("enter file what you want to delete: ");
-    scanf("%s", filename);
-    strcat(path,filename);
+    get_line("enter file what you want to delete: ", filename, SIZE);
+    strlcat(path, filename, SIZE);
     remove(path);
-}
-
-void directory() {
-    
-
-}
-
-void remove_file() {
-    
 }
 
 // показать сществующие категории
@@ -72,13 +66,14 @@ int show_dir() {
     int hidden_dir = 0;
     while ((dir = readdir(list_dir)) != NULL) {
         hidden_dir++;
-        if(strlen(dir->d_name) > 2) {                       // if dirname > 2  то не будет показаны 
-            printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
+        if(!strcmp(dir->d_name, ".") || !strcmp(dir->d_name, "..")) {
+            continue;
         }
+        printf("[%d] %s\n", ++showed_dir, dir->d_name); // функции выхода  из директории . и ..
     }
     // printf("%d", hidden_dir);
     if(hidden_dir <= 2) {
-        printf("\n[!] You haven't any categories for your entry. Creating...\n");
+        printf("[!] You haven't any categories for your entry. Creating...\n");
         create_cat();
     }
     closedir(list_dir);

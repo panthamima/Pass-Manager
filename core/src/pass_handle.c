@@ -98,7 +98,7 @@ int confirm() {  // сделать количество попыток
         // sha256(pas_confirm);
         fgets(buffer, SIZE, AWE);
         if(!memcmp(pas_confirm, buffer, strlen(buffer))) {
-            printf("Success.\n");
+            printf("Success.\n\n");
             RTS += 1;
             return TRUE;
         }

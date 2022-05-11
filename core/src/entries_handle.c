@@ -208,12 +208,23 @@ void extradition() {
     }
     printf("\n[!] Pass will be saved in your clipboard, after input type ctrl^C\n");
     printf("enter number of entry: ");
-    // scanf("%d\r\n", &line);
-
+    scanf("%d", &line);
+    // get_line("", line, SIZE);
+    int j = 0;
     counting(path, line-1, entry, sizeof(entry));
     printf("choose what you want to get:\n\tf [full]\n\tp [pass]\n\tl [login]\n\t- ");
-    get_line("", answer, SIZE);
-    for(int j = 0; j < strlen(entry); j++) {
+    scanf("%s", answer);
+
+    switch (answer[0]) {
+    case 'f':
+    while(j < strlen(entry)) {
+        entry_buf[j] = entry[j];
+        j++;
+    }
+    entry_buf[j] = '\0';
+        break;
+    case 'p':
+        for(j = 0; j < strlen(entry); j++) {
         if(entry[j] == ':') {
             j++;
             while(entry[j] != '(') {
@@ -221,7 +232,21 @@ void extradition() {
             }
         }
         entry_buf[j] == '\0';
+        }
+        break;
+    case 'l':
+    for(j = 0; j < strlen(entry); j++) {
+        while(entry[j] != ':') {
+            entry_buf[k++] = entry[j++];
+        }
+        entry_buf[j] == '\0';
     }
-    // copy(entry_buf);
+        break;
+    default:
+        printf("unknown token\n");
+        break;
+    }
+
+    copy(entry_buf);
     fclose(AWE);    
 }

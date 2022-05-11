@@ -182,6 +182,7 @@ void extradition() {
     unsigned line = 0;
     int i = 1;
     int k = 0;
+    int j = 0;
     char entry[SIZE];
     char entry_buf[SIZE];
     char buffer[SIZE];
@@ -190,12 +191,10 @@ void extradition() {
     char answer[SIZE];
     char enter;
 
-    if(confirm() == FALSE) {
-        exit(1);
-    }
+    if(confirm());
 
     show_dir();
-    printf("enter category name: ");
+    printf("\nenter category name: ");
     scanf("%s", category);
     get_path(path, storage);
     strlcat(path, category, SIZE);
@@ -208,20 +207,48 @@ void extradition() {
     }
     printf("\n[!] Pass will be saved in your clipboard, after input type ctrl^C\n");
     printf("enter number of entry: ");
-    // scanf("%d\r\n", &line);
-
+    scanf("%d", &line);
+    // get_line("", line, SIZE);
     counting(path, line-1, entry, sizeof(entry));
     printf("choose what you want to get:\n\tf [full]\n\tp [pass]\n\tl [login]\n\t- ");
-    get_line("", answer, SIZE);
-    for(int j = 0; j < strlen(entry); j++) {
-        if(entry[j] == ':') {
+    scanf("%s", answer);
+
+    switch (answer[0]) {
+    case 'f':
+        while(j < strlen(entry)) {
+            entry_buf[j] = entry[j];
             j++;
-            while(entry[j] != '(') {
-                entry_buf[k++] = entry[j++];
+        }
+    entry_buf[j] = '\0';
+        break;
+    case 'p':
+        for(j = 0; j < strlen(entry); j++) {
+            if(entry[j] == ':') {
+                j++;
+                while(entry[j]) {
+                    entry_buf[k++] = entry[j++];
+                    if(entry[j] == '(') {
+                        entry_buf[k++] = '\0';
+                        break;    
+                    }
+                }
             }
         }
-        entry_buf[j] == '\0';
+        break;
+    case 'l':
+    for(j = 0; j < strlen(entry); j++) {
+        if(entry[j] == ':') {
+            break;
+        }
+        entry_buf[k++] = entry[j];
     }
-    // copy(entry_buf);
+    entry_buf[k++] == '\0';
+        break;
+    default:
+        printf("unknown token\n");
+        break;
+    }
+    printf("\n%s\n", entry_buf);
     fclose(AWE);    
+    copy(entry_buf);
 }

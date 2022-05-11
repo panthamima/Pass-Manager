@@ -12,14 +12,14 @@
 // удалить выбранную запись
 void removing() {
     char filename[SIZE];
-    char file_ext[] = ".txt";
     char temp_path[SIZE];    
     char  awe_path[SIZE];
     char buffer[SIZE];
     unsigned file_line = 1;
     int j, k, num_line;
     j = k = num_line = 0;
-
+    
+    if(confirm);
     show_dir();
     
     get_path(temp_path, temp);
@@ -78,13 +78,28 @@ void prepare_string(char path_file[SIZE], char symbol) {
     }
     AWE = fopen(path_file, "a");
     char buffer[SIZE];
-    get_line("", buffer, SIZE);
+    fgets(buffer, SIZE, stdin);
+    // printf("%s %ld %ld", buffer, sizeof(buffer), strlen(buffer));
+    if(symbol == '(' && buffer[0] == '\n') {
+        random_pass(buffer);
+        printf("your random password: %s\n", buffer);
+    }
+    buffer[strlen(buffer)-1] = '\0';
+    if(symbol == '\n' && buffer[0] != '\n') {
+
+    }
+
     fprintf(AWE, "%s%c", buffer, symbol);
+    if(symbol == ')') {
+        fprintf(AWE, "\n");
+    }
     fclose(AWE);    
 }
 
 // добавление строки в файл
 void addition() {
+    if(confirm());
+
     char path[SIZE]; 
     char filename[SIZE];
     if(show_dir());
@@ -93,16 +108,24 @@ void addition() {
 
     get_line("enter filename\n\t- ", filename, SIZE);
     strlcat(path, filename, SIZE);
-    printf("%s", path);
+
     printf("Enter login\n\t- ");
     prepare_string(path, ':');
 
     printf("Enter password\n\t- ");
-    prepare_string(path, '\n');
+    prepare_string(path, '(');
+
+    printf("Add a note, enter if you don't need it\n");
+    prepare_string(path, ')');
+    
 }
 
 // показать все пароли из файла
 void show_the_list() {
+    if(!confirm()) {
+        exit(1);
+    }
+
     int j = 1;
     char c;
     char path[SIZE];
@@ -111,23 +134,21 @@ void show_the_list() {
     DIR *list_dir;
     struct dirent *dir;
 
-    if(!confirm()) {
-        exit(1);
-    }
     get_path(path, storage);
     list_dir = opendir(path);
     while ((dir = readdir(list_dir)) != NULL) {
-        if(strlen(dir->d_name) > 2) { // if dirname > 3 то не будут показаны . и .. 
-            memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 
-            AWE = fopen(strcat(buffer, dir->d_name), "r"); 
-            printf("\n%s\n", dir->d_name);
-            
-            while(fscanf(AWE, "%s", line) != EOF) {
-                printf("[%d] %s\n",j++, line);
-            }
-            j = 1;
-            printf("\n+------------------------------------+\n");
+        if(!strcmp(dir->d_name, ".") || !strcmp(dir->d_name, "..")) {
+            continue;
         }
+        memcpy(buffer, path, (strlen(path) +1)); // копирование path в buffer 
+        AWE = fopen(strcat(buffer, dir->d_name), "r"); 
+        printf("\n%s\n", dir->d_name);
+            
+        while(fscanf(AWE, "%s", line) != EOF) {
+            printf("[%d] %s\n",j++, line);
+        }
+        j = 1;
+        printf("\n+------------------------------------+\n");
     } 
     closedir(list_dir);
 }
@@ -158,14 +179,16 @@ int counting(const char* f_name, int n, char* buf, int len) {
 
 // выдача информации о записи (строке)
 void extradition() {
-    unsigned line;
+    unsigned line = 0;
     int i = 1;
+    int k = 0;
     char entry[SIZE];
+    char entry_buf[SIZE];
     char buffer[SIZE];
     char category[SIZE];
     char path[SIZE];
-
-    system("clear");
+    char answer[SIZE];
+    char enter;
 
     if(confirm() == FALSE) {
         exit(1);
@@ -183,10 +206,22 @@ void extradition() {
     while(fscanf(AWE, "%s", buffer) != EOF) {
         printf("[%d]> %s\n", i++, buffer);
     }
+    printf("\n[!] Pass will be saved in your clipboard, after input type ctrl^C\n");
     printf("enter number of entry: ");
-    scanf("%d", &line);
+    // scanf("%d\r\n", &line);
 
     counting(path, line-1, entry, sizeof(entry));
-    copy(entry);
+    printf("choose what you want to get:\n\tf [full]\n\tp [pass]\n\tl [login]\n\t- ");
+    get_line("", answer, SIZE);
+    for(int j = 0; j < strlen(entry); j++) {
+        if(entry[j] == ':') {
+            j++;
+            while(entry[j] != '(') {
+                entry_buf[k++] = entry[j++];
+            }
+        }
+        entry_buf[j] == '\0';
+    }
+    // copy(entry_buf);
     fclose(AWE);    
 }

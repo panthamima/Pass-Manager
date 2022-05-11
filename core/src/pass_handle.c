@@ -9,7 +9,7 @@
 #include "../crypt/sha256.h"
 
 // генерирует случайный пароль
-char* random_pass(char *password) {
+void random_pass(char *password) {
     int pass_len = 24;
     char rand_ch;
     char pool[] = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
@@ -19,7 +19,7 @@ char* random_pass(char *password) {
         rand_ch = rand()%62;
         *password++ = pool[rand_ch]; 
     }
-    sha256(password);
+    *password++ = '\0';
 }
 
 // создание мастер пароля
@@ -53,12 +53,12 @@ void master_seed() {
     awe_print_logo();
     printf("Enter the master password:~# ");
     hide_pass(master_pass);
-    sha256(master_pass);
+    // sha256(master_pass);
 
     if(master_pass != NULL) {
         printf("Confirm your master password: ");
         hide_pass(re_master_pass);
-        sha256(re_master_pass);
+        // sha256(re_master_pass);
         if(!memcmp(master_pass, re_master_pass, strlen(master_pass))) {
             printf(TCOLOR_G"[✔]%s The password has been saved.\n", TCOLOR_RESET);
             fputs(re_master_pass, AWE);
@@ -73,10 +73,11 @@ void master_seed() {
 // подтверждение мастер пароля
 int confirm() {  // сделать количество попыток
     char pas_confirm[SIZE], buffer[SIZE], path[SIZE];
-    get_path(path, master);
     static unsigned int RTS = 0; // Rights To Skip
     static unsigned int ATL = 2; // Attempts To Login
 
+    get_path(path, master);
+    
     if(RTS != 0) {
         return TRUE;
     }
@@ -94,16 +95,14 @@ int confirm() {  // сделать количество попыток
         printf("Enter master password to confirm: ");
         
         hide_pass(pas_confirm);
-        sha256(pas_confirm);
+        // sha256(pas_confirm);
         fgets(buffer, SIZE, AWE);
-        printf("%s", pas_confirm);
         if(!memcmp(pas_confirm, buffer, strlen(buffer))) {
-            printf("Success.\n");
+            printf("Success.\n\n");
             RTS += 1;
             return TRUE;
         }
         if(ATL > 0) {
-            
             printf(TCOLOR_R "[×]%s Passwords are not match. Attempts: %d\n", TCOLOR_RESET, ATL--);
             goto retry;
         }
